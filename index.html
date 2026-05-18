@@ -23,7 +23,6 @@
   a { color: inherit; text-decoration: none; }
   a:hover { opacity: 0.65; }
 
-  /* Subtle background grid */
   body::before {
     content: "";
     position: fixed;
@@ -41,9 +40,8 @@
     margin: 0 auto;
     padding: 0 32px;
     position: relative;
-    z-index: 1;
+    z-index: 2;
   }
-  .container.narrow { max-width: 880px; }
 
   /* NAV */
   nav.site-nav {
@@ -102,6 +100,15 @@
     pointer-events: none;
     z-index: 0;
   }
+  .hero-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.55;
+  }
   .hero-eyebrow {
     display: inline-flex;
     align-items: center;
@@ -112,7 +119,9 @@
     color: #666;
     margin-bottom: 32px;
     padding: 6px 14px;
-    background: #fff;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     border: 1px solid #ececec;
     border-radius: 999px;
   }
@@ -292,11 +301,35 @@
     margin-bottom: 8px;
     color: #0d0d0d;
     letter-spacing: -0.005em;
+    min-height: 1.2em;
+  }
+  .prop-title.typewriter::after {
+    content: "";
+    display: inline-block;
+    width: 2px;
+    height: 0.95em;
+    margin-left: 2px;
+    background: currentColor;
+    vertical-align: -2px;
+    animation: caret 0.9s steps(2) infinite;
+  }
+  .prop-title.typewriter.is-done::after {
+    display: none;
+  }
+  @keyframes caret {
+    50% { opacity: 0; }
   }
   .prop-desc {
     font-size: 14.5px;
     color: #555;
     line-height: 1.65;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .prop-desc.is-revealed {
+    opacity: 1;
+    transform: none;
   }
 
   /* APPLICATIONS */
@@ -318,14 +351,16 @@
     padding: 32px;
     border-radius: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.01);
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.28s ease;
     display: flex;
     flex-direction: column;
   }
   .app-card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-4px);
     border-color: #d0d0d0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.02);
+    box-shadow: 0 14px 36px rgba(0,0,0,0.09), 0 0 0 1px rgba(0,0,0,0.02);
   }
   .app-icon-wrap {
     width: 44px;
@@ -360,6 +395,7 @@
     margin-top: 56px;
     position: relative;
     padding-left: 36px;
+    --tl-progress: 0;
   }
   .timeline::before {
     content: "";
@@ -368,8 +404,20 @@
     top: 8px;
     bottom: 8px;
     width: 2px;
-    background: linear-gradient(to bottom, #1a1a1a 0%, #1a1a1a 70%, #d0d0d0 100%);
+    background: #e4e4e4;
     border-radius: 1px;
+  }
+  .timeline::after {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    width: 2px;
+    height: calc(var(--tl-progress) * 100%);
+    max-height: calc(100% - 16px);
+    background: linear-gradient(to bottom, #1a1a1a 0%, #1a1a1a 80%, rgba(26,26,26,0.5) 100%);
+    border-radius: 1px;
+    transition: height 0.15s linear;
   }
   .t-item {
     position: relative;
@@ -384,11 +432,16 @@
     width: 16px;
     height: 16px;
     background: #fff;
-    border: 3px solid #1a1a1a;
+    border: 3px solid #d0d0d0;
     border-radius: 50%;
     box-shadow: 0 0 0 4px #fafafa;
+    transition: border-color 0.4s ease, background 0.4s ease, transform 0.4s ease;
   }
-  .t-item:last-child::before {
+  .t-item.is-passed::before {
+    border-color: #1a1a1a;
+    transform: scale(1.05);
+  }
+  .t-item.is-passed:last-child::before {
     background: #1a1a1a;
   }
   .t-date {
@@ -461,11 +514,13 @@
     background: #fafafa;
   }
 
-  /* FADE IN */
+  /* REVEAL */
   .reveal {
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
   }
   .reveal.is-visible {
     opacity: 1;
@@ -500,6 +555,9 @@
     .reveal { opacity: 1; transform: none; transition: none; }
     .btn, .app-card { transition: none; }
     .hero-eyebrow .pulse::after { animation: none; }
+    .prop-title.typewriter::after { animation: none; display: none; }
+    .prop-desc { opacity: 1; transform: none; transition: none; }
+    .hero-canvas { display: none; }
     html { scroll-behavior: auto; }
   }
 </style>
@@ -514,6 +572,7 @@
 </nav>
 
 <section class="hero">
+  <canvas class="hero-canvas" id="heroCanvas" aria-hidden="true"></canvas>
   <div class="container">
     <div class="hero-eyebrow reveal">
       <span class="pulse"></span>
@@ -539,19 +598,19 @@
 
     <div class="props">
       <div class="prop reveal">
-        <div class="prop-title">Parallel processing</div>
+        <div class="prop-title" data-text="Parallel processing"></div>
         <div class="prop-desc">Semantic and acoustic streams analyzed independently, never merged.</div>
       </div>
       <div class="prop reveal">
-        <div class="prop-title">Word-level precision</div>
+        <div class="prop-title" data-text="Word-level precision"></div>
         <div class="prop-desc">Divergence measured at individual word granularity with millisecond timestamps.</div>
       </div>
       <div class="prop reveal">
-        <div class="prop-title">Interpretable output</div>
+        <div class="prop-title" data-text="Interpretable output"></div>
         <div class="prop-desc">You can see exactly where and when divergence occurs.</div>
       </div>
       <div class="prop reveal">
-        <div class="prop-title">Built on RGC</div>
+        <div class="prop-title" data-text="Built on RGC"></div>
         <div class="prop-desc">Calibrated against a universal prosodic reference baseline.</div>
       </div>
     </div>
@@ -569,19 +628,19 @@
 
     <div class="props">
       <div class="prop reveal">
-        <div class="prop-title">Zero-point reference</div>
+        <div class="prop-title" data-text="Zero-point reference"></div>
         <div class="prop-desc">Synthetic neutral speech defines the measurement baseline.</div>
       </div>
       <div class="prop reveal">
-        <div class="prop-title">Universal</div>
+        <div class="prop-title" data-text="Universal"></div>
         <div class="prop-desc">No prior data needed, works from the first second with any speaker.</div>
       </div>
       <div class="prop reveal">
-        <div class="prop-title">Reproducible</div>
+        <div class="prop-title" data-text="Reproducible"></div>
         <div class="prop-desc">Same text always yields the same reference point.</div>
       </div>
       <div class="prop reveal">
-        <div class="prop-title">Privacy-first</div>
+        <div class="prop-title" data-text="Privacy-first"></div>
         <div class="prop-desc">No personal voice data is collected or stored.</div>
       </div>
     </div>
@@ -682,7 +741,7 @@
     <div class="layer-eyebrow reveal"><span class="num">04</span> Where we are</div>
     <h2 class="section-title reveal">Status</h2>
 
-    <div class="timeline">
+    <div class="timeline" id="timeline">
       <div class="t-item reveal">
         <div class="t-date">March 2026</div>
         <div class="t-text">US Provisional Patents filed.</div>
@@ -725,9 +784,86 @@
 </footer>
 
 <script>
-  // Reveal on scroll
-  (function () {
+(function () {
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // --- 1) Hero canvas: two slow waves (black + gray) that drift in and out of alignment
+  (function heroWaves() {
+    var canvas = document.getElementById('heroCanvas');
+    if (!canvas || reduceMotion) return;
+    var ctx = canvas.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var width = 0, height = 0;
+
+    function resize() {
+      var rect = canvas.getBoundingClientRect();
+      width = Math.max(1, Math.floor(rect.width));
+      height = Math.max(1, Math.floor(rect.height));
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function drawWave(t, color, alpha, phaseShift, ampScale, freqScale, yOffset) {
+      var midY = height / 2 + yOffset;
+      var amp = Math.min(70, height * 0.11) * ampScale;
+      var k = (Math.PI * 2 * freqScale) / width;
+      ctx.beginPath();
+      var step = 4;
+      for (var x = 0; x <= width; x += step) {
+        // Slight amplitude wobble for organic feel
+        var localAmp = amp * (0.92 + 0.08 * Math.sin((x * 0.006) + t * 0.0007));
+        var y = midY + Math.sin(x * k + t * 0.0009 + phaseShift) * localAmp;
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = alpha;
+      ctx.lineWidth = 1.4;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    var visible = true;
+    document.addEventListener('visibilitychange', function () {
+      visible = !document.hidden;
+      if (visible) requestAnimationFrame(loop);
+    });
+
+    function loop(t) {
+      if (!visible) return;
+      ctx.clearRect(0, 0, width, height);
+      // Phase delta oscillates slowly: aligned at 0, divergent at ~PI
+      var phaseDelta = (Math.sin(t * 0.00018) * 0.5 + 0.5) * Math.PI * 0.95;
+      // Semantic stream (black)
+      drawWave(t, '#1a1a1a', 0.55, 0,            1.00, 1.5, -8);
+      // Acoustic stream (gray)
+      drawWave(t, '#888888', 0.55, phaseDelta,   1.00, 1.5,  8);
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
+
+  // --- 2) Reveal on scroll, with per-card stagger inside .apps-grid
+  (function revealOnScroll() {
     var els = document.querySelectorAll('.reveal');
+    // Stagger: app cards
+    document.querySelectorAll('.apps-grid .reveal').forEach(function (el, i) {
+      el.style.setProperty('--reveal-delay', (i * 90) + 'ms');
+    });
+    // Stagger: properties inside each .props
+    document.querySelectorAll('.props').forEach(function (group) {
+      group.querySelectorAll('.reveal').forEach(function (el, i) {
+        el.style.setProperty('--reveal-delay', (i * 100) + 'ms');
+      });
+    });
+    // Stagger: timeline items
+    document.querySelectorAll('.timeline .reveal').forEach(function (el, i) {
+      el.style.setProperty('--reveal-delay', (i * 110) + 'ms');
+    });
+
     if (!('IntersectionObserver' in window)) {
       els.forEach(function (el) { el.classList.add('is-visible'); });
       return;
@@ -743,20 +879,114 @@
     els.forEach(function (el) { io.observe(el); });
   })();
 
-  // Nav blur on scroll
-  (function () {
+  // --- 3) Typewriter on prop titles + delayed description fade
+  (function typewriterProps() {
+    var titles = document.querySelectorAll('.prop-title[data-text]');
+    if (!titles.length) return;
+
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      titles.forEach(function (el) {
+        el.textContent = el.getAttribute('data-text');
+        var desc = el.parentElement.querySelector('.prop-desc');
+        if (desc) desc.classList.add('is-revealed');
+      });
+      return;
+    }
+
+    function type(el) {
+      var text = el.getAttribute('data-text') || '';
+      el.classList.add('typewriter');
+      el.textContent = '';
+      var i = 0;
+      var charDelay = 45;
+      function step() {
+        if (i <= text.length) {
+          el.textContent = text.slice(0, i);
+          i++;
+          setTimeout(step, charDelay);
+        } else {
+          el.classList.add('is-done');
+          var desc = el.parentElement.querySelector('.prop-desc');
+          if (desc) desc.classList.add('is-revealed');
+        }
+      }
+      step();
+    }
+
+    var seen = new WeakSet();
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && !seen.has(entry.target)) {
+          seen.add(entry.target);
+          // Stagger across the row of 4 properties
+          var siblings = Array.prototype.slice.call(
+            entry.target.parentElement.parentElement.querySelectorAll('.prop-title[data-text]')
+          );
+          var idx = siblings.indexOf(entry.target);
+          setTimeout(function () { type(entry.target); }, Math.max(0, idx) * 240);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5, rootMargin: '0px 0px -10% 0px' });
+    titles.forEach(function (el) { io.observe(el); });
+  })();
+
+  // --- 4) Timeline: progressive line fill on scroll
+  (function timelineProgress() {
+    var tl = document.getElementById('timeline');
+    if (!tl) return;
+    var items = Array.prototype.slice.call(tl.querySelectorAll('.t-item'));
+
+    function update() {
+      var rect = tl.getBoundingClientRect();
+      var viewportH = window.innerHeight || document.documentElement.clientHeight;
+      // Progress: 0 when top of timeline hits 70% of viewport, 1 when bottom hits 30%
+      var startY = viewportH * 0.7;
+      var endY = viewportH * 0.3;
+      var total = rect.height;
+      var traveled = startY - rect.top;
+      var range = (rect.height) + (startY - endY);
+      var p = traveled / range;
+      if (p < 0) p = 0;
+      if (p > 1) p = 1;
+      tl.style.setProperty('--tl-progress', p.toFixed(4));
+
+      // Mark items as passed when their dot is above the current fill
+      var fillBottomY = rect.top + Math.min(total, p * total);
+      items.forEach(function (item) {
+        var r = item.getBoundingClientRect();
+        var dotY = r.top + 16;
+        if (dotY <= fillBottomY + 4) item.classList.add('is-passed');
+        else item.classList.remove('is-passed');
+      });
+    }
+
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () {
+        update();
+        ticking = false;
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
+
+  // --- Nav blur on scroll
+  (function navBlur() {
     var nav = document.getElementById('nav');
     if (!nav) return;
     var onScroll = function () {
-      if (window.scrollY > 8) {
-        nav.classList.add('is-scrolled');
-      } else {
-        nav.classList.remove('is-scrolled');
-      }
+      if (window.scrollY > 8) nav.classList.add('is-scrolled');
+      else nav.classList.remove('is-scrolled');
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
   })();
+})();
 </script>
 
 </body>
