@@ -423,6 +423,12 @@
     line-height: 1.65;
     max-width: 580px;
   }
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px 40px;
+    align-items: center;
+  }
   .contact-email {
     display: inline-flex;
     align-items: center;
@@ -481,6 +487,7 @@
     .apps-intro { font-size: 16px; margin-bottom: 36px; }
     .contact-card { padding: 36px 28px; }
     .contact-email { font-size: 20px; }
+    .contact-links { gap: 20px 28px; }
     .nav-inner { height: 60px; }
     .btn { padding: 13px 24px; }
     body::before { background-size: 48px 48px; }
@@ -502,7 +509,7 @@
 <nav class="site-nav" id="nav">
   <div class="container nav-inner">
     <a href="#" class="wordmark" aria-label="3Mirror">3Mirror<span class="dot"></span></a>
-    <a class="nav-link" href="#contact">Contact</a>
+    <a class="nav-link" href="https://www.linkedin.com/in/vlad-altschuller-6a3970112/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
   </div>
 </nav>
 
@@ -705,7 +712,10 @@
 
     <div class="contact-card reveal">
       <p>For NDA access to technical specifications, licensing inquiries, or partnership discussions:</p>
-      <a class="contact-email" href="mailto:altschuller.v@gmail.com">altschuller.v@gmail.com <span class="arrow">→</span></a>
+      <div class="contact-links">
+        <a class="contact-email" href="mailto:altschuller.v@gmail.com">altschuller.v@gmail.com <span class="arrow">→</span></a>
+        <a class="contact-email" href="https://www.linkedin.com/in/vlad-altschuller-6a3970112/" target="_blank" rel="noopener noreferrer">LinkedIn <span class="arrow">↗</span></a>
+      </div>
     </div>
   </div>
 </section>
