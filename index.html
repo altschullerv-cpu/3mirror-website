@@ -249,37 +249,48 @@
   /* HERO MIRRORS — three portrait glass panels */
   .mirrors-stage {
     position: relative;
-    height: 580px;
-    perspective: 1600px;
-    perspective-origin: 50% 45%;
+    height: 460px;
+    perspective: 1400px;
+    perspective-origin: 50% 50%;
   }
   .mirrors-stage::before {
     content: "";
     position: absolute;
     inset: -15% -10%;
-    background: radial-gradient(ellipse at center, rgba(255,255,255,0.06), rgba(10,10,10,0) 60%);
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.05), rgba(10,10,10,0) 60%);
     pointer-events: none;
+  }
+  .mirrors-axis {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    animation: axis-spin 28s linear infinite;
+  }
+  @keyframes axis-spin {
+    from { transform: rotateX(-12deg) rotateY(0deg); }
+    to   { transform: rotateX(-12deg) rotateY(360deg); }
   }
   .mirror {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 250px;
-    height: 350px;
-    margin-top: -175px;
-    margin-left: -125px;
+    width: 175px;
+    height: 260px;
+    margin-top: -130px;
+    margin-left: 0;
     border: 1px solid rgba(255,255,255,0.20);
-    border-radius: 16px;
+    border-radius: 14px;
     background:
       linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.08) 100%);
     box-shadow:
       0 1px 0 rgba(255,255,255,0.14) inset,
-      0 30px 70px rgba(0,0,0,0.7);
+      0 24px 60px rgba(0,0,0,0.6);
     overflow: hidden;
     transform-style: preserve-3d;
-    transform-origin: center center;
+    transform-origin: 0% 50%;
     opacity: 0;
     animation: mirror-enter 1.2s cubic-bezier(0.16,1,0.3,1) forwards;
+    backface-visibility: visible;
   }
   .mirror .surface {
     position: absolute;
@@ -337,43 +348,34 @@
     50%      { transform: translateX(110%); }
   }
   @keyframes mirror-enter {
-    from { opacity: 0; transform: translate(-50%, -50%) translateX(0) rotate(0) scale(0.92); }
+    from { opacity: 0; }
     to   { opacity: 1; }
   }
 
-  /* Place three mirrors with subtle 3D fan-out */
-  .mirror.m1 {
-    transform: translate3d(-180px, 14px, -24px) rotateY(18deg) rotateZ(-6deg);
-    animation-delay: 0.1s;
-  }
-  .mirror.m2 {
-    transform: translate3d(0, -10px, 50px) rotateY(0deg) rotateZ(0deg);
-    z-index: 2;
-    animation-delay: 0.25s;
-  }
-  .mirror.m3 {
-    transform: translate3d(180px, 14px, -24px) rotateY(-18deg) rotateZ(6deg);
-    animation-delay: 0.4s;
-  }
+  /* Three mirrors share the left edge as a common axis, fanned 120° apart */
+  .mirror.m1 { transform: rotateY(0deg);   animation-delay: 0.1s; }
+  .mirror.m2 { transform: rotateY(120deg); animation-delay: 0.25s; }
+  .mirror.m3 { transform: rotateY(240deg); animation-delay: 0.4s; }
   .mirror.m1 .sweep { animation-delay: 0s; }
   .mirror.m2 .sweep { animation-delay: 2.5s; }
   .mirror.m3 .sweep { animation-delay: 5s; }
 
-  /* Floating divergence numbers between mirrors */
+  /* Floating divergence numbers (kept outside the axis so they don't rotate) */
   .float-num {
     position: absolute;
     font-family: "JetBrains Mono", monospace;
-    font-size: 13px;
-    color: rgba(255,255,255,0.55);
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
     letter-spacing: 0.05em;
     opacity: 0;
     animation: float-fade 1s ease-out 1.4s forwards;
     z-index: 3;
     text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    pointer-events: none;
   }
-  .float-num.n1 { top: 32%; left: 32%; }
-  .float-num.n2 { top: 58%; left: 62%; }
-  .float-num.n3 { top: 22%; left: 64%; }
+  .float-num.n1 { top: 14%; left: 18%; }
+  .float-num.n2 { top: 78%; right: 18%; left: auto; }
+  .float-num.n3 { top: 22%; right: 16%; left: auto; }
   @keyframes float-fade {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: none; }
@@ -1039,18 +1041,12 @@
   }
   @media (max-width: 940px) {
     .hero-grid { grid-template-columns: 1fr; gap: 8px; }
-    .mirrors-stage { order: -1; height: 460px; }
-    .mirror { width: 210px; height: 290px; margin-top: -145px; margin-left: -105px; }
-    .mirror.m1 { transform: translate3d(-150px, 10px, -22px) rotateY(18deg) rotateZ(-6deg); }
-    .mirror.m2 { transform: translate3d(0, -8px, 44px); }
-    .mirror.m3 { transform: translate3d(150px, 10px, -22px) rotateY(-18deg) rotateZ(6deg); }
+    .mirrors-stage { order: -1; height: 400px; }
+    .mirror { width: 150px; height: 220px; margin-top: -110px; }
   }
   @media (max-width: 560px) {
-    .mirrors-stage { height: 380px; }
-    .mirror { width: 170px; height: 235px; margin-top: -117px; margin-left: -85px; }
-    .mirror.m1 { transform: translate3d(-120px, 8px, -20px) rotateY(18deg) rotateZ(-6deg); }
-    .mirror.m2 { transform: translate3d(0, -6px, 40px); }
-    .mirror.m3 { transform: translate3d(120px, 8px, -20px) rotateY(-18deg) rotateZ(6deg); }
+    .mirrors-stage { height: 340px; }
+    .mirror { width: 125px; height: 185px; margin-top: -92px; }
   }
   @media (max-width: 880px) {
     .container { padding: 0 22px; }
@@ -1079,6 +1075,7 @@
     .reveal { opacity: 1; transform: none; transition: none; }
     .mirror { animation: none; opacity: 1; }
     .mirror .sweep { animation: none; opacity: 0; }
+    .mirrors-axis { animation: none; transform: rotateX(-12deg) rotateY(-25deg); }
     .float-num { opacity: 0.5; animation: none; }
     .hero-eyebrow .pulse::after { animation: none; }
     .cell.pulsing { animation: none; }
@@ -1116,6 +1113,7 @@
       </div>
 
       <div class="mirrors-stage" aria-hidden="true">
+        <div class="mirrors-axis">
         <div class="mirror m1">
           <div class="surface">
             <svg class="pattern" viewBox="0 0 200 280" preserveAspectRatio="none">
@@ -1189,6 +1187,7 @@
           </div>
         </div>
 
+        </div>
         <span class="float-num n1">0.12</span>
         <span class="float-num n2">0.73</span>
         <span class="float-num n3">0.41</span>
