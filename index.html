@@ -685,9 +685,6 @@
   .cell-low  { background: var(--c-low-bg);  color: var(--c-low-text);  border-color: var(--c-low-border)  !important; }
   .cell-mod  { background: var(--c-mod-bg);  color: var(--c-mod-text);  border-color: var(--c-mod-border)  !important; }
   .cell-high { background: var(--c-high-bg); color: var(--c-high-text); border-color: var(--c-high-border) !important; }
-  .cell-dir-high { background: rgba(42,24,66,0.8); color: var(--c-dir-text); border-color: var(--c-dir-border) !important; }
-  .cell-dir-mod  { background: rgba(42,24,66,0.5); color: var(--c-dir-text); border-color: rgba(156,122,212,0.16) !important; }
-  .cell-dir-low  { background: rgba(42,24,66,0.3); color: #9a7cc4;          border-color: rgba(156,122,212,0.12) !important; }
   .cell .lbl {
     display: block;
     font-size: 10px;
@@ -713,29 +710,22 @@
     background: linear-gradient(to right, transparent, var(--border-strong) 10%, var(--border-strong) 90%, transparent);
     border: 0;
   }
-  .row-tagged th, .row-tagged td {
-    background-color: rgba(156,122,212,0.05);
-    border-top: 1px solid rgba(156,122,212,0.18);
-    border-bottom: 1px solid rgba(156,122,212,0.18);
-  }
-  .row-tagged th { font-weight: 600; color: var(--c-dir-text); }
-  .row-tagged th em { font-style: italic; color: rgba(184,146,230,0.7); }
-  .row-separator-label td {
-    padding: 0; height: auto; border: 0;
-    position: relative;
-  }
-  .row-separator-label .sep-text {
-    display: flex; align-items: center; gap: 12px;
-    padding: 10px 16px 8px;
-    font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em;
-    color: var(--text-4);
-  }
-  .row-separator-label .sep-text::before,
-  .row-separator-label .sep-text::after {
-    content: ''; flex: 1; height: 1px;
-    background: linear-gradient(to right, transparent, var(--border-strong), transparent);
-  }
   .row-real th { color: var(--text); font-weight: 600; }
+  .row-direction td {
+    font-size: 11px;
+    padding: 6px 16px;
+    color: inherit;
+    opacity: 0.7;
+    border-top: 0;
+    letter-spacing: 0.02em;
+  }
+  .row-direction th {
+    font-size: 11px;
+    padding: 6px 16px;
+    color: var(--text-3);
+    border-top: 0;
+    font-weight: 400;
+  }
 
   /* Matrix animation */
   .matrix-row { opacity: 0; transform: translateY(8px); transition: opacity 0.6s ease, transform 0.6s ease; transition-delay: var(--row-delay, 0ms); }
@@ -779,12 +769,83 @@
     margin-bottom: 12px;
     font-weight: 500;
   }
-  .psd-direction {
-    margin-top: 10px;
-    font-size: 12px;
-    color: var(--text-4);
-    line-height: 1.5;
+
+  /* Divergence graph */
+  .divergence-graph {
+    margin-top: 36px;
+    padding: 28px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
   }
+  .divergence-graph-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--text-3);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .divergence-graph-phrase {
+    font-size: 14px;
+    color: var(--text-2);
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  .divergence-canvas-wrap {
+    position: relative;
+    height: 320px;
+  }
+  .divergence-legend {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--text-3);
+  }
+  .divergence-legend span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .legend-line {
+    display: inline-block;
+    width: 24px;
+    height: 2px;
+  }
+  .legend-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* Conclusion card */
+  .conclusion-card {
+    margin-top: 28px;
+    padding: 24px 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid #E24B4A;
+    border-radius: 10px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-2);
+  }
+  .conclusion-card strong {
+    color: var(--text);
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .conclusion-card p { margin: 0 0 14px; }
+  .conclusion-card p:last-child { margin-bottom: 0; }
+  .tag-uncertain { color: #EF9F27; font-weight: 500; }
+  .tag-anxious   { color: #E24B4A; font-weight: 500; }
+  .tag-hesitant  { color: #EF9F27; font-weight: 500; }
 
   /* INSIGHTS cards */
   .insights {
@@ -793,7 +854,6 @@
     gap: 14px;
     margin-top: 28px;
   }
-  .insight.i-dir { grid-column: 1 / -1; }
   .insight {
     border: 1px solid var(--border);
     background: var(--bg-elev);
@@ -807,7 +867,6 @@
   .insight.i-mod  { border-color: var(--c-mod-border);  background: rgba(58,42,20,0.4); }
   .insight.i-low  { border-color: var(--c-low-border);  background: rgba(24,37,66,0.4); }
   .insight.i-ok   { border-color: var(--c-zero-border); background: rgba(20,48,46,0.4); }
-  .insight.i-dir  { border-color: var(--c-dir-border);  background: rgba(42,24,66,0.4); }
   .insight-icon {
     width: 24px; height: 24px;
     flex-shrink: 0;
@@ -817,7 +876,6 @@
   .insight.i-mod  .insight-icon { color: var(--c-mod-text); }
   .insight.i-low  .insight-icon { color: var(--c-low-text); }
   .insight.i-ok   .insight-icon { color: var(--c-zero-text); }
-  .insight.i-dir  .insight-icon { color: var(--c-dir-text); }
   .insight-text {
     flex: 1;
     font-size: 14px;
@@ -1112,6 +1170,11 @@
     .mirror .label { padding: 22px 24px; }
   }
   @media (max-width: 640px) {
+    .divergence-canvas-wrap { height: 240px; }
+    .divergence-graph { padding: 20px 16px; }
+    .conclusion-card { padding: 20px; font-size: 14px; }
+    .row-direction td { font-size: 10px; padding: 4px 10px; }
+    .row-direction th { font-size: 10px; padding: 4px 10px; }
     .mirrors-stage {
       width: 420px;
       height: 380px;
@@ -1162,6 +1225,7 @@
     html { scroll-behavior: auto; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
 </head>
 <body>
 
@@ -1433,22 +1497,22 @@
               <td class="cell cell-zero">0.00</td>
               <td class="cell cell-zero">0.00</td>
             </tr>
-            <tr class="matrix-row row-tagged" data-row="4">
-              <th>TTS Voice A · <em>"sad"</em></th>
-              <td class="cell cell-dir-high" data-val="0.62">0.00<span class="lbl">directed</span></td>
-              <td class="cell cell-dir-low"  data-val="0.15">0.00<span class="lbl">low</span></td>
-              <td class="cell cell-dir-high" data-val="0.71">0.00<span class="lbl">directed</span></td>
-              <td class="cell cell-dir-mod"  data-val="0.24">0.00<span class="lbl">low</span></td>
-              <td class="cell cell-dir-mod"  data-val="0.48">0.00<span class="lbl">moderate</span></td>
-            </tr>
-            <tr class="row-separator-label"><td colspan="6"><span class="sep-text">measured against the scale</span></td></tr>
-            <tr class="matrix-row row-real" data-row="5">
+            <tr class="row-separator"><td colspan="6"></td></tr>
+            <tr class="matrix-row row-real" data-row="4">
               <th>Real speaker</th>
               <td class="cell cell-low"  data-val="0.12">0.00<span class="lbl">low</span></td>
               <td class="cell cell-mod"  data-val="0.41">0.00<span class="lbl">moderate</span></td>
               <td class="cell cell-low"  data-val="0.08">0.00<span class="lbl">low</span></td>
               <td class="cell cell-high" data-val="0.73">0.00<span class="lbl">high</span></td>
               <td class="cell cell-mod"  data-val="0.55">0.00<span class="lbl">moderate</span></td>
+            </tr>
+            <tr class="row-direction">
+              <th>Direction</th>
+              <td class="cell cell-low">→ aligned</td>
+              <td class="cell cell-mod">→ decided</td>
+              <td class="cell cell-low">→ aligned</td>
+              <td class="cell cell-high">→ uncertain</td>
+              <td class="cell cell-mod">→ tense</td>
             </tr>
           </tbody>
         </table>
@@ -1462,19 +1526,29 @@
           <span>0.6 · moderate</span>
           <span>1.0 · high</span>
         </div>
-        <div class="psd-direction">Direction: proximity to tagged TTS references indicates where the divergence points</div>
       </div>
     </div>
 
-    <div class="insights">
-      <div class="insight i-dir reveal">
-        <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 2 L12 6 M12 18 L12 22 M2 12 L6 12 M18 12 L22 12"/>
-          <path d="M12 8 L12 12 L15 15" stroke-width="2"/>
-        </svg>
-        <div class="insight-text"><strong>Direction, not just distance</strong>The tagged TTS row is the coordinate grid. We know exactly what "sad" sounds like for each phrase and how far it is from zero. When the real speaker's divergence lands near a tagged direction — we know not just how far the voice diverged from the words, but where it went.</div>
+    <div class="divergence-graph reveal" id="divergenceGraph">
+      <div class="divergence-graph-title">Word-by-word divergence</div>
+      <div class="divergence-graph-phrase">"I'm really confident in this deal, but I need more time to think."</div>
+      <div class="divergence-canvas-wrap">
+        <canvas id="psdChart"></canvas>
       </div>
+      <div class="divergence-legend">
+        <span><span class="legend-line" style="background:#1D9E75;border-top:2px dashed #1D9E75;height:0"></span> TTS baseline (zero point)</span>
+        <span><span class="legend-line" style="background:#85B7EB"></span> Real speaker</span>
+        <span><span class="legend-dot" style="background:#EF9F27"></span><span class="legend-dot" style="background:#E24B4A"></span> Direction (nearest TTS tag)</span>
+      </div>
+    </div>
+
+    <div class="conclusion-card reveal">
+      <p><strong>What was said</strong>"I'm really confident in this deal, but I need more time to think."</p>
+      <p><strong>What the voice tells us</strong>Words and voice are aligned through "I'm confident in this" — the speaker sounds like they mean it. At "deal" the voice shifts toward the acoustic profile of TTS-generated uncertainty (tag: <span class="tag-uncertain">uncertain</span>, PSD 0.41). After "but," the divergence climbs sharply. At "need" the voice is closest to TTS-generated anxiety (tag: <span class="tag-anxious">anxious</span>, PSD 0.73) — the highest point. At "time" it matches TTS-generated hesitation (tag: <span class="tag-hesitant">hesitant</span>, PSD 0.71).</p>
+      <p><strong>Conclusion</strong>This person is not "thinking it over." They have a specific concern about the deal they are not voicing. The system detected it without asking a single question — just by measuring the distance between their words and their voice, and matching the direction of that distance against known acoustic profiles.</p>
+    </div>
+
+    <div class="insights">
       <div class="insight i-high reveal">
         <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 2 L22 20 L2 20 Z"/>
@@ -1508,7 +1582,7 @@
     </div>
 
     <div class="matrix-callout reveal">
-      <strong>How to read this.</strong> The green rows are the ruler — synthetic voices that can't feel anything, so their words and tone always match (<span style="font-family:'JetBrains Mono',monospace">0.00</span>). The <span style="color:var(--c-dir-text)">purple row</span> adds a known direction — the same voice instructed to sound "sad." Now you have a coordinate grid: zero point plus known directions. The bottom row is a real person, measured against both. Where the number rises, the voice is telling a different story than the words. When it rises toward a known direction — you know which story.
+      <strong>How to read this.</strong> The green rows are the ruler — synthetic voices that can't feel anything, so their words and tone always match (<span style="font-family:'JetBrains Mono',monospace">0.00</span>). The bottom row is a real person, measured against that ruler. Where the number rises, the voice is telling a different story than the words. The system doesn't guess emotions. It measures the gap.
     </div>
 
     <div class="features-grid">
@@ -1794,23 +1868,19 @@
       rows.forEach(function (row, i) {
         setTimeout(function () { row.classList.add('is-visible'); }, i * 160);
       });
-      var taggedRow = wrap.querySelector('.row-tagged');
       var realRow = wrap.querySelector('.row-real');
-      if (taggedRow) animateRow(taggedRow, rows.length * 160 + 200);
-      if (realRow) animateRow(realRow, rows.length * 160 + 200 + 800);
+      if (realRow) animateRow(realRow, rows.length * 160 + 200);
     }
 
     if (reduceMotion || !('IntersectionObserver' in window)) {
       var rows = wrap.querySelectorAll('.matrix-row');
       rows.forEach(function (row) { row.classList.add('is-visible'); });
-      ['.row-tagged', '.row-real'].forEach(function (sel) {
-        var row = wrap.querySelector(sel);
-        if (row) {
-          row.querySelectorAll('td[data-val]').forEach(function (cell) {
-            cell.firstChild.nodeValue = parseFloat(cell.getAttribute('data-val')).toFixed(2);
-          });
-        }
-      });
+      var realRow = wrap.querySelector('.row-real');
+      if (realRow) {
+        realRow.querySelectorAll('td[data-val]').forEach(function (cell) {
+          cell.firstChild.nodeValue = parseFloat(cell.getAttribute('data-val')).toFixed(2);
+        });
+      }
       return;
     }
 
@@ -1823,6 +1893,158 @@
       });
     }, { threshold: 0.25 });
     io.observe(wrap);
+  })();
+
+  // Divergence line graph
+  (function divergenceChart() {
+    var canvas = document.getElementById('psdChart');
+    if (!canvas || typeof Chart === 'undefined') return;
+    var ctx = canvas.getContext('2d');
+
+    var words = ["I'm","really","confident","in","this","deal","but","I","need","more","time","to","think"];
+    var psd =   [0.05, 0.08, 0.12, 0.06, 0.04, 0.41, 0.55, 0.38, 0.73, 0.62, 0.71, 0.35, 0.18];
+    var baseline = words.map(function () { return 0; });
+
+    var annotated = [
+      { idx: 5,  tag: 'uncertain', color: '#EF9F27' },
+      { idx: 8,  tag: 'anxious',   color: '#E24B4A' },
+      { idx: 10, tag: 'hesitant',  color: '#EF9F27' }
+    ];
+
+    var pointBg = psd.map(function (v, i) {
+      var a = annotated.filter(function (x) { return x.idx === i; })[0];
+      return a ? a.color : '#85B7EB';
+    });
+    var pointR = psd.map(function (v, i) {
+      var a = annotated.filter(function (x) { return x.idx === i; })[0];
+      return a ? 6 : 2.5;
+    });
+
+    var annotationPlugin = {
+      id: 'psdAnnotations',
+      afterDraw: function (chart) {
+        var ctx = chart.ctx;
+        var xScale = chart.scales.x;
+        var yScale = chart.scales.y;
+        annotated.forEach(function (a) {
+          var x = xScale.getPixelForValue(a.idx);
+          var y = yScale.getPixelForValue(psd[a.idx]);
+          var topY = y - 52;
+          ctx.save();
+          ctx.setLineDash([3, 3]);
+          ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(x, y - 8);
+          ctx.lineTo(x, topY + 14);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.textAlign = 'center';
+          ctx.font = '10px Inter, sans-serif';
+          ctx.fillStyle = 'rgba(255,255,255,0.35)';
+          ctx.fillText('TTS tag: ' + a.tag, x, topY);
+          ctx.font = '500 11px Inter, sans-serif';
+          ctx.fillStyle = a.color;
+          ctx.fillText('→ ' + a.tag, x, topY + 14);
+          ctx.restore();
+        });
+      }
+    };
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: words,
+        datasets: [
+          {
+            label: 'TTS baseline (zero point)',
+            data: baseline,
+            borderColor: '#1D9E75',
+            borderDash: [5, 4],
+            borderWidth: 1.5,
+            pointRadius: 0,
+            fill: false,
+            order: 2
+          },
+          {
+            label: 'Real speaker',
+            data: psd,
+            borderColor: '#85B7EB',
+            borderWidth: 2.5,
+            tension: 0.35,
+            pointBackgroundColor: pointBg,
+            pointBorderColor: pointBg,
+            pointRadius: pointR,
+            pointHoverRadius: 7,
+            fill: {
+              target: 0,
+              above: 'rgba(133,183,235,0.08)'
+            },
+            order: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          mode: 'index',
+          intersect: false
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(12,12,18,0.92)',
+            titleFont: { family: 'Inter', size: 13 },
+            bodyFont: { family: 'JetBrains Mono', size: 12 },
+            borderColor: 'rgba(255,255,255,0.08)',
+            borderWidth: 1,
+            padding: 12,
+            callbacks: {
+              title: function (items) { return '"' + items[0].label + '"'; },
+              label: function (item) {
+                if (item.datasetIndex === 0) return 'Baseline: 0.00';
+                var v = item.raw;
+                var dir = '';
+                annotated.forEach(function (a) {
+                  if (a.idx === item.dataIndex) dir = '  → ' + a.tag;
+                });
+                return 'PSD: ' + v.toFixed(2) + dir;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: {
+              color: 'rgba(255,255,255,0.4)',
+              font: { family: 'Inter', size: 12 }
+            },
+            border: { color: 'rgba(255,255,255,0.06)' }
+          },
+          y: {
+            min: -0.1,
+            max: 1.0,
+            ticks: {
+              stepSize: 0.2,
+              color: 'rgba(255,255,255,0.35)',
+              font: { family: 'JetBrains Mono', size: 11 },
+              callback: function (v) { return v.toFixed(1); }
+            },
+            grid: { color: 'rgba(255,255,255,0.04)' },
+            border: { display: false },
+            title: {
+              display: true,
+              text: 'PSD (divergence)',
+              color: 'rgba(255,255,255,0.3)',
+              font: { family: 'Inter', size: 11, weight: '400' }
+            }
+          }
+        }
+      },
+      plugins: [annotationPlugin]
+    });
   })();
 
   // Timeline progressive fill on scroll
