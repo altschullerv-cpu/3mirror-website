@@ -289,13 +289,13 @@
     height: 520px;
     margin-top: -260px;
     margin-left: 0;
-    border: 1px solid rgba(255,255,255,0.20);
-    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 0;
     background:
-      linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.08) 100%);
+      linear-gradient(135deg, #20202a 0%, #0c0c12 48%, #1a1a22 100%);
     box-shadow:
-      0 1px 0 rgba(255,255,255,0.14) inset,
-      0 24px 60px rgba(0,0,0,0.6);
+      0 1px 0 rgba(255,255,255,0.10) inset,
+      0 30px 70px rgba(0,0,0,0.8);
     overflow: hidden;
     transform-style: preserve-3d;
     transform-origin: 0% 50%;
@@ -319,7 +319,7 @@
   .mirror .sweep {
     position: absolute;
     inset: -20% -40%;
-    background: linear-gradient(110deg, transparent 36%, rgba(255,255,255,0.42) 49%, transparent 62%);
+    background: linear-gradient(110deg, transparent 34%, rgba(255,255,255,0.55) 49%, transparent 64%);
     transform: translateX(-100%);
     animation: sweep 9s ease-in-out infinite;
     pointer-events: none;
@@ -327,7 +327,7 @@
   .mirror .gloss {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 32%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0) 32%);
     pointer-events: none;
   }
   .mirror .label {
@@ -363,10 +363,10 @@
     to   { opacity: 1; }
   }
 
-  /* Three mirrors share the left edge as a common axis, fanned 120° apart */
-  .mirror.m1 { transform: rotateY(0deg);   animation-delay: 0.1s; }
-  .mirror.m2 { transform: rotateY(120deg); animation-delay: 0.25s; }
-  .mirror.m3 { transform: rotateY(240deg); animation-delay: 0.4s; }
+  /* Three mirrors orbit the shared Y axis at gap distance, fanned 120° apart */
+  .mirror.m1 { transform: rotateY(0deg)   translateX(50px); animation-delay: 0.1s; }
+  .mirror.m2 { transform: rotateY(120deg) translateX(50px); animation-delay: 0.25s; }
+  .mirror.m3 { transform: rotateY(240deg) translateX(50px); animation-delay: 0.4s; }
   .mirror.m1 .sweep { animation-delay: 0s; }
   .mirror.m2 .sweep { animation-delay: 2.5s; }
   .mirror.m3 .sweep { animation-delay: 5s; }
@@ -1058,7 +1058,10 @@
       mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.35) 28%, #000 58%);
       -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.35) 28%, #000 58%);
     }
-    .mirror { width: 260px; height: 380px; margin-top: -190px; border-radius: 18px; }
+    .mirror { width: 260px; height: 380px; margin-top: -190px; }
+    .mirror.m1 { transform: rotateY(0deg)   translateX(38px); }
+    .mirror.m2 { transform: rotateY(120deg) translateX(38px); }
+    .mirror.m3 { transform: rotateY(240deg) translateX(38px); }
     .mirror .label { padding: 22px 24px; }
   }
   @media (max-width: 640px) {
@@ -1066,11 +1069,14 @@
       width: 420px;
       height: 380px;
       right: -120px;
-      opacity: 0.7;
+      opacity: 0.75;
       mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 30%, #000 62%);
       -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 30%, #000 62%);
     }
-    .mirror { width: 200px; height: 290px; margin-top: -145px; border-radius: 14px; }
+    .mirror { width: 200px; height: 290px; margin-top: -145px; }
+    .mirror.m1 { transform: rotateY(0deg)   translateX(28px); }
+    .mirror.m2 { transform: rotateY(120deg) translateX(28px); }
+    .mirror.m3 { transform: rotateY(240deg) translateX(28px); }
     .mirror .label { padding: 18px 20px; }
     .mirror .idx { font-size: 11px; }
     .mirror .tag { font-size: 10.5px; }
