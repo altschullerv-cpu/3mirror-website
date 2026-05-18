@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>3Mirror — Measurement infrastructure for prosodic-semantic divergence</title>
+<meta name="description" content="3Mirror measures the distance between what is said and how it is said. A two-layer measurement infrastructure for prosodic-semantic divergence." />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    color: #1a1a1a;
+    background: #fff;
+    font-size: 16px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:hover { opacity: 0.6; }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* NAV */
+  nav.site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .wordmark {
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border: 1px solid #1a1a1a;
+    padding: 4px 10px;
+    white-space: nowrap;
+  }
+  .nav-link {
+    font-size: 14px;
+  }
+
+  /* HERO */
+  section.hero {
+    padding: 160px 0 140px;
+  }
+  .hero h1 {
+    font-size: 64px;
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 32px;
+    max-width: 880px;
+  }
+  .hero .sub {
+    font-size: 20px;
+    font-weight: 300;
+    color: #555;
+    max-width: 640px;
+    margin: 0 0 48px;
+    line-height: 1.5;
+  }
+  .btn-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-block;
+    border: 1px solid #1a1a1a;
+    background: transparent;
+    color: #1a1a1a;
+    padding: 14px 28px;
+    font-size: 14px;
+    font-family: inherit;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .btn:hover {
+    background: #1a1a1a;
+    color: #fff;
+    opacity: 1;
+  }
+
+  /* SECTIONS */
+  section.layer {
+    padding: 120px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+  .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #888;
+    margin-bottom: 24px;
+  }
+  h2.section-title {
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 0 0 12px;
+  }
+  .subtitle {
+    font-size: 18px;
+    color: #555;
+    font-weight: 300;
+    margin: 0 0 32px;
+  }
+  .description {
+    font-size: 16px;
+    color: #1a1a1a;
+    max-width: 760px;
+    margin: 0 0 32px;
+  }
+  .layer .badge { margin-bottom: 56px; }
+
+  .props {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px 56px;
+    margin-top: 24px;
+  }
+  .prop-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .prop-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  /* APPLICATIONS */
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .app-card {
+    border: 1px solid #e8e8e8;
+    padding: 32px;
+    transition: border-color 0.2s ease;
+  }
+  .app-card:hover {
+    border-color: #1a1a1a;
+  }
+  .app-icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 24px;
+    color: #1a1a1a;
+  }
+  .app-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .app-desc {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    margin-top: 48px;
+    border-left: 1px solid #e8e8e8;
+    padding-left: 32px;
+  }
+  .t-item {
+    position: relative;
+    padding: 0 0 36px;
+  }
+  .t-item:last-child { padding-bottom: 0; }
+  .t-item::before {
+    content: "";
+    position: absolute;
+    left: -37px;
+    top: 8px;
+    width: 9px;
+    height: 9px;
+    background: #1a1a1a;
+    border-radius: 50%;
+  }
+  .t-date {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #888;
+    margin-bottom: 4px;
+  }
+  .t-text {
+    font-size: 16px;
+    color: #1a1a1a;
+  }
+
+  /* CONTACT */
+  .contact-blocks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 48px;
+  }
+  .contact-block {
+    border: 1px solid #e8e8e8;
+    padding: 32px;
+  }
+  .contact-label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 12px;
+  }
+  .contact-email {
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+  }
+
+  footer {
+    border-top: 1px solid #e8e8e8;
+    padding: 40px 0;
+    text-align: center;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #888;
+  }
+
+  /* FADE IN */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 760px) {
+    .container { padding: 0 24px; }
+    section.hero { padding: 100px 0 80px; }
+    .hero h1 { font-size: 40px; }
+    .hero .sub { font-size: 17px; }
+    section.layer { padding: 80px 0; }
+    h2.section-title { font-size: 28px; }
+    .props { grid-template-columns: 1fr; gap: 28px; }
+    .apps-grid { grid-template-columns: 1fr; }
+    .contact-blocks { grid-template-columns: 1fr; }
+    .nav-right .badge { display: none; }
+    .nav-inner { height: 56px; }
+  }
+  @media (max-width: 980px) and (min-width: 761px) {
+    .apps-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .btn, .app-card { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="container nav-inner">
+    <div class="wordmark">3Mirror</div>
+    <div class="nav-right">
+      <span class="badge">Patent Pending</span>
+      <a class="nav-link" href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1 class="reveal">What is said. How it is said. The distance between them.</h1>
+    <p class="sub reveal">A measurement infrastructure for prosodic-semantic divergence.</p>
+    <div class="btn-row reveal">
+      <a href="#rgc" class="btn">Learn More</a>
+      <a href="mailto:altschuller.v@gmail.com?subject=NDA%20Access%20Request%20%E2%80%94%203Mirror" class="btn">Request NDA Access</a>
+    </div>
+  </div>
+</section>
+
+<section class="layer" id="rgc">
+  <div class="container">
+    <div class="label reveal">Layer One</div>
+    <h2 class="section-title reveal">Reverse Generative Calibration</h2>
+    <p class="subtitle reveal">The measurement foundation</p>
+    <p class="description reveal">A text-to-speech model without emotional instructions cannot diverge from semantics — its output is a pure function of the input text. This makes synthetic speech a natural zero point on the prosodic-semantic divergence scale. RGC constructs a calibration matrix from this zero point: a universal reference that works from the first second of interaction with any new speaker, requiring no prior personal data.</p>
+    <span class="badge reveal">Patent Pending · US PPA #64/018,274 · Priority March 2026</span>
+    <div class="props">
+      <div class="reveal">
+        <div class="prop-title">Universal</div>
+        <div class="prop-desc">Works with any new speaker from second one.</div>
+      </div>
+      <div class="reveal">
+        <div class="prop-title">Reproducible</div>
+        <div class="prop-desc">Same text yields same reference across systems.</div>
+      </div>
+      <div class="reveal">
+        <div class="prop-title">Privacy-preserving</div>
+        <div class="prop-desc">No personal voice data required.</div>
+      </div>
+      <div class="reveal">
+        <div class="prop-title">Bidirectional</div>
+        <div class="prop-desc">Supports both measurement and synthesis.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="layer" id="threemirror">
+  <div class="container">
+    <div class="label reveal">Layer Two</div>
+    <h2 class="section-title reveal">3Mirror</h2>
+    <p class="subtitle reveal">The analysis engine</p>
+    <p class="description reveal">3Mirror processes semantic and acoustic layers in parallel without fusion. It measures divergence between what is said and how it is said at word-level granularity — with millisecond-precision temporal alignment. The divergence signal is the diagnostic output, not a byproduct.</p>
+    <span class="badge reveal">Patent Pending · US PPA #64/016,499 · Priority March 2026</span>
+    <div class="props">
+      <div class="reveal">
+        <div class="prop-title">Non-fusion</div>
+        <div class="prop-desc">Semantic and acoustic layers preserved separately.</div>
+      </div>
+      <div class="reveal">
+        <div class="prop-title">Word-level</div>
+        <div class="prop-desc">Millisecond-precision temporal alignment.</div>
+      </div>
+      <div class="reveal">
+        <div class="prop-title">Interpretable</div>
+        <div class="prop-desc">Divergence localized to specific words and moments.</div>
+      </div>
+      <div class="reveal">
+        <div class="prop-title">Calibrated</div>
+        <div class="prop-desc">Built on RGC measurement foundation.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="layer" id="applications">
+  <div class="container">
+    <div class="label reveal">Applications</div>
+    <h2 class="section-title reveal">Applications</h2>
+    <div class="apps-grid">
+
+      <div class="app-card reveal">
+        <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path>
+        </svg>
+        <div class="app-title">Deepfake Detection</div>
+        <div class="app-desc">Behavioral incongruence, not generative artifacts.</div>
+      </div>
+
+      <div class="app-card reveal">
+        <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 12h2M8 6v12M12 3v18M16 8v8M20 11v2"></path>
+        </svg>
+        <div class="app-title">Voice AI</div>
+        <div class="app-desc">Background analytical layer for conversational systems.</div>
+      </div>
+
+      <div class="app-card reveal">
+        <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 12h3l2 -7 4 14 2 -10 2 5h5"></path>
+        </svg>
+        <div class="app-title">Clinical Diagnostics</div>
+        <div class="app-desc">Early monitoring of neurodegenerative changes.</div>
+      </div>
+
+      <div class="app-card reveal">
+        <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"></circle>
+          <circle cx="12" cy="12" r="9"></circle>
+        </svg>
+        <div class="app-title">Psychotherapy Support</div>
+        <div class="app-desc">Prosodic-semantic incongruence as clinical signal.</div>
+      </div>
+
+      <div class="app-card reveal">
+        <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 19V8l7 -5 7 5v11"></path>
+          <path d="M5 19h14"></path>
+          <path d="M10 19v-5h4v5"></path>
+        </svg>
+        <div class="app-title">HR &amp; Negotiations</div>
+        <div class="app-desc">Divergence analysis in high-stakes conversations.</div>
+      </div>
+
+      <div class="app-card reveal">
+        <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="9"></circle>
+          <circle cx="12" cy="12" r="5"></circle>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"></circle>
+        </svg>
+        <div class="app-title">Communication Training</div>
+        <div class="app-desc">Target prosodic profile coaching.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="layer" id="status">
+  <div class="container">
+    <div class="label reveal">Status</div>
+    <h2 class="section-title reveal">Status</h2>
+    <div class="timeline">
+      <div class="t-item reveal">
+        <div class="t-date">March 2026</div>
+        <div class="t-text">US Provisional Patents filed (3Mirror + RGC).</div>
+      </div>
+      <div class="t-item reveal">
+        <div class="t-date">May 2026</div>
+        <div class="t-text">Submitted to ICML 2026 Workshop on Machine Learning for Audio.</div>
+      </div>
+      <div class="t-item reveal">
+        <div class="t-date">May 2026</div>
+        <div class="t-text">Pre-seed discussions with Israel Innovation Authority (Tnufa).</div>
+      </div>
+      <div class="t-item reveal">
+        <div class="t-date">Ongoing</div>
+        <div class="t-text">Evaluating strategic partnerships and licensing.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="layer" id="contact">
+  <div class="container">
+    <div class="label reveal">Contact</div>
+    <h2 class="section-title reveal">Contact</h2>
+    <div class="contact-blocks">
+      <div class="contact-block reveal">
+        <div class="contact-label">Technical specification &amp; NDA access</div>
+        <a class="contact-email" href="mailto:altschuller.v@gmail.com?subject=Technical%20Specification%20%26%20NDA%20Access">altschuller.v@gmail.com</a>
+      </div>
+      <div class="contact-block reveal">
+        <div class="contact-label">Licensing &amp; partnership inquiries</div>
+        <a class="contact-email" href="mailto:altschuller.v@gmail.com?subject=Licensing%20%26%20Partnership%20Inquiry">altschuller.v@gmail.com</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  3Mirror · CreoCompass · Patent Pending · 2026
+</footer>
+
+<script>
+  (function () {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (el) { el.classList.add('is-visible'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+
+</body>
+</html>
