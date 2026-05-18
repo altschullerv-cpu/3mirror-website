@@ -8,7 +8,7 @@
 <meta name="description" content="Two patent-pending systems that turn the gap between words and voice into a quantitative, reproducible signal — from the first second of any conversation." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0a0a;
@@ -42,7 +42,8 @@
   html, body { margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "ss01", "cv11";
     color: var(--text);
     background: var(--bg);
     font-size: 15px;
@@ -93,11 +94,28 @@
     align-items: center;
     gap: 10px;
   }
-  .wordmark .glyph {
-    font-size: 15px;
-    color: var(--text-2);
-    transform: translateY(-1px);
+  .wordmark .mark {
+    width: 18px;
+    height: 18px;
+    position: relative;
+    display: inline-block;
   }
+  .wordmark .mark::before,
+  .wordmark .mark::after,
+  .wordmark .mark > i {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 1px;
+    transform-origin: center;
+  }
+  .wordmark .mark::before { transform: translate(-50%, -50%) rotate(60deg); opacity: 0.55; }
+  .wordmark .mark > i { transform: translate(-50%, -50%) rotate(0deg); }
+  .wordmark .mark::after  { transform: translate(-50%, -50%) rotate(-60deg); opacity: 0.55; }
   .nav-link {
     font-size: 13.5px;
     font-weight: 500;
@@ -156,22 +174,30 @@
     font-size: 66px;
     font-weight: 500;
     line-height: 1.04;
-    letter-spacing: -0.035em;
+    letter-spacing: -0.04em;
     margin: 0 0 28px;
     max-width: 640px;
     color: var(--text);
+    background: linear-gradient(180deg, #ffffff 0%, #c8c8d2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .hero h1 .accent {
     color: var(--accent);
     font-style: italic;
     font-weight: 400;
+    -webkit-text-fill-color: var(--accent);
   }
   .hero h1 .line {
     display: block;
   }
-  .hero h1 .line:nth-child(1) { color: var(--text); }
-  .hero h1 .line:nth-child(2) { color: var(--text); }
-  .hero h1 .line:nth-child(3) { color: var(--text-3); font-weight: 400; }
+  .hero h1 .line:nth-child(3) {
+    color: var(--text-3);
+    font-weight: 400;
+    -webkit-text-fill-color: var(--text-3);
+    background: none;
+  }
 
   .hero .sub {
     font-size: 17px;
@@ -214,7 +240,7 @@
   /* HERO MIRRORS — three portrait glass panels */
   .mirrors-stage {
     position: relative;
-    height: 480px;
+    height: 580px;
     perspective: 1600px;
     perspective-origin: 50% 45%;
   }
@@ -222,24 +248,24 @@
     content: "";
     position: absolute;
     inset: -15% -10%;
-    background: radial-gradient(ellipse at center, rgba(255,255,255,0.04), rgba(10,10,10,0) 60%);
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.06), rgba(10,10,10,0) 60%);
     pointer-events: none;
   }
   .mirror {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 200px;
-    height: 280px;
-    margin-top: -140px;
-    margin-left: -100px;
-    border: 1px solid rgba(255,255,255,0.14);
-    border-radius: 14px;
+    width: 250px;
+    height: 350px;
+    margin-top: -175px;
+    margin-left: -125px;
+    border: 1px solid rgba(255,255,255,0.20);
+    border-radius: 16px;
     background:
-      linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0.05) 100%);
+      linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.03) 50%, rgba(255,255,255,0.08) 100%);
     box-shadow:
-      0 1px 0 rgba(255,255,255,0.10) inset,
-      0 24px 60px rgba(0,0,0,0.6);
+      0 1px 0 rgba(255,255,255,0.14) inset,
+      0 30px 70px rgba(0,0,0,0.7);
     overflow: hidden;
     transform-style: preserve-3d;
     transform-origin: center center;
@@ -262,7 +288,7 @@
   .mirror .sweep {
     position: absolute;
     inset: -20% -40%;
-    background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,0.22) 49%, transparent 60%);
+    background: linear-gradient(110deg, transparent 36%, rgba(255,255,255,0.42) 49%, transparent 62%);
     transform: translateX(-100%);
     animation: sweep 9s ease-in-out infinite;
     pointer-events: none;
@@ -270,7 +296,7 @@
   .mirror .gloss {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 30%);
+    background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 32%);
     pointer-events: none;
   }
   .mirror .label {
@@ -308,16 +334,16 @@
 
   /* Place three mirrors with subtle 3D fan-out */
   .mirror.m1 {
-    transform: translate3d(-145px, 12px, -20px) rotateY(18deg) rotateZ(-6deg);
+    transform: translate3d(-180px, 14px, -24px) rotateY(18deg) rotateZ(-6deg);
     animation-delay: 0.1s;
   }
   .mirror.m2 {
-    transform: translate3d(0, -8px, 40px) rotateY(0deg) rotateZ(0deg);
+    transform: translate3d(0, -10px, 50px) rotateY(0deg) rotateZ(0deg);
     z-index: 2;
     animation-delay: 0.25s;
   }
   .mirror.m3 {
-    transform: translate3d(145px, 12px, -20px) rotateY(-18deg) rotateZ(6deg);
+    transform: translate3d(180px, 14px, -24px) rotateY(-18deg) rotateZ(6deg);
     animation-delay: 0.4s;
   }
   .mirror.m1 .sweep { animation-delay: 0s; }
@@ -328,12 +354,13 @@
   .float-num {
     position: absolute;
     font-family: "JetBrains Mono", monospace;
-    font-size: 12px;
-    color: rgba(255,255,255,0.28);
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
     letter-spacing: 0.05em;
     opacity: 0;
     animation: float-fade 1s ease-out 1.4s forwards;
     z-index: 3;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
   }
   .float-num.n1 { top: 32%; left: 32%; }
   .float-num.n2 { top: 58%; left: 62%; }
@@ -404,6 +431,10 @@
     line-height: 1.04;
     margin: 0 0 14px;
     color: var(--text);
+    background: linear-gradient(180deg, #ffffff 0%, #b8b8c2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .section-tagline {
     font-size: 19px;
@@ -999,11 +1030,18 @@
   }
   @media (max-width: 940px) {
     .hero-grid { grid-template-columns: 1fr; gap: 8px; }
-    .mirrors-stage { order: -1; height: 360px; }
-    .mirror { width: 160px; height: 220px; margin-top: -110px; margin-left: -80px; }
-    .mirror.m1 { transform: translate3d(-115px, 8px, -20px) rotateY(18deg) rotateZ(-6deg); }
+    .mirrors-stage { order: -1; height: 460px; }
+    .mirror { width: 210px; height: 290px; margin-top: -145px; margin-left: -105px; }
+    .mirror.m1 { transform: translate3d(-150px, 10px, -22px) rotateY(18deg) rotateZ(-6deg); }
+    .mirror.m2 { transform: translate3d(0, -8px, 44px); }
+    .mirror.m3 { transform: translate3d(150px, 10px, -22px) rotateY(-18deg) rotateZ(6deg); }
+  }
+  @media (max-width: 560px) {
+    .mirrors-stage { height: 380px; }
+    .mirror { width: 170px; height: 235px; margin-top: -117px; margin-left: -85px; }
+    .mirror.m1 { transform: translate3d(-120px, 8px, -20px) rotateY(18deg) rotateZ(-6deg); }
     .mirror.m2 { transform: translate3d(0, -6px, 40px); }
-    .mirror.m3 { transform: translate3d(115px, 8px, -20px) rotateY(-18deg) rotateZ(6deg); }
+    .mirror.m3 { transform: translate3d(120px, 8px, -20px) rotateY(-18deg) rotateZ(6deg); }
   }
   @media (max-width: 880px) {
     .container { padding: 0 22px; }
@@ -1043,7 +1081,7 @@
 
 <nav class="site-nav" id="nav">
   <div class="container nav-inner">
-    <a href="#" class="wordmark" aria-label="3Mirror"><span class="glyph">✦</span> 3Mirror</a>
+    <a href="#" class="wordmark" aria-label="3Mirror"><span class="mark" aria-hidden="true"><i></i></span> 3Mirror</a>
     <a class="nav-link" href="https://www.linkedin.com/in/vlad-altschuller-6a3970112/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
   </div>
 </nav>
@@ -1073,12 +1111,12 @@
           <div class="surface">
             <svg class="pattern" viewBox="0 0 200 280" preserveAspectRatio="none">
               <g stroke="#ffffff" fill="none" stroke-linecap="round">
-                <line x1="22" y1="118" x2="158" y2="118" stroke-opacity="0.16" stroke-width="2"/>
-                <line x1="22" y1="134" x2="128" y2="134" stroke-opacity="0.13" stroke-width="2"/>
-                <line x1="22" y1="150" x2="170" y2="150" stroke-opacity="0.10" stroke-width="2"/>
-                <line x1="22" y1="166" x2="100" y2="166" stroke-opacity="0.12" stroke-width="2"/>
-                <line x1="22" y1="182" x2="148" y2="182" stroke-opacity="0.09" stroke-width="2"/>
-                <line x1="22" y1="198" x2="115" y2="198" stroke-opacity="0.08" stroke-width="2"/>
+                <line x1="22" y1="118" x2="158" y2="118" stroke-opacity="0.28" stroke-width="2"/>
+                <line x1="22" y1="134" x2="128" y2="134" stroke-opacity="0.24" stroke-width="2"/>
+                <line x1="22" y1="150" x2="170" y2="150" stroke-opacity="0.20" stroke-width="2"/>
+                <line x1="22" y1="166" x2="100" y2="166" stroke-opacity="0.22" stroke-width="2"/>
+                <line x1="22" y1="182" x2="148" y2="182" stroke-opacity="0.18" stroke-width="2"/>
+                <line x1="22" y1="198" x2="115" y2="198" stroke-opacity="0.16" stroke-width="2"/>
               </g>
             </svg>
             <div class="sweep"></div>
@@ -1094,10 +1132,10 @@
           <div class="surface">
             <svg class="pattern" viewBox="0 0 200 280" preserveAspectRatio="none">
               <g stroke="#ffffff" fill="none" stroke-linecap="round">
-                <path d="M 18 138 Q 38 110 58 138 T 98 138 T 138 138 T 182 138" stroke-opacity="0.22" stroke-width="1.5"/>
-                <path d="M 18 158 Q 38 130 58 158 T 98 158 T 138 158 T 182 158" stroke-opacity="0.16" stroke-width="1.5"/>
-                <path d="M 18 178 Q 38 195 58 178 T 98 178 T 138 178 T 182 178" stroke-opacity="0.12" stroke-width="1.5"/>
-                <g stroke-opacity="0.10" stroke-width="1.2">
+                <path d="M 18 138 Q 38 110 58 138 T 98 138 T 138 138 T 182 138" stroke-opacity="0.36" stroke-width="1.5"/>
+                <path d="M 18 158 Q 38 130 58 158 T 98 158 T 138 158 T 182 158" stroke-opacity="0.26" stroke-width="1.5"/>
+                <path d="M 18 178 Q 38 195 58 178 T 98 178 T 138 178 T 182 178" stroke-opacity="0.20" stroke-width="1.5"/>
+                <g stroke-opacity="0.18" stroke-width="1.2">
                   <line x1="32"  y1="118" x2="32"  y2="198"/>
                   <line x1="68"  y1="110" x2="68"  y2="206"/>
                   <line x1="100" y1="98"  x2="100" y2="218"/>
@@ -1119,18 +1157,18 @@
           <div class="surface">
             <svg class="pattern" viewBox="0 0 200 280" preserveAspectRatio="none">
               <g stroke="#ffffff" fill="none">
-                <circle cx="100" cy="138" r="26" stroke-opacity="0.18" stroke-width="1.5"/>
-                <path d="M 60 208 Q 100 178 140 208" stroke-opacity="0.18" stroke-width="1.5" fill="none"/>
+                <circle cx="100" cy="138" r="26" stroke-opacity="0.32" stroke-width="1.6"/>
+                <path d="M 60 208 Q 100 178 140 208" stroke-opacity="0.32" stroke-width="1.6" fill="none"/>
               </g>
               <g fill="#ffffff">
-                <circle cx="42"  cy="90"  r="2" fill-opacity="0.22"/>
-                <circle cx="158" cy="106" r="2" fill-opacity="0.17"/>
-                <circle cx="36"  cy="226" r="2" fill-opacity="0.20"/>
-                <circle cx="164" cy="232" r="2" fill-opacity="0.14"/>
-                <circle cx="82"  cy="244" r="2" fill-opacity="0.16"/>
-                <circle cx="120" cy="240" r="2" fill-opacity="0.14"/>
-                <circle cx="58"  cy="120" r="1.5" fill-opacity="0.14"/>
-                <circle cx="148" cy="190" r="1.5" fill-opacity="0.12"/>
+                <circle cx="42"  cy="90"  r="2.2" fill-opacity="0.38"/>
+                <circle cx="158" cy="106" r="2.2" fill-opacity="0.30"/>
+                <circle cx="36"  cy="226" r="2.2" fill-opacity="0.34"/>
+                <circle cx="164" cy="232" r="2.2" fill-opacity="0.24"/>
+                <circle cx="82"  cy="244" r="2.2" fill-opacity="0.28"/>
+                <circle cx="120" cy="240" r="2.2" fill-opacity="0.24"/>
+                <circle cx="58"  cy="120" r="1.6" fill-opacity="0.24"/>
+                <circle cx="148" cy="190" r="1.6" fill-opacity="0.22"/>
               </g>
             </svg>
             <div class="sweep"></div>
