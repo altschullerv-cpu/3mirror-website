@@ -37,6 +37,10 @@
     --c-high-bg: #3a1818;
     --c-high-border: rgba(212,120,120,0.24);
     --c-high-text: #e88888;
+
+    --c-dir-bg: #2a1842;
+    --c-dir-border: rgba(156,122,212,0.22);
+    --c-dir-text: #b892e6;
   }
   *, *::before, *::after { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -681,6 +685,9 @@
   .cell-low  { background: var(--c-low-bg);  color: var(--c-low-text);  border-color: var(--c-low-border)  !important; }
   .cell-mod  { background: var(--c-mod-bg);  color: var(--c-mod-text);  border-color: var(--c-mod-border)  !important; }
   .cell-high { background: var(--c-high-bg); color: var(--c-high-text); border-color: var(--c-high-border) !important; }
+  .cell-dir-high { background: rgba(42,24,66,0.8); color: var(--c-dir-text); border-color: var(--c-dir-border) !important; }
+  .cell-dir-mod  { background: rgba(42,24,66,0.5); color: var(--c-dir-text); border-color: rgba(156,122,212,0.16) !important; }
+  .cell-dir-low  { background: rgba(42,24,66,0.3); color: #9a7cc4;          border-color: rgba(156,122,212,0.12) !important; }
   .cell .lbl {
     display: block;
     font-size: 10px;
@@ -705,6 +712,28 @@
     height: 2px;
     background: linear-gradient(to right, transparent, var(--border-strong) 10%, var(--border-strong) 90%, transparent);
     border: 0;
+  }
+  .row-tagged th, .row-tagged td {
+    background-color: rgba(156,122,212,0.05);
+    border-top: 1px solid rgba(156,122,212,0.18);
+    border-bottom: 1px solid rgba(156,122,212,0.18);
+  }
+  .row-tagged th { font-weight: 600; color: var(--c-dir-text); }
+  .row-tagged th em { font-style: italic; color: rgba(184,146,230,0.7); }
+  .row-separator-label td {
+    padding: 0; height: auto; border: 0;
+    position: relative;
+  }
+  .row-separator-label .sep-text {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px 8px;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em;
+    color: var(--text-4);
+  }
+  .row-separator-label .sep-text::before,
+  .row-separator-label .sep-text::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-strong), transparent);
   }
   .row-real th { color: var(--text); font-weight: 600; }
 
@@ -750,6 +779,12 @@
     margin-bottom: 12px;
     font-weight: 500;
   }
+  .psd-direction {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-4);
+    line-height: 1.5;
+  }
 
   /* INSIGHTS cards */
   .insights {
@@ -758,6 +793,7 @@
     gap: 14px;
     margin-top: 28px;
   }
+  .insight.i-dir { grid-column: 1 / -1; }
   .insight {
     border: 1px solid var(--border);
     background: var(--bg-elev);
@@ -771,6 +807,7 @@
   .insight.i-mod  { border-color: var(--c-mod-border);  background: rgba(58,42,20,0.4); }
   .insight.i-low  { border-color: var(--c-low-border);  background: rgba(24,37,66,0.4); }
   .insight.i-ok   { border-color: var(--c-zero-border); background: rgba(20,48,46,0.4); }
+  .insight.i-dir  { border-color: var(--c-dir-border);  background: rgba(42,24,66,0.4); }
   .insight-icon {
     width: 24px; height: 24px;
     flex-shrink: 0;
@@ -780,6 +817,7 @@
   .insight.i-mod  .insight-icon { color: var(--c-mod-text); }
   .insight.i-low  .insight-icon { color: var(--c-low-text); }
   .insight.i-ok   .insight-icon { color: var(--c-zero-text); }
+  .insight.i-dir  .insight-icon { color: var(--c-dir-text); }
   .insight-text {
     flex: 1;
     font-size: 14px;
@@ -1395,7 +1433,15 @@
               <td class="cell cell-zero">0.00</td>
               <td class="cell cell-zero">0.00</td>
             </tr>
-            <tr class="row-separator"><td colspan="6"></td></tr>
+            <tr class="matrix-row row-tagged" data-row="4">
+              <th>TTS Voice A · <em>"sad"</em></th>
+              <td class="cell cell-dir-high" data-val="0.62">0.00<span class="lbl">directed</span></td>
+              <td class="cell cell-dir-low"  data-val="0.15">0.00<span class="lbl">low</span></td>
+              <td class="cell cell-dir-high" data-val="0.71">0.00<span class="lbl">directed</span></td>
+              <td class="cell cell-dir-mod"  data-val="0.24">0.00<span class="lbl">low</span></td>
+              <td class="cell cell-dir-mod"  data-val="0.48">0.00<span class="lbl">moderate</span></td>
+            </tr>
+            <tr class="row-separator-label"><td colspan="6"><span class="sep-text">measured against the scale</span></td></tr>
             <tr class="matrix-row row-real" data-row="5">
               <th>Real speaker</th>
               <td class="cell cell-low"  data-val="0.12">0.00<span class="lbl">low</span></td>
@@ -1416,10 +1462,19 @@
           <span>0.6 · moderate</span>
           <span>1.0 · high</span>
         </div>
+        <div class="psd-direction">Direction: proximity to tagged TTS references indicates where the divergence points</div>
       </div>
     </div>
 
     <div class="insights">
+      <div class="insight i-dir reveal">
+        <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 2 L12 6 M12 18 L12 22 M2 12 L6 12 M18 12 L22 12"/>
+          <path d="M12 8 L12 12 L15 15" stroke-width="2"/>
+        </svg>
+        <div class="insight-text"><strong>Direction, not just distance</strong>The tagged TTS row is the coordinate grid. We know exactly what "sad" sounds like for each phrase and how far it is from zero. When the real speaker's divergence lands near a tagged direction — we know not just how far the voice diverged from the words, but where it went.</div>
+      </div>
       <div class="insight i-high reveal">
         <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 2 L22 20 L2 20 Z"/>
@@ -1453,7 +1508,7 @@
     </div>
 
     <div class="matrix-callout reveal">
-      <strong>How to read this.</strong> The green rows are the ruler — synthetic voices that can't feel anything, so their words and tone always match (<span style="font-family:'JetBrains Mono',monospace">0.00</span>). The bottom row is a real person, measured against that ruler. Where the number rises, the voice is telling a different story than the words. The system doesn't guess emotions. It measures the gap.
+      <strong>How to read this.</strong> The green rows are the ruler — synthetic voices that can't feel anything, so their words and tone always match (<span style="font-family:'JetBrains Mono',monospace">0.00</span>). The <span style="color:var(--c-dir-text)">purple row</span> adds a known direction — the same voice instructed to sound "sad." Now you have a coordinate grid: zero point plus known directions. The bottom row is a real person, measured against both. Where the number rises, the voice is telling a different story than the words. When it rises toward a known direction — you know which story.
     </div>
 
     <div class="features-grid">
@@ -1739,19 +1794,23 @@
       rows.forEach(function (row, i) {
         setTimeout(function () { row.classList.add('is-visible'); }, i * 160);
       });
+      var taggedRow = wrap.querySelector('.row-tagged');
       var realRow = wrap.querySelector('.row-real');
-      if (realRow) animateRow(realRow, rows.length * 160 + 200);
+      if (taggedRow) animateRow(taggedRow, rows.length * 160 + 200);
+      if (realRow) animateRow(realRow, rows.length * 160 + 200 + 800);
     }
 
     if (reduceMotion || !('IntersectionObserver' in window)) {
       var rows = wrap.querySelectorAll('.matrix-row');
       rows.forEach(function (row) { row.classList.add('is-visible'); });
-      var realRow = wrap.querySelector('.row-real');
-      if (realRow) {
-        realRow.querySelectorAll('td[data-val]').forEach(function (cell) {
-          cell.firstChild.nodeValue = parseFloat(cell.getAttribute('data-val')).toFixed(2);
-        });
-      }
+      ['.row-tagged', '.row-real'].forEach(function (sel) {
+        var row = wrap.querySelector(sel);
+        if (row) {
+          row.querySelectorAll('td[data-val]').forEach(function (cell) {
+            cell.firstChild.nodeValue = parseFloat(cell.getAttribute('data-val')).toFixed(2);
+          });
+        }
+      });
       return;
     }
 
