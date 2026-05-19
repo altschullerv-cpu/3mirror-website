@@ -1656,12 +1656,11 @@
   <div class="container">
     <div class="layer-eyebrow reveal"><span class="num">02</span> The measurement foundation</div>
     <h2 class="section-title reveal">Reverse Generative Calibration (RGC)</h2>
-    <p class="section-tagline reveal">The ruler that makes the measurement possible.</p>
+    <p class="section-tagline reveal">A calibration matrix tool.</p>
 
-    <p class="description reveal">To measure how far a voice diverges from its words, you need a reference point — a voice that has zero divergence. Where do you find one?</p>
-    <p class="description reveal">You build it. A text-to-speech model reading words without any emotional instructions has no feelings, no hidden agenda, no internal state. It can't say one thing and mean another. Its output is pure alignment between words and voice — a natural zero point.</p>
-    <p class="description reveal">RGC feeds hundreds of phrases into multiple TTS models, extracts the acoustic signature of that zero point, and builds a universal measurement scale. The scale works instantly — no training data from the speaker, no waiting period, no personal recordings needed.</p>
-    <p class="description reveal">Real human speech is then measured against this scale: from <strong>0.0</strong> (full alignment) to <strong>1.0</strong> (maximum divergence between words and voice).</p>
+    <p class="description reveal">A TTS model today is built for one thing: precision. Its maximum capability is connecting the acoustic layer to the semantic layer — exactly as instructed, no more, no less. It has no internal state. Non-precision speech is a system bug.</p>
+    <p class="description reveal">Human free speech is the opposite. There are always two channels: what the person decided to say, and what their body does while saying it. The body doesn't fully obey — fear, doubt, excitement, uncertainty leak through. That leakage is the divergence.</p>
+    <p class="description reveal">To measure how far a voice diverges from its words, we built RGC. It feeds hundreds of phrases into multiple TTS models, extracts the acoustic reference for every emotional tag, and builds a measurement scale — from <strong>0.0</strong> (full alignment) to <strong>1.0</strong> (maximum divergence). The full calibration matrix supports up to 180,000 combinations of phrases, tags, voices, and divergence levels — each serving as a calibrated reference point on the PSD scale.</p>
 
     <div class="matrix-callout reveal">
       <strong>How to read this.</strong> The table has three sections. <strong>RGC Matrix</strong> — the green rows are the ruler. Synthetic voices that can't feel anything, so their words and tone always match (<span style="font-family:'JetBrains Mono',monospace">0.00</span>). This is the zero point of the measurement scale. <strong>3Mirror Analysis</strong> — a real person says the same phrases. The numbers show how far their voice departs from the words. The color shows severity: blue is low, amber is moderate, red is high. The Tag row shows the direction — which calibrated acoustic profile the voice is closest to. <strong>Conclusion &amp; Action</strong> — what the divergence means in plain language, and what to do about it. The system doesn't guess emotions. It measures the gap between words and voice, identifies the direction, and recommends a response.
