@@ -580,6 +580,33 @@
     font-weight: 500;
   }
 
+  .formula-block {
+    margin: 28px auto 0;
+    max-width: 760px;
+    padding: 32px 32px 28px;
+    background: rgba(255,255,255,0.015);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .formula-line {
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    margin-bottom: 4px;
+  }
+  .formula-line .accent { color: var(--accent); }
+  .formula-note {
+    margin-top: 14px;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    color: var(--text-3);
+    font-style: italic;
+  }
+
   /* FEATURE CARDS — 2x2 */
   .features-grid {
     display: grid;
@@ -846,6 +873,15 @@
   .tag-uncertain { color: #EF9F27; font-weight: 500; }
   .tag-anxious   { color: #E24B4A; font-weight: 500; }
   .tag-hesitant  { color: #EF9F27; font-weight: 500; }
+  .conclusion-footnote {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--text-4);
+    font-style: italic;
+    line-height: 1.6;
+  }
 
   /* INSIGHTS cards */
   .insights {
@@ -1414,6 +1450,12 @@
       The distance between Mirror 1 and Mirror 2 is the <em>diagnostic signal</em>. Mirror 3 tells you what it means.
     </div>
 
+    <div class="formula-block reveal">
+      <div class="formula-line">Words + Sound + Context = <span class="accent">Divergence</span></div>
+      <div class="formula-line"><span class="accent">Divergence</span> + AI Analysis = <span class="accent">Conclusion</span></div>
+      <div class="formula-note">Remove any element — and the equation breaks.</div>
+    </div>
+
     <div class="features-grid">
       <div class="feat-card reveal">
         <h4 class="feat-title">Parallel, not fused</h4>
@@ -1528,25 +1570,6 @@
       </div>
     </div>
 
-    <div class="divergence-graph reveal" id="divergenceGraph">
-      <div class="divergence-graph-title">Word-by-word divergence</div>
-      <div class="divergence-graph-phrase">"I'm really confident in this deal, but I need more time to think."</div>
-      <div class="divergence-canvas-wrap">
-        <canvas id="psdChart"></canvas>
-      </div>
-      <div class="divergence-legend">
-        <span><span class="legend-line" style="background:#1D9E75;border-top:2px dashed #1D9E75;height:0"></span> TTS baseline (zero point)</span>
-        <span><span class="legend-line" style="background:#85B7EB"></span> Real speaker</span>
-        <span><span class="legend-dot" style="background:#EF9F27"></span><span class="legend-dot" style="background:#E24B4A"></span> Direction (nearest TTS tag)</span>
-      </div>
-    </div>
-
-    <div class="conclusion-card reveal">
-      <p><strong>What was said</strong>"I'm really confident in this deal, but I need more time to think."</p>
-      <p><strong>What the voice tells us</strong>Words and voice are aligned through "I'm confident in this" — the speaker sounds like they mean it. At "deal" the voice shifts toward the acoustic profile of TTS-generated uncertainty (tag: <span class="tag-uncertain">uncertain</span>, PSD 0.41). After "but," the divergence climbs sharply. At "need" the voice is closest to TTS-generated anxiety (tag: <span class="tag-anxious">anxious</span>, PSD 0.73) — the highest point. At "time" it matches TTS-generated hesitation (tag: <span class="tag-hesitant">hesitant</span>, PSD 0.71).</p>
-      <p><strong>Conclusion</strong>This person is not "thinking it over." They have a specific concern about the deal they are not voicing. The system detected it without asking a single question — just by measuring the distance between their words and their voice, and matching the direction of that distance against known acoustic profiles.</p>
-    </div>
-
     <div class="insights">
       <div class="insight i-high reveal">
         <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -1582,6 +1605,26 @@
 
     <div class="matrix-callout reveal">
       <strong>How to read this.</strong> The green rows are the ruler — synthetic voices that can't feel anything, so their words and tone always match (<span style="font-family:'JetBrains Mono',monospace">0.00</span>). The bottom row is a real person, measured against that ruler. Where the number rises, the voice is telling a different story than the words. The system doesn't guess emotions. It measures the gap.
+    </div>
+
+    <div class="divergence-graph reveal" id="divergenceGraph">
+      <div class="divergence-graph-title">Word-by-word divergence</div>
+      <div class="divergence-graph-phrase">"I'm really confident in this deal, but I need more time to think."</div>
+      <div class="divergence-canvas-wrap">
+        <canvas id="psdChart"></canvas>
+      </div>
+      <div class="divergence-legend">
+        <span><span class="legend-line" style="background:#1D9E75;border-top:2px dashed #1D9E75;height:0"></span> TTS baseline (zero point)</span>
+        <span><span class="legend-line" style="background:#85B7EB"></span> Real speaker</span>
+        <span><span class="legend-dot" style="background:#EF9F27"></span><span class="legend-dot" style="background:#E24B4A"></span> Direction (nearest TTS tag)</span>
+      </div>
+    </div>
+
+    <div class="conclusion-card reveal">
+      <p><strong>What was said</strong>"I'm really confident in this deal, but I need more time to think."</p>
+      <p><strong>What the voice tells us</strong>Words and voice are aligned through "I'm confident in this" — the speaker sounds like they mean it. At "deal" the voice shifts toward the acoustic profile of TTS-generated uncertainty (tag: <span class="tag-uncertain">uncertain</span>, PSD 0.41). After "but," the divergence climbs sharply. At "need" the voice is closest to TTS-generated anxiety (tag: <span class="tag-anxious">anxious</span>, PSD 0.73) — the highest point. At "time" it matches TTS-generated hesitation (tag: <span class="tag-hesitant">hesitant</span>, PSD 0.71).</p>
+      <p><strong>Conclusion</strong>This person is not "thinking it over." They have a specific concern about the deal they are not voicing. The system detected it without asking a single question — just by measuring the distance between their words and their voice, and matching the direction of that distance against known acoustic profiles.</p>
+      <div class="conclusion-footnote">This is not emotion recognition. Emotion AI asks: what is the speaker feeling? 3Mirror asks: does the voice match what the words are saying? Direction labels are coordinates on a calibrated scale — not emotions assigned by a model.</div>
     </div>
 
     <div class="features-grid">
@@ -1970,7 +2013,7 @@
             label: 'Real speaker',
             data: psd,
             borderColor: '#85B7EB',
-            borderWidth: 2.5,
+            borderWidth: 1,
             tension: 0.35,
             pointBackgroundColor: pointBg,
             pointBorderColor: pointBg,
