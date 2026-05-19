@@ -948,14 +948,13 @@
     line-height: 1.6;
   }
 
-  /* INSIGHTS deck — fanned cards, hover to bring forward */
+  /* INSIGHTS deck — overlapping cards, hover to lift */
   .insights {
     display: flex;
     width: 100%;
     align-items: stretch;
     margin-top: 40px;
     padding: 40px 0 60px;
-    perspective: 1400px;
   }
 
   /* New v2 insight cards */
@@ -972,27 +971,25 @@
     width: 28%;
     flex-shrink: 0;
     min-height: 360px;
-    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.45s ease,
-                background 0.45s ease;
-    transform-origin: bottom center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     cursor: pointer;
-    box-shadow: 0 14px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.55),
+                inset -1px 0 0 rgba(255,255,255,0.09);
   }
   .insight-card + .insight-card { margin-left: -10%; }
-  .insight-card { transform: rotate(var(--rot, 0deg)); }
-  .insight-card:nth-child(1) { --rot:  0deg;  z-index: 5; }
-  .insight-card:nth-child(2) { --rot: -2deg;  z-index: 4; }
-  .insight-card:nth-child(3) { --rot: -4deg;  z-index: 3; }
-  .insight-card:nth-child(4) { --rot: -6deg;  z-index: 2; }
-  .insight-card:nth-child(5) { --rot: -8deg;  z-index: 1; }
+  .insight-card:nth-child(1) { z-index: 5; }
+  .insight-card:nth-child(2) { z-index: 4; }
+  .insight-card:nth-child(3) { z-index: 3; }
+  .insight-card:nth-child(4) { z-index: 2; }
+  .insight-card:nth-child(5) { z-index: 1; }
   .insight-card:hover:not(.is-active) {
-    transform: rotate(var(--rot, 0deg)) translateY(-12px);
+    transform: translateY(-14px);
     z-index: 50;
-    box-shadow: 0 22px 40px rgba(0,0,0,0.6);
+    box-shadow: 0 28px 44px rgba(0,0,0,0.65),
+                inset -1px 0 0 rgba(255,255,255,0.09);
   }
   .insight-card.is-active {
-    transform: rotate(0deg) translateY(-32px) scale(1.06) !important;
+    transform: translateY(-32px) scale(1.06) !important;
     z-index: 100 !important;
     background: var(--bg-elev-2);
     box-shadow: 0 40px 80px rgba(0,0,0,0.8),
