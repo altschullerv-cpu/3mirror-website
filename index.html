@@ -674,6 +674,10 @@
     border-right: 1px solid rgba(255,255,255,0.06);
   }
   .rgc-matrix th:last-child, .rgc-matrix td:last-child { border-right: 0; }
+  .rgc-matrix tbody th, .rgc-matrix tbody td {
+    border-bottom-color: rgba(95,184,176,0.22) !important;
+    border-right-color: rgba(95,184,176,0.22) !important;
+  }
   .rgc-matrix thead th {
     font-size: 12px;
     font-weight: 500;
@@ -737,22 +741,114 @@
     background: linear-gradient(to right, transparent, var(--border-strong) 10%, var(--border-strong) 90%, transparent);
     border: 0;
   }
+  .row-separator-label td {
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+  }
+  .row-separator-label .sep-text {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    font-size: 15px;
+    letter-spacing: -0.005em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .matrix-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 16px;
+    font-size: 15px;
+    letter-spacing: -0.005em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .matrix-note {
+    margin-top: 24px;
+    padding: 14px 18px;
+    border-left: 3px solid #1D9E75;
+    background: rgba(29,158,117,0.04);
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--text-3);
+    line-height: 1.65;
+  }
+  .matrix-note strong {
+    color: #6dcabe;
+    font-weight: 500;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .matrix-title::before,
+  .matrix-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212,196,164,0.35), transparent);
+  }
+  .row-separator-label .sep-text::before,
+  .row-separator-label .sep-text::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212,196,164,0.35), transparent);
+  }
   .row-real th { color: var(--text); font-weight: 600; }
   .row-direction td {
     font-size: 11px;
     padding: 6px 16px;
     color: inherit;
     opacity: 0.7;
-    border-top: 0;
     letter-spacing: 0.02em;
   }
   .row-direction th {
     font-size: 11px;
     padding: 6px 16px;
     color: var(--text-3);
-    border-top: 0;
     font-weight: 400;
   }
+  .row-direction .cell { font-weight: 500; opacity: 0.95; background: rgba(95,184,176,0.05) !important; }
+  .row-direction .cell-low  { color: #6dcabe; }
+  .row-direction .cell-mod  { color: #EF9F27; }
+  .row-direction .cell-high { color: #E24B4A; }
+  .row-conclusion td {
+    font-size: 12px;
+    padding: 10px 14px;
+    letter-spacing: 0.01em;
+  }
+  .row-conclusion th {
+    font-size: 12px;
+    padding: 10px 14px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .row-conclusion .cell {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    color: var(--accent);
+    background: rgba(212,196,164,0.04) !important;
+    font-style: italic;
+  }
+  .row-action td {
+    font-size: 11.5px;
+    padding: 8px 14px;
+  }
+  .row-action th {
+    font-size: 11.5px;
+    padding: 8px 14px;
+    color: var(--text-3);
+    font-weight: 400;
+  }
+  .row-action .cell {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    background: rgba(255,255,255,0.015) !important;
+  }
+  .row-action .cell-low  { color: #92b3e6; }
+  .row-action .cell-mod  { color: #EF9F27; }
+  .row-action .cell-high { color: #E24B4A; }
 
   /* Matrix animation */
   .matrix-row { opacity: 0; transform: translateY(8px); transition: opacity 0.6s ease, transform 0.6s ease; transition-delay: var(--row-delay, 0ms); }
@@ -890,6 +986,66 @@
     gap: 14px;
     margin-top: 28px;
   }
+
+  /* New v2 insight cards */
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left-width: 3px;
+    border-radius: 10px;
+    padding: 20px 22px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .insight-card.iv-high { border-left-color: #E24B4A; }
+  .insight-card.iv-mod  { border-left-color: #EF9F27; }
+  .insight-card.iv-low  { border-left-color: #378ADD; }
+  .insight-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+  .iv-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 14.5px;
+    font-weight: 500;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .iv-phrase { color: var(--text); }
+  .iv-score {
+    font-family: "JetBrains Mono", monospace;
+    color: var(--text-2);
+    font-size: 13.5px;
+  }
+  .iv-dot { color: var(--text-4); }
+  .iv-tag { font-weight: 500; }
+  .iv-high .iv-tag { color: #E24B4A; }
+  .iv-mod  .iv-tag { color: #EF9F27; }
+  .iv-low  .iv-tag { color: #378ADD; }
+
+  .iv-section { display: flex; flex-direction: column; gap: 6px; }
+  .iv-section.iv-action {
+    background: rgba(255,255,255,0.025);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin: 0 -2px;
+  }
+  .iv-label {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--text-4);
+    font-weight: 500;
+  }
+  .iv-body {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-2);
+    margin: 0;
+  }
+  .iv-section.iv-action .iv-body { font-style: italic; }
   .insight {
     border: 1px solid var(--border);
     background: var(--bg-elev);
@@ -1484,7 +1640,7 @@
 <section class="layer" id="rgc">
   <div class="container">
     <div class="layer-eyebrow reveal"><span class="num">02</span> The measurement foundation</div>
-    <h2 class="section-title reveal">Reverse Generative Calibration</h2>
+    <h2 class="section-title reveal">Reverse Generative Calibration (RGC)</h2>
     <p class="section-tagline reveal">The ruler that makes the measurement possible.</p>
 
     <p class="description reveal">To measure how far a voice diverges from its words, you need a reference point — a voice that has zero divergence. Where do you find one?</p>
@@ -1493,6 +1649,7 @@
     <p class="description reveal">Real human speech is then measured against this scale: from <strong>0.0</strong> (full alignment) to <strong>1.0</strong> (maximum divergence between words and voice).</p>
 
     <div class="matrix-wrap reveal" id="matrixWrap">
+      <div class="matrix-title">RGC Matrix</div>
       <div class="matrix-scroll">
         <table class="rgc-matrix">
           <thead>
@@ -1507,7 +1664,7 @@
           </thead>
           <tbody>
             <tr class="matrix-row" data-row="0">
-              <th>TTS Voice A</th>
+              <th>TTS Voice A (no tag)</th>
               <td class="cell cell-zero">0.00</td>
               <td class="cell cell-zero">0.00</td>
               <td class="cell cell-zero">0.00</td>
@@ -1515,7 +1672,7 @@
               <td class="cell cell-zero">0.00</td>
             </tr>
             <tr class="matrix-row" data-row="1">
-              <th>TTS Voice B</th>
+              <th>TTS Voice B (no tag)</th>
               <td class="cell cell-zero">0.00</td>
               <td class="cell cell-zero">0.00</td>
               <td class="cell cell-zero">0.00</td>
@@ -1523,7 +1680,7 @@
               <td class="cell cell-zero">0.00</td>
             </tr>
             <tr class="matrix-row" data-row="2">
-              <th>TTS Voice C</th>
+              <th>TTS Voice C (no tag)</th>
               <td class="cell cell-zero">0.00</td>
               <td class="cell cell-zero">0.00</td>
               <td class="cell cell-zero">0.00</td>
@@ -1538,9 +1695,9 @@
               <td class="cell cell-zero">0.00</td>
               <td class="cell cell-zero">0.00</td>
             </tr>
-            <tr class="row-separator"><td colspan="6"></td></tr>
+            <tr class="row-separator-label"><td colspan="6"><span class="sep-text">3Mirror Analysis</span></td></tr>
             <tr class="matrix-row row-real" data-row="4">
-              <th>Real speaker</th>
+              <th>Human voice</th>
               <td class="cell cell-low"  data-val="0.12">0.00<span class="lbl">low</span></td>
               <td class="cell cell-mod"  data-val="0.41">0.00<span class="lbl">moderate</span></td>
               <td class="cell cell-low"  data-val="0.08">0.00<span class="lbl">low</span></td>
@@ -1548,12 +1705,29 @@
               <td class="cell cell-mod"  data-val="0.55">0.00<span class="lbl">moderate</span></td>
             </tr>
             <tr class="row-direction">
-              <th>Direction</th>
-              <td class="cell cell-low">→ aligned</td>
-              <td class="cell cell-mod">→ decided</td>
-              <td class="cell cell-low">→ aligned</td>
-              <td class="cell cell-high">→ uncertain</td>
-              <td class="cell cell-mod">→ tense</td>
+              <th>Tag (Emotional Direction)</th>
+              <td class="cell cell-low">aligned</td>
+              <td class="cell cell-mod">decided</td>
+              <td class="cell cell-low">aligned</td>
+              <td class="cell cell-high">uncertain</td>
+              <td class="cell cell-mod">tense</td>
+            </tr>
+            <tr class="row-separator-label"><td colspan="6"><span class="sep-text">Conclusion</span></td></tr>
+            <tr class="row-conclusion">
+              <th></th>
+              <td class="cell">Sincere</td>
+              <td class="cell">Hidden opinion</td>
+              <td class="cell">Sincere</td>
+              <td class="cell">Masked doubt</td>
+              <td class="cell">Concealed issue</td>
+            </tr>
+            <tr class="row-action">
+              <th>Action</th>
+              <td class="cell cell-low">Reliable</td>
+              <td class="cell cell-mod">Ask directly</td>
+              <td class="cell cell-low">Reliable</td>
+              <td class="cell cell-high">Address the doubt</td>
+              <td class="cell cell-mod">Follow up</td>
             </tr>
           </tbody>
         </table>
@@ -1570,36 +1744,94 @@
       </div>
     </div>
 
+    <div class="matrix-note reveal">
+      This example uses a single zero-point reference — TTS without emotional tags. The full calibration matrix supports up to <strong>180,000</strong> combinations of phrases, tags, voices, and divergence levels — each serving as a calibrated reference point on the PSD scale.
+    </div>
+
     <div class="insights">
-      <div class="insight i-high reveal">
-        <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 2 L22 20 L2 20 Z"/>
-          <line x1="12" y1="9" x2="12" y2="14"/>
-          <circle cx="12" cy="17" r="0.6" fill="currentColor"/>
-        </svg>
-        <div class="insight-text"><strong>"I disagree" — score <span class="score">0.73</span></strong>The words say disagreement, but the voice doesn't match — it sounds uncertain, not oppositional. The speaker may be masking doubt behind a strong statement.</div>
+      <div class="insight-card iv-high reveal">
+        <div class="iv-header">
+          <span class="iv-phrase">"I disagree"</span>
+          <span class="iv-score">0.73</span>
+          <span class="iv-dot">·</span>
+          <span class="iv-tag">→ uncertain</span>
+        </div>
+        <div class="iv-section">
+          <div class="iv-label">Conclusion</div>
+          <p class="iv-body">The words say disagreement, but the voice says doubt. This isn't a firm position — it's insecurity presented as opposition.</p>
+        </div>
+        <div class="iv-section iv-action">
+          <div class="iv-label">Action</div>
+          <p class="iv-body">Don't argue against the position. Address the doubt behind it: "What would make you more comfortable with this?"</p>
+        </div>
       </div>
-      <div class="insight i-mod reveal">
-        <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="13"/>
-          <circle cx="12" cy="16" r="0.6" fill="currentColor"/>
-        </svg>
-        <div class="insight-text"><strong>"No problem at all" — score <span class="score">0.55</span></strong>There is a problem. The words dismiss it, but the voice carries tension. This is the phrase people use when something is wrong, but they don't want to address it.</div>
+
+      <div class="insight-card iv-mod reveal">
+        <div class="iv-header">
+          <span class="iv-phrase">"No problem at all"</span>
+          <span class="iv-score">0.55</span>
+          <span class="iv-dot">·</span>
+          <span class="iv-tag">→ tense</span>
+        </div>
+        <div class="iv-section">
+          <div class="iv-label">Conclusion</div>
+          <p class="iv-body">There is a problem. The voice carries tension the words are trying to dismiss.</p>
+        </div>
+        <div class="iv-section iv-action">
+          <div class="iv-label">Action</div>
+          <p class="iv-body">Don't accept the statement at face value. Follow up: "If there were an issue, what would it be?" Give permission to voice it.</p>
+        </div>
       </div>
-      <div class="insight i-mod reveal">
-        <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="13"/>
-          <circle cx="12" cy="16" r="0.6" fill="currentColor"/>
-        </svg>
-        <div class="insight-text"><strong>"I'm not sure yet" — score <span class="score">0.41</span></strong>The words express uncertainty — but the voice sounds more decided than the words admit. The speaker may already have an opinion they're not sharing.</div>
+
+      <div class="insight-card iv-mod reveal">
+        <div class="iv-header">
+          <span class="iv-phrase">"I'm not sure yet"</span>
+          <span class="iv-score">0.41</span>
+          <span class="iv-dot">·</span>
+          <span class="iv-tag">→ decided</span>
+        </div>
+        <div class="iv-section">
+          <div class="iv-label">Conclusion</div>
+          <p class="iv-body">The voice sounds more decided than the words admit. The speaker may already have a position they're not sharing.</p>
+        </div>
+        <div class="iv-section iv-action">
+          <div class="iv-label">Action</div>
+          <p class="iv-body">Ask a direct question: "What are you leaning toward?" The opinion is there — it just needs space.</p>
+        </div>
       </div>
-      <div class="insight i-ok reveal">
-        <svg class="insight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="4 12 10 18 20 6"/>
-        </svg>
-        <div class="insight-text"><strong>"I'm confident" + "This is great news" — scores <span class="score">0.12</span>, <span class="score">0.08</span></strong>Words and voice match. The speaker means what they're saying. No signal of concern.</div>
+
+      <div class="insight-card iv-low reveal">
+        <div class="iv-header">
+          <span class="iv-phrase">"I'm confident in this"</span>
+          <span class="iv-score">0.12</span>
+          <span class="iv-dot">·</span>
+          <span class="iv-tag">→ aligned</span>
+        </div>
+        <div class="iv-section">
+          <div class="iv-label">Conclusion</div>
+          <p class="iv-body">Words and voice match. The speaker means what they're saying.</p>
+        </div>
+        <div class="iv-section iv-action">
+          <div class="iv-label">Action</div>
+          <p class="iv-body">No action needed. Statement is reliable.</p>
+        </div>
+      </div>
+
+      <div class="insight-card iv-low reveal">
+        <div class="iv-header">
+          <span class="iv-phrase">"This is great news"</span>
+          <span class="iv-score">0.08</span>
+          <span class="iv-dot">·</span>
+          <span class="iv-tag">→ aligned</span>
+        </div>
+        <div class="iv-section">
+          <div class="iv-label">Conclusion</div>
+          <p class="iv-body">Genuine positive reaction. No divergence detected.</p>
+        </div>
+        <div class="iv-section iv-action">
+          <div class="iv-label">Action</div>
+          <p class="iv-body">No action needed. Reaction is authentic.</p>
+        </div>
       </div>
     </div>
 
