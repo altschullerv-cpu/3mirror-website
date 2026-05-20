@@ -589,57 +589,20 @@
     font-weight: 500;
   }
 
-  @property --beam-angle {
-    syntax: "<angle>";
-    inherits: true;
-    initial-value: 0deg;
-  }
   .formula-block {
-    position: relative;
-    margin: 28px auto 0;
+    margin: 40px auto 0;
     max-width: 760px;
     padding: 32px 32px 28px;
-    background: rgba(255,255,255,0.015);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-strong);
     border-radius: 14px;
+    box-shadow: 0 0 30px rgba(212,196,164,0.06), 0 0 80px rgba(212,196,164,0.03);
     text-align: center;
     font-family: "JetBrains Mono", monospace;
     color: var(--text);
     line-height: 1.7;
   }
-  .formula-block::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: 15px;
-    padding: 1.5px;
-    background: conic-gradient(from var(--beam-angle),
-      rgba(212,196,164,0)    0deg,
-      rgba(212,196,164,0)    200deg,
-      rgba(212,196,164,0.08) 240deg,
-      rgba(212,196,164,0.25) 270deg,
-      rgba(212,196,164,0.7)  300deg,
-      rgba(212,196,164,1)    340deg,
-      rgba(255,248,225,1)    355deg,
-      rgba(212,196,164,0.7)  365deg,
-      rgba(212,196,164,0.3)  375deg,
-      rgba(212,196,164,0)    395deg);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-            mask-composite: exclude;
-    pointer-events: none;
-    filter: drop-shadow(0 0 4px rgba(212,196,164,0.6)) drop-shadow(0 0 10px rgba(212,196,164,0.3));
-    animation: beam-rotate 12s linear infinite;
-  }
-  @keyframes beam-rotate {
-    to { --beam-angle: 360deg; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .formula-block::before { display: none; }
-  }
   .formula-line {
-    font-size: 18px;
+    font-size: 28px;
     font-weight: 500;
     letter-spacing: -0.005em;
     margin-bottom: 4px;
@@ -1495,10 +1458,7 @@
   <div class="container">
     <div class="hero-grid">
       <div class="hero-text">
-        <div class="hero-eyebrow reveal">
-          <span class="pulse"></span>
-          <span>Patent Pending · 2026</span>
-        </div>
+
         <h1 class="reveal">
           <span class="line">People say one thing.</span>
           <span class="line">Their <span class="accent">voice</span> says another.</span>
@@ -1665,7 +1625,7 @@
 
 
     <div class="formula-block reveal">
-      <div class="formula-line">Text − Sound = <span class="accent">Divergence</span></div>
+      <div class="formula-line">Voice − Text = <span class="accent">Divergence</span></div>
       <div class="formula-line"><span class="accent">Divergence</span> + Context = <span class="accent">Conclusion</span></div>
     </div>
 
@@ -1688,7 +1648,7 @@
       </div>
     </div>
 
-    <span class="patent-badge reveal">Patent Pending · US PPA #64/016,499 · Priority March 2026</span>
+    <span class="patent-badge reveal">Patent Pending · #64/016,499</span>
   </div>
 </section>
 
@@ -1943,7 +1903,7 @@
       </div>
     </div>
 
-    <span class="patent-badge reveal">Patent Pending · US PPA #64/018,274 · Priority March 2026</span>
+    <span class="patent-badge reveal">Patent Pending · US #64/018,274</span>
   </div>
 </section>
 
@@ -2320,6 +2280,7 @@
         var ctx = chart.ctx;
         var xScale = chart.scales.x;
         var yScale = chart.scales.y;
+
         annotated.forEach(function (a) {
           var x = xScale.getPixelForValue(a.idx);
           var y = yScale.getPixelForValue(psd[a.idx]);
