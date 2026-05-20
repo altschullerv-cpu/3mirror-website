@@ -630,6 +630,10 @@
             mask-composite: exclude;
     pointer-events: none;
     filter: drop-shadow(0 0 4px rgba(212,196,164,0.6)) drop-shadow(0 0 10px rgba(212,196,164,0.3));
+    animation: beam-rotate 12s linear infinite;
+  }
+  @keyframes beam-rotate {
+    to { --beam-angle: 360deg; }
   }
   @media (prefers-reduced-motion: reduce) {
     .formula-block::before { display: none; }
@@ -2264,37 +2268,6 @@
     tick();
   })();
 
-  // Formula beam — constant perimeter speed
-  (function formulaBeam() {
-    var el = document.querySelector('.formula-block');
-    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    var duration = 12000;
-    var start = null;
-
-    function perimeterAngle(distOnPerimeter) {
-      var r = el.getBoundingClientRect();
-      var W = r.width, H = r.height;
-      var cx = W / 2, cy = H / 2;
-      var pos = distOnPerimeter;
-      var x, y;
-      if      (pos < W)         { x = pos - cx;            y = -cy;                }
-      else if (pos < W + H)     { x = cx;                  y = (pos - W) - cy;     }
-      else if (pos < 2*W + H)   { x = cx - (pos - W - H);  y = cy;                 }
-      else                      { x = -cx;                 y = cy - (pos - 2*W - H); }
-      return Math.atan2(y, x) * 180 / Math.PI;
-    }
-
-    function frame(ts) {
-      if (!start) start = ts;
-      var W = el.offsetWidth, H = el.offsetHeight;
-      var P = 2 * (W + H);
-      var dist = ((ts - start) / duration) * P % P;
-      el.style.setProperty('--beam-angle', perimeterAngle(dist) + 'deg');
-      requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-  })();
 
   // Insight cards click-to-activate
   (function insightCardClicks() {
