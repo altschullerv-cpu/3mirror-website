@@ -709,15 +709,34 @@
     flex: 1;
     min-width: 0;
     position: sticky;
-    top: 88px;
+    top: 25vh;
+    align-self: flex-start;
+    transition: top 0.3s cubic-bezier(0.4,0,0.2,1);
   }
   .hiw-panel {
+    position: relative;
     background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 28px;
     opacity: 0;
     transition: opacity 0.35s ease;
+    box-shadow:
+      0 0 40px rgba(212,196,164,0.07),
+      0 0 100px rgba(212,196,164,0.04),
+      0 12px 28px rgba(0,0,0,0.35);
+  }
+  .hiw-panel::before {
+    content: "";
+    position: absolute;
+    inset: -32px;
+    background: radial-gradient(ellipse at center,
+      rgba(212,196,164,0.08) 0%,
+      rgba(212,196,164,0.025) 38%,
+      transparent 72%);
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 24px;
   }
   .hiw-panel.is-vis { opacity: 1; }
   .hiw-p-tag {
@@ -745,7 +764,7 @@
   @media (max-width: 900px) {
     .hiw-layout { flex-direction: column; gap: 32px; }
     .hiw-diagram-wrap { flex: none; width: 100%; }
-    .hiw-panel-wrap { position: static; width: 100%; }
+    .hiw-panel-wrap { position: static; width: 100%; top: auto; }
   }
   @media (max-width: 480px) {
     .hiw-node--c { width: 170px; }
@@ -1099,8 +1118,8 @@
     display: flex;
     width: 100%;
     align-items: stretch;
-    margin-top: 40px;
-    padding: 40px 0 60px;
+    margin-top: 96px;
+    padding: 60px 0 60px;
   }
 
   /* New v2 insight cards */
@@ -1805,9 +1824,31 @@
             <!-- Stage 5 -->
             <div class="hiw-stage hiw-stage--center">
               <div class="hiw-node hiw-node--c hiw-node--out" id="hiwPsd" data-node="psd">
-                <div class="hiw-node-tag">Output</div>
+                <div class="hiw-node-tag">Score</div>
                 <div class="hiw-node-title">PSD 0.73 · uncertain</div>
-                <div class="hiw-node-cap">Mirror 3 (Context) turns the number into an interpretation</div>
+                <div class="hiw-node-cap">scalar value + direction tag</div>
+              </div>
+            </div>
+
+            <div class="hiw-gap"></div>
+
+            <!-- Stage 6 -->
+            <div class="hiw-stage hiw-stage--center">
+              <div class="hiw-node hiw-node--c" id="hiwContext" data-node="context">
+                <div class="hiw-node-tag">Mirror 03</div>
+                <div class="hiw-node-title">Context</div>
+                <div class="hiw-node-cap">who, what role, what situation</div>
+              </div>
+            </div>
+
+            <div class="hiw-gap"></div>
+
+            <!-- Stage 7 -->
+            <div class="hiw-stage hiw-stage--center">
+              <div class="hiw-node hiw-node--c" id="hiwConclusion" data-node="conclusion">
+                <div class="hiw-node-tag">Output</div>
+                <div class="hiw-node-title">Conclusion + action</div>
+                <div class="hiw-node-cap">plain-language interpretation</div>
               </div>
             </div>
           </div>
@@ -2662,13 +2703,33 @@
         body: 'The two vectors meet here for the only time in the system. The distance between them is calculated word by word, with millisecond precision. This distance is the PSD score: how far the real voice diverges from the zero point.'
       },
       psd: {
-        tag: 'Output',
+        tag: 'Score',
         title: 'PSD 0.73 · direction: uncertain',
-        body: 'The output is a number on a calibrated scale (0.0 to 1.0), plus a direction tag. The number says how far the voice diverged. The direction says which calibrated profile from the RGC matrix it was closest to. Together they form a coordinate — not an emotion label.'
+        body: 'A number on a calibrated scale (0.0 to 1.0), plus a direction tag. The number says how far the voice diverged. The direction says which calibrated profile from the RGC matrix it was closest to. Together they form a coordinate — not an emotion label.'
+      },
+      context: {
+        tag: 'Mirror 03',
+        title: 'Mirror 3 — Context',
+        body: 'A PSD of 0.73 means different things for different people in different situations. A surgeon before an operation and a job candidate in an interview may show the same number — but the interpretation differs. The context layer knows who is speaking, in what role, and in what situation. It turns the raw measurement into a meaningful interpretation.'
+      },
+      conclusion: {
+        tag: 'Output',
+        title: 'Conclusion + action',
+        body: 'The final output is a plain-language conclusion and a specific recommended action. Not a score to interpret. Not a black-box label. A statement of what the divergence means in this context, and what to do about it.'
       }
     };
 
     var activeEl = null;
+    var panelWrap = panel.parentElement;
+    function setPanelOffset() {
+      if (!panelWrap) return;
+      if (window.matchMedia('(max-width: 900px)').matches) {
+        panelWrap.style.top = '';
+        return;
+      }
+      var h = panel.offsetHeight;
+      panelWrap.style.top = 'calc(50vh - ' + (h / 2) + 'px)';
+    }
     function activate(key) {
       var d = DATA[key];
       if (!d) return;
@@ -2679,6 +2740,7 @@
       pTitle.textContent = d.title;
       pBody.textContent  = d.body;
       panel.classList.add('is-vis');
+      requestAnimationFrame(setPanelOffset);
     }
 
     // Map ids to data keys for event attachment
@@ -2689,7 +2751,9 @@
       ['hiwRgc',         'rgc'],
       ['hiwAcoustic',    'acoustic'],
       ['hiwMeasurement', 'measurement'],
-      ['hiwPsd',         'psd']
+      ['hiwPsd',         'psd'],
+      ['hiwContext',     'context'],
+      ['hiwConclusion',  'conclusion']
     ];
 
     nodeIds.forEach(function(pair) {
@@ -2701,6 +2765,10 @@
 
     // SVG line drawing
     var lines = [];
+    var ARROW_GAP = 8;       // gap between line end and next node
+    var ARROW_LEN = 7;       // arrow length
+    var ARROW_HALF_W = 3.5;  // arrow half-width
+
     function drawLines() {
       var dr = diagram.getBoundingClientRect();
       var W  = diagram.offsetWidth;
@@ -2722,21 +2790,25 @@
         };
       }
 
+      // Bezier: starts at (x1,y1), ends at (x2, y2 - ARROW_GAP).
+      // Tangent at the endpoint is straight down (control point 2 directly above end).
       function bez(x1,y1, x2,y2) {
-        var dy = y2 - y1;
+        var y2a = y2 - ARROW_GAP;
+        var dy  = y2a - y1;
         return 'M ' + x1 + ' ' + y1 +
                ' C ' + x1 + ' ' + (y1 + dy*0.55) +
-               ' '  + x2 + ' ' + (y2 - dy*0.25) +
-               ' '  + x2 + ' ' + y2;
+               ' '  + x2 + ' ' + (y2a - dy*0.25) +
+               ' '  + x2 + ' ' + y2a;
       }
       function line(x1,y1,x2,y2) {
-        return 'M '+x1+' '+y1+' L '+x2+' '+y2;
+        return 'M '+x1+' '+y1+' L '+x2+' '+(y2 - ARROW_GAP);
       }
 
       var inp = c('hiwInput'), wrd = c('hiwWords'), voc = c('hiwVoice');
       var rgc = c('hiwRgc'),   aco = c('hiwAcoustic');
       var msr = c('hiwMeasurement'), psd = c('hiwPsd');
-      if (!inp || !wrd || !voc || !rgc || !aco || !msr || !psd) return;
+      var ctx = c('hiwContext'), con = c('hiwConclusion');
+      if (!inp || !wrd || !voc || !rgc || !aco || !msr || !psd || !ctx || !con) return;
 
       var paths = [
         bez(inp.x, inp.b, wrd.x, wrd.t),
@@ -2745,14 +2817,16 @@
         line(voc.x, voc.b, aco.x, aco.t),
         bez(rgc.x, rgc.b, msr.x, msr.t),
         bez(aco.x, aco.b, msr.x, msr.t),
-        line(msr.x, msr.b, psd.x, psd.t)
+        line(msr.x, msr.b, psd.x, psd.t),
+        line(psd.x, psd.b, ctx.x, ctx.t),
+        line(ctx.x, ctx.b, con.x, con.t)
       ];
 
       paths.forEach(function(d) {
         var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         p.setAttribute('d', d);
         p.setAttribute('fill', 'none');
-        p.setAttribute('stroke', 'rgba(255,255,255,0.13)');
+        p.setAttribute('stroke', 'rgba(255,255,255,0.18)');
         p.setAttribute('stroke-width', '1.5');
         p.setAttribute('stroke-linecap', 'round');
         var len = p.getTotalLength ? p.getTotalLength() : 200;
@@ -2760,7 +2834,24 @@
         p.setAttribute('stroke-dasharray',  len);
         p.setAttribute('stroke-dashoffset', len);
         svgEl.appendChild(p);
-        lines.push({ el: p, len: len });
+
+        // Downward arrow polygon. Path endpoint is ARROW_GAP above the next node;
+        // arrow tip sits at the node's top edge.
+        var endX = parseFloat(p.getAttribute('d').match(/([0-9.]+)\s+([0-9.]+)\s*$/)[1]);
+        var endY = parseFloat(p.getAttribute('d').match(/([0-9.]+)\s+([0-9.]+)\s*$/)[2]);
+        var tipY = endY + ARROW_GAP;
+        var baseY = tipY - ARROW_LEN;
+        var poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        poly.setAttribute('points',
+          (endX - ARROW_HALF_W) + ',' + baseY + ' ' +
+          (endX + ARROW_HALF_W) + ',' + baseY + ' ' +
+          endX + ',' + tipY);
+        poly.setAttribute('fill', 'rgba(255,255,255,0.32)');
+        poly.style.opacity = '0';
+        poly.style.transition = 'opacity 0.35s ease';
+        svgEl.appendChild(poly);
+
+        lines.push({ el: p, len: len, arrow: poly });
       });
     }
 
@@ -2769,6 +2860,7 @@
         setTimeout(function() {
           l.el.style.transition = 'stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)';
           l.el.style.strokeDashoffset = '0';
+          setTimeout(function() { if (l.arrow) l.arrow.style.opacity = '1'; }, 700);
         }, i * 90);
       });
     }
@@ -2782,6 +2874,7 @@
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(function() {
         drawLines();
+        setPanelOffset();
         if (animated) animateLines();
       }, 160);
     });
