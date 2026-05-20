@@ -279,7 +279,7 @@
     position: absolute;
     inset: 0;
     transform-style: preserve-3d;
-    animation: axis-spin 28s linear infinite;
+    animation: axis-spin 45s linear infinite;
   }
   @keyframes axis-spin {
     from { transform: rotateX(-12deg) rotateY(0deg); }
@@ -589,7 +589,13 @@
     font-weight: 500;
   }
 
+  @property --beam-angle {
+    syntax: "<angle>";
+    inherits: true;
+    initial-value: 0deg;
+  }
   .formula-block {
+    position: relative;
     margin: 28px auto 0;
     max-width: 760px;
     padding: 32px 32px 28px;
@@ -600,6 +606,33 @@
     font-family: "JetBrains Mono", monospace;
     color: var(--text);
     line-height: 1.7;
+  }
+  .formula-block::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 15px;
+    padding: 1.5px;
+    background: conic-gradient(from var(--beam-angle),
+      rgba(212,196,164,0)    0deg,
+      rgba(212,196,164,0)    200deg,
+      rgba(212,196,164,0.08) 240deg,
+      rgba(212,196,164,0.25) 270deg,
+      rgba(212,196,164,0.7)  300deg,
+      rgba(212,196,164,1)    340deg,
+      rgba(255,248,225,1)    355deg,
+      rgba(212,196,164,0.7)  365deg,
+      rgba(212,196,164,0.3)  375deg,
+      rgba(212,196,164,0)    395deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    pointer-events: none;
+    filter: drop-shadow(0 0 4px rgba(212,196,164,0.6)) drop-shadow(0 0 10px rgba(212,196,164,0.3));
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .formula-block::before { display: none; }
   }
   .formula-line {
     font-size: 18px;
@@ -1492,7 +1525,6 @@
             <div class="sweep"></div>
             <div class="gloss"></div>
             <div class="label">
-              <span class="idx">01</span>
               <span class="tag">Semantic</span>
             </div>
           </div>
@@ -1518,7 +1550,6 @@
             <div class="sweep"></div>
             <div class="gloss"></div>
             <div class="label">
-              <span class="idx">02</span>
               <span class="tag">Acoustic</span>
             </div>
           </div>
@@ -1546,7 +1577,6 @@
             <div class="sweep"></div>
             <div class="gloss"></div>
             <div class="label">
-              <span class="idx">03</span>
               <span class="tag">Context</span>
             </div>
           </div>
@@ -1666,7 +1696,6 @@
     <h2 class="section-title reveal">Reverse Generative Calibration (RGC)</h2>
     <p class="description reveal">To measure divergence, we need a scale. A point on this scale where divergence is guaranteed to be absent is a <strong style="color:#ffffff; font-weight:600;">zero</strong>.</p>
     <p class="description reveal">A TTS model is built for one thing: to deliver a message precisely. It connects sound to meaning — exactly as instructed, no more, no less. It has no internal state. Nothing to doubt, fear, or feel. Nothing to leak through. The divergence between words and voice in TTS without emotional tags is zero — not approximately, but architecturally.</p>
-    <p class="description reveal">That is the zero point of the scale.</p>
     <p class="description reveal">A real person saying the same words will land somewhere above zero. How far above — that is the measurement.</p>
     <p class="description reveal">RGC builds this scale. Hundreds of phrases pass through multiple TTS models. For each phrase, an acoustic reference is extracted — how a voice sounds when there is no divergence. Then the same phrases are generated with emotional tags that deliberately contradict the meaning — the opposite pole of the scale. Between zero and maximum, the gradations are calibrated. The full matrix supports up to <strong>180,000</strong> combinations of phrases, tags, voices, and divergence levels — each a calibrated coordinate on the PSD scale.</p>
 
@@ -2233,6 +2262,38 @@
       requestAnimationFrame(tick);
     }
     tick();
+  })();
+
+  // Formula beam — constant perimeter speed
+  (function formulaBeam() {
+    var el = document.querySelector('.formula-block');
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var duration = 12000;
+    var start = null;
+
+    function perimeterAngle(distOnPerimeter) {
+      var r = el.getBoundingClientRect();
+      var W = r.width, H = r.height;
+      var cx = W / 2, cy = H / 2;
+      var pos = distOnPerimeter;
+      var x, y;
+      if      (pos < W)         { x = pos - cx;            y = -cy;                }
+      else if (pos < W + H)     { x = cx;                  y = (pos - W) - cy;     }
+      else if (pos < 2*W + H)   { x = cx - (pos - W - H);  y = cy;                 }
+      else                      { x = -cx;                 y = cy - (pos - 2*W - H); }
+      return Math.atan2(y, x) * 180 / Math.PI;
+    }
+
+    function frame(ts) {
+      if (!start) start = ts;
+      var W = el.offsetWidth, H = el.offsetHeight;
+      var P = 2 * (W + H);
+      var dist = ((ts - start) / duration) * P % P;
+      el.style.setProperty('--beam-angle', perimeterAngle(dist) + 'deg');
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   })();
 
   // Insight cards click-to-activate
