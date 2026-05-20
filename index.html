@@ -616,6 +616,143 @@
     font-style: italic;
   }
 
+  /* HOW IT WORKS DIAGRAM */
+  .hiw-section { margin-top: 72px; }
+  .hiw-head { margin-bottom: 44px; }
+  .hiw-sub {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--text-4);
+    margin: 0 0 10px;
+  }
+  .hiw-tagline {
+    font-size: 14.5px;
+    color: var(--text-3);
+    margin: 0;
+    line-height: 1.6;
+  }
+  .hiw-layout {
+    display: flex;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .hiw-diagram-wrap { flex: 0 0 460px; }
+  .hiw-diagram {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .hiw-svg {
+    position: absolute;
+    top: 0; left: 0;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 0;
+  }
+  .hiw-stage { position: relative; z-index: 1; }
+  .hiw-stage--center { display: flex; justify-content: center; }
+  .hiw-stage--split { display: flex; gap: 14px; }
+  .hiw-gap { height: 48px; }
+  .hiw-node {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease,
+                border-color 0.25s ease, background 0.25s ease;
+  }
+  .hiw-node.is-vis { opacity: 1; transform: none; }
+  .hiw-node.is-active {
+    border-color: var(--border-strong);
+    background: var(--bg-elev-2);
+    border-left-color: var(--accent);
+    border-left-width: 2px;
+  }
+  .hiw-node--c { width: 240px; }
+  .hiw-node--s { flex: 1; min-width: 0; }
+  .hiw-node--out {
+    width: 268px;
+    border-color: rgba(212,196,164,0.22);
+  }
+  .hiw-node-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--text-4);
+    margin: 0 0 5px;
+  }
+  .hiw-node-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .hiw-node-cap {
+    font-size: 11.5px;
+    color: var(--text-3);
+    margin: 0;
+    line-height: 1.45;
+  }
+  .hiw-node--out .hiw-node-title {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    color: var(--c-mod-text);
+  }
+  .hiw-panel-wrap {
+    flex: 1;
+    min-width: 0;
+    position: sticky;
+    top: 88px;
+  }
+  .hiw-panel {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .hiw-panel.is-vis { opacity: 1; }
+  .hiw-p-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--text-4);
+    margin: 0 0 12px;
+  }
+  .hiw-p-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.015em;
+    margin: 0 0 14px;
+    line-height: 1.3;
+  }
+  .hiw-p-body {
+    font-size: 13.5px;
+    color: var(--text-2);
+    line-height: 1.7;
+    margin: 0;
+  }
+  @media (max-width: 900px) {
+    .hiw-layout { flex-direction: column; gap: 32px; }
+    .hiw-diagram-wrap { flex: none; width: 100%; }
+    .hiw-panel-wrap { position: static; width: 100%; }
+  }
+  @media (max-width: 480px) {
+    .hiw-node--c { width: 170px; }
+    .hiw-node--out { width: 200px; }
+    .hiw-gap { height: 36px; }
+  }
+
   /* FEATURE CARDS — 2x2 */
   .features-grid {
     display: grid;
@@ -1158,66 +1295,41 @@
     margin: 0;
   }
 
-  /* DIFFERENTIATION blocks */
-  .diff-stack {
+  /* DIFFERENTIATION cards */
+  .diff-grid {
     margin-top: 56px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .diff-block {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    align-items: stretch;
-    padding: 36px 0;
-    border-bottom: 1px solid var(--border);
   }
-  .diff-block:last-child { border-bottom: 0; }
-  .diff-side {
-    padding: 24px 28px;
-    border-radius: 12px;
+  .diff-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 14px;
+    padding: 32px 28px;
+    transition: transform 0.28s cubic-bezier(0.16,1,0.3,1), border-color 0.28s ease, background 0.28s ease;
     display: flex;
     flex-direction: column;
     gap: 14px;
-    justify-content: center;
   }
-  .diff-muted {
-    background: rgba(255,255,255,0.015);
-    border: 1px dashed rgba(255,255,255,0.08);
+  .diff-card:hover {
+    transform: translateY(-3px);
+    background: var(--bg-elev-2);
   }
-  .diff-bright {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border-strong);
-    border-left-width: 3px;
-    border-left-color: var(--accent);
-  }
-  .diff-label {
-    font-family: "JetBrains Mono", monospace;
-    font-size: 10.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    color: var(--text-4);
-    font-weight: 500;
-  }
-  .diff-bright .diff-label { color: var(--accent); }
-  .diff-text {
+  .diff-card-title {
     font-size: 18px;
-    line-height: 1.5;
-    color: var(--text-3);
-    font-weight: 400;
+    font-weight: 600;
+    color: var(--text);
     letter-spacing: -0.015em;
     margin: 0;
   }
-  .diff-bright .diff-text {
-    color: var(--text);
-    font-weight: 500;
-    font-size: 20px;
-    letter-spacing: -0.02em;
+  .diff-card-text {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--text-2);
+    margin: 0;
   }
-  /* Alternate: 2nd block flips order */
-  .diff-block.flip .diff-muted { order: 2; }
-  .diff-block.flip .diff-bright { order: 1; }
 
   /* TIMELINE */
   .timeline {
@@ -1422,11 +1534,7 @@
     .insight-card:hover {
       transform: translateY(-4px) !important;
     }
-    .diff-block { grid-template-columns: 1fr; padding: 28px 0; }
-    .diff-block.flip .diff-muted { order: 0; }
-    .diff-block.flip .diff-bright { order: 0; }
-    .diff-text { font-size: 16px; }
-    .diff-bright .diff-text { font-size: 17.5px; }
+    .diff-grid { grid-template-columns: 1fr; }
     .contact-grid { grid-template-columns: 1fr; gap: 12px; }
     .contact-email { font-size: 17px; }
     .nav-inner { height: 58px; }
@@ -1627,6 +1735,93 @@
     <div class="formula-block reveal">
       <div class="formula-line">Voice − Text = <span class="accent">Divergence</span></div>
       <div class="formula-line"><span class="accent">Divergence</span> + Context = <span class="accent">Conclusion</span></div>
+    </div>
+
+    <!-- HOW IT WORKS -->
+    <div class="hiw-section">
+      <div class="hiw-head">
+        <p class="hiw-sub">How it works</p>
+        <p class="hiw-tagline">Two parallel streams. One point of measurement. Scroll to see how it flows.</p>
+      </div>
+      <div class="hiw-layout">
+        <div class="hiw-diagram-wrap">
+          <div class="hiw-diagram" id="hiwDiagram">
+            <svg class="hiw-svg" id="hiwSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+            <!-- Stage 1 -->
+            <div class="hiw-stage hiw-stage--center">
+              <div class="hiw-node hiw-node--c" id="hiwInput" data-node="input">
+                <div class="hiw-node-tag">Input</div>
+                <div class="hiw-node-title">Human speech</div>
+                <div class="hiw-node-cap">"I'm confident in this deal..."</div>
+              </div>
+            </div>
+
+            <div class="hiw-gap"></div>
+
+            <!-- Stage 2 -->
+            <div class="hiw-stage hiw-stage--split">
+              <div class="hiw-node hiw-node--s" id="hiwWords" data-node="words">
+                <div class="hiw-node-tag">Mirror 01</div>
+                <div class="hiw-node-title">Words</div>
+                <div class="hiw-node-cap">transcribed, word-by-word</div>
+              </div>
+              <div class="hiw-node hiw-node--s" id="hiwVoice" data-node="voice">
+                <div class="hiw-node-tag">Mirror 02</div>
+                <div class="hiw-node-title">Voice</div>
+                <div class="hiw-node-cap">extracted on-device, audio never leaves</div>
+              </div>
+            </div>
+
+            <div class="hiw-gap"></div>
+
+            <!-- Stage 3 -->
+            <div class="hiw-stage hiw-stage--split">
+              <div class="hiw-node hiw-node--s" id="hiwRgc" data-node="rgc">
+                <div class="hiw-node-tag">RGC</div>
+                <div class="hiw-node-title">Zero point</div>
+                <div class="hiw-node-cap">Same text → TTS (no tags) → reference vector</div>
+              </div>
+              <div class="hiw-node hiw-node--s" id="hiwAcoustic" data-node="acoustic">
+                <div class="hiw-node-tag">Acoustic</div>
+                <div class="hiw-node-title">Real vector</div>
+                <div class="hiw-node-cap">pitch, tremor, rate, pauses</div>
+              </div>
+            </div>
+
+            <div class="hiw-gap"></div>
+
+            <!-- Stage 4 -->
+            <div class="hiw-stage hiw-stage--center">
+              <div class="hiw-node hiw-node--c" id="hiwMeasurement" data-node="measurement">
+                <div class="hiw-node-tag">Measurement</div>
+                <div class="hiw-node-title">Text − Sound</div>
+                <div class="hiw-node-cap">= divergence, word by word</div>
+              </div>
+            </div>
+
+            <div class="hiw-gap"></div>
+
+            <!-- Stage 5 -->
+            <div class="hiw-stage hiw-stage--center">
+              <div class="hiw-node hiw-node--c hiw-node--out" id="hiwPsd" data-node="psd">
+                <div class="hiw-node-tag">Output</div>
+                <div class="hiw-node-title">PSD 0.73 · uncertain</div>
+                <div class="hiw-node-cap">Mirror 3 (Context) turns the number into an interpretation</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Info panel -->
+        <div class="hiw-panel-wrap">
+          <div class="hiw-panel" id="hiwPanel">
+            <div class="hiw-p-tag" id="hiwPTag"></div>
+            <div class="hiw-p-title" id="hiwPTitle"></div>
+            <p class="hiw-p-body" id="hiwPBody"></p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="features-grid">
@@ -1920,24 +2115,24 @@
         <div class="app-icon-wrap">
           <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 2 L20 6 V12 C20 17 16 21 12 22 C8 21 4 17 4 12 V6 Z"/>
+            <path d="M9 12 l2 2 l4 -4"/>
           </svg>
         </div>
-        <div class="app-title">Deepfake Detection</div>
-        <p class="app-desc">A synthetic voice is acoustically perfect but behaviorally flat — it lacks the micro-variations of a real internal state. RGC detects this absence. Unlike artifact-based detectors, this approach doesn't degrade as generative models improve. It gets more relevant.</p>
+        <div class="app-title">Cybersecurity</div>
+        <p class="app-desc">Generative models improve every month. Artifact-based detectors fall behind with every update. The market needs an approach that gets stronger as models improve — not weaker. 3Mirror detects the absence of behavioral micro-variations that characterize a real internal state. A structural property of synthetic speech that cannot be removed without compromising the model's primary function.</p>
       </div>
 
       <div class="app-card reveal">
         <div class="app-icon-wrap">
           <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="4" y1="12" x2="6" y2="12"/>
-            <line x1="8" y1="7" x2="8" y2="17"/>
-            <line x1="12" y1="4" x2="12" y2="20"/>
-            <line x1="16" y1="8" x2="16" y2="16"/>
-            <line x1="20" y1="11" x2="20" y2="13"/>
+            <path d="M4 5h16v10H8l-4 4z"/>
+            <line x1="8" y1="10" x2="8" y2="10.01"/>
+            <line x1="12" y1="10" x2="12" y2="10.01"/>
+            <line x1="16" y1="10" x2="16" y2="10.01"/>
           </svg>
         </div>
-        <div class="app-title">Voice AI</div>
-        <p class="app-desc">The risk-analytics layer that runs behind any conversational AI. Not a replacement for the dialogue — a parallel channel that flags when the speaker's tone doesn't match their words. Think of it as a background analyst, not a faster cashier.</p>
+        <div class="app-title">Conversational AI</div>
+        <p class="app-desc">Billions of conversations pass through voice assistants, bots, and call centers every day. Each one carries information that never makes it into the transcript — the divergence between what is said and how it sounds. 3Mirror is an analytical layer that runs in parallel with any conversational platform and turns that gap into data.</p>
       </div>
 
       <div class="app-card reveal">
@@ -1946,42 +2141,45 @@
             <path d="M3 12h4l2 -7 3 14 3 -10 2 5h4"/>
           </svg>
         </div>
-        <div class="app-title">Clinical Monitoring</div>
-        <p class="app-desc">Speech patterns shift years before a clinical diagnosis appears. A reproducible measurement scale makes longitudinal tracking possible — not as a diagnosis, but as an early signal that something is changing.</p>
+        <div class="app-title">Healthcare</div>
+        <p class="app-desc">Changes in speech patterns appear years before a clinical diagnosis. But medicine still lacks a standardized scale for longitudinal tracking of these changes. 3Mirror gives healthcare a reproducible measurement instrument — a universal scale, any patient, from the first second, with no training on their data.</p>
       </div>
 
       <div class="app-card reveal">
         <div class="app-icon-wrap">
           <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 12c0 4 -4 7 -9 7 -1.4 0 -2.7 -.3 -4 -.7L3 20l1 -4.2C3.4 14.6 3 13.3 3 12c0 -3.9 4 -7 9 -7s9 3.1 9 7z"/>
+            <path d="M9 3a3 3 0 0 0 -3 3v1a3 3 0 0 0 -2 3v2a3 3 0 0 0 2 3v1a3 3 0 0 0 3 3a3 3 0 0 0 3 -3V6a3 3 0 0 0 -3 -3z"/>
+            <path d="M15 3a3 3 0 0 1 3 3v1a3 3 0 0 1 2 3v2a3 3 0 0 1 -2 3v1a3 3 0 0 1 -3 3a3 3 0 0 1 -3 -3V6a3 3 0 0 1 3 -3z"/>
           </svg>
         </div>
-        <div class="app-title">Psychotherapy Support</div>
-        <p class="app-desc">A client says "I'm fine" — but their voice says otherwise. 3Mirror quantifies that gap and shows the clinician exactly where it occurs. Not a diagnosis. Not a replacement for judgment. A calibrated signal the clinician couldn't see before.</p>
+        <div class="app-title">Mental Health</div>
+        <p class="app-desc">The mental health market is growing faster than the supply of professionals. Millions of people between sessions have no objective self-monitoring tool. 3Mirror brings this industry something it has never had — a reproducible, quantitative measurement of the divergence between words and voice. A scalable signal for clinics, teletherapy platforms, and personal monitoring.</p>
       </div>
 
       <div class="app-card reveal">
         <div class="app-icon-wrap">
           <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="7" width="18" height="13" rx="2"/>
-            <path d="M9 7V5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v2"/>
-            <line x1="3" y1="13" x2="21" y2="13"/>
+            <circle cx="9" cy="8" r="3"/>
+            <path d="M3 21v-1a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v1"/>
+            <circle cx="17" cy="9" r="2.5"/>
+            <path d="M16 16h2a3 3 0 0 1 3 3v1"/>
           </svg>
         </div>
-        <div class="app-title">HR &amp; Negotiations</div>
-        <p class="app-desc">High-stakes conversations carry information in how things are said, not just what. Divergence analysis surfaces that information — measurably, not impressionistically.</p>
+        <div class="app-title">Human Resources</div>
+        <p class="app-desc">The right person can transform an idea. But not everyone can put their true value into words — especially under the pressure of an interview. 3Mirror reveals what words alone can't convey: where conviction is real, where passion is genuine, and where a candidate's potential is hiding behind imperfect self-presentation.</p>
       </div>
 
       <div class="app-card reveal">
         <div class="app-icon-wrap">
           <svg class="app-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="9"/>
-            <circle cx="12" cy="12" r="5"/>
-            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            <path d="M4 20 L10 14"/>
+            <path d="M14 4 h6 v6"/>
+            <path d="M10 14 L20 4"/>
+            <path d="M4 14 v6 h6"/>
           </svg>
         </div>
-        <div class="app-title">Communication Training</div>
-        <p class="app-desc">Define a target vocal profile for a specific communicative goal. Measure the distance between current delivery and the target. Train toward it with real-time, quantitative feedback.</p>
+        <div class="app-title">Personal &amp; Professional Development</div>
+        <p class="app-desc">A great actor commands both channels — words and voice — at once. A great leader does the same. Most people don't hear the gap between what they say and how they sound. 3Mirror makes it visible — a quantitative mirror for conscious growth in acting, public speaking, leadership, and everyday communication.</p>
       </div>
     </div>
   </div>
@@ -1992,40 +2190,22 @@
 <section class="layer" id="different">
   <div class="container">
     <div class="layer-eyebrow reveal"><span class="num">04</span> How it's different</div>
-    <h2 class="section-title reveal">Not another emotion label.</h2>
+    <h2 class="section-title reveal">What makes it different</h2>
 
-    <div class="diff-stack">
-      <div class="diff-block reveal">
-        <div class="diff-side diff-muted">
-          <span class="diff-label">Them</span>
-          <p class="diff-text">The industry blends words and voice into one signal.</p>
-        </div>
-        <div class="diff-side diff-bright">
-          <span class="diff-label">Us</span>
-          <p class="diff-text">We keep them separate. The gap between them is the product.</p>
-        </div>
+    <div class="diff-grid">
+      <div class="diff-card reveal">
+        <div class="diff-card-title">Different question</div>
+        <p class="diff-card-text">Most voice analysis asks: what is this person feeling? 3Mirror asks: where do the words and the voice disagree? Different question — different architecture.</p>
       </div>
 
-      <div class="diff-block flip reveal">
-        <div class="diff-side diff-muted">
-          <span class="diff-label">Them</span>
-          <p class="diff-text">Emotion AI assigns a label: happy, sad, angry.</p>
-        </div>
-        <div class="diff-side diff-bright">
-          <span class="diff-label">Us</span>
-          <p class="diff-text">We assign a number on a calibrated scale: how far does this voice diverge from what the words say?</p>
-        </div>
+      <div class="diff-card reveal">
+        <div class="diff-card-title">Number, not label</div>
+        <p class="diff-card-text">The output is a position on a calibrated scale — how far the voice diverges from what the words say. Not a category. A measurement.</p>
       </div>
 
-      <div class="diff-block reveal">
-        <div class="diff-side diff-muted">
-          <span class="diff-label">Them</span>
-          <p class="diff-text">Most systems need training data before they work.</p>
-        </div>
-        <div class="diff-side diff-bright">
-          <span class="diff-label">Us</span>
-          <p class="diff-text">RGC builds a universal reference from synthetic speech. Works from the first second, with any speaker.</p>
-        </div>
+      <div class="diff-card reveal">
+        <div class="diff-card-title">Universal from second one</div>
+        <p class="diff-card-text">RGC builds a reference from synthetic speech. No training data needed. Works with any speaker, any language, from the first moment.</p>
       </div>
     </div>
   </div>
@@ -2103,7 +2283,7 @@
     document.querySelectorAll('.insights .reveal').forEach(function (el, i) {
       el.style.setProperty('--reveal-delay', (i * 100) + 'ms');
     });
-    document.querySelectorAll('.diff-stack .reveal').forEach(function (el, i) {
+    document.querySelectorAll('.diff-grid .reveal').forEach(function (el, i) {
       el.style.setProperty('--reveal-delay', (i * 120) + 'ms');
     });
     document.querySelectorAll('.timeline .reveal').forEach(function (el, i) {
@@ -2438,6 +2618,198 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     update();
+  })();
+
+  // How It Works diagram
+  (function hiwDiagram() {
+    var diagram = document.getElementById('hiwDiagram');
+    var svgEl   = document.getElementById('hiwSvg');
+    var panel   = document.getElementById('hiwPanel');
+    var pTag    = document.getElementById('hiwPTag');
+    var pTitle  = document.getElementById('hiwPTitle');
+    var pBody   = document.getElementById('hiwPBody');
+    if (!diagram || !svgEl || !panel) return;
+
+    var DATA = {
+      input: {
+        tag: 'Stage 01',
+        title: 'Human speech — the input',
+        body: 'A person speaks naturally. No prompts, no questions asked. The system receives raw audio and begins processing immediately — from the very first word.'
+      },
+      words: {
+        tag: 'Mirror 01',
+        title: 'Mirror 1 — Text stream',
+        body: 'The audio is transcribed word by word, with millisecond timestamps. This represents what the person decided to say — the conscious, edited message. This stream is processed independently and never mixes with the acoustic stream.'
+      },
+      voice: {
+        tag: 'Mirror 02',
+        title: 'Mirror 2 — Sound stream',
+        body: "The same audio is analyzed separately for voice characteristics: pitch, tremor, speech rate, pauses, dynamic range. This represents what the body does while speaking. The body doesn't fully obey the decision — doubt, tension, excitement leak through."
+      },
+      rgc: {
+        tag: 'RGC',
+        title: 'RGC — building the zero point',
+        body: 'The transcript is fed into multiple TTS models with no emotional tags. TTS has no internal state — nothing to doubt, fear, or feel. Its output is acoustically precise and behaviorally flat. This becomes the zero point: what the voice would sound like if words and voice were perfectly aligned. The full RGC matrix contains 180,000 calibrated reference points.'
+      },
+      acoustic: {
+        tag: 'Acoustic',
+        title: 'Acoustic vector — the real voice',
+        body: "From the real audio, the system extracts pitch, tremor, speech rate, pauses, dynamic range. Processing happens on the speaker's own device — the raw audio never leaves. This vector represents what the body does while speaking."
+      },
+      measurement: {
+        tag: 'Measurement',
+        title: 'The measurement',
+        body: 'The two vectors meet here for the only time in the system. The distance between them is calculated word by word, with millisecond precision. This distance is the PSD score: how far the real voice diverges from the zero point.'
+      },
+      psd: {
+        tag: 'Output',
+        title: 'PSD 0.73 · direction: uncertain',
+        body: 'The output is a number on a calibrated scale (0.0 to 1.0), plus a direction tag. The number says how far the voice diverged. The direction says which calibrated profile from the RGC matrix it was closest to. Together they form a coordinate — not an emotion label.'
+      }
+    };
+
+    var activeEl = null;
+    function activate(key) {
+      var d = DATA[key];
+      if (!d) return;
+      if (activeEl) activeEl.classList.remove('is-active');
+      activeEl = document.getElementById('hiw' + key.charAt(0).toUpperCase() + key.slice(1));
+      if (activeEl) activeEl.classList.add('is-active');
+      pTag.textContent   = d.tag;
+      pTitle.textContent = d.title;
+      pBody.textContent  = d.body;
+      panel.classList.add('is-vis');
+    }
+
+    // Map ids to data keys for event attachment
+    var nodeIds = [
+      ['hiwInput',       'input'],
+      ['hiwWords',       'words'],
+      ['hiwVoice',       'voice'],
+      ['hiwRgc',         'rgc'],
+      ['hiwAcoustic',    'acoustic'],
+      ['hiwMeasurement', 'measurement'],
+      ['hiwPsd',         'psd']
+    ];
+
+    nodeIds.forEach(function(pair) {
+      var el = document.getElementById(pair[0]);
+      if (!el) return;
+      el.addEventListener('mouseenter', function() { activate(pair[1]); });
+      el.addEventListener('click',      function() { activate(pair[1]); });
+    });
+
+    // SVG line drawing
+    var lines = [];
+    function drawLines() {
+      var dr = diagram.getBoundingClientRect();
+      var W  = diagram.offsetWidth;
+      var H  = diagram.offsetHeight;
+      svgEl.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      svgEl.setAttribute('width',  W);
+      svgEl.setAttribute('height', H);
+      svgEl.innerHTML = '';
+      lines = [];
+
+      function c(id) {
+        var el = document.getElementById(id);
+        if (!el) return null;
+        var r = el.getBoundingClientRect();
+        return {
+          x:  r.left - dr.left + r.width  / 2,
+          t:  r.top  - dr.top,
+          b:  r.top  - dr.top  + r.height
+        };
+      }
+
+      function bez(x1,y1, x2,y2) {
+        var dy = y2 - y1;
+        return 'M ' + x1 + ' ' + y1 +
+               ' C ' + x1 + ' ' + (y1 + dy*0.55) +
+               ' '  + x2 + ' ' + (y2 - dy*0.25) +
+               ' '  + x2 + ' ' + y2;
+      }
+      function line(x1,y1,x2,y2) {
+        return 'M '+x1+' '+y1+' L '+x2+' '+y2;
+      }
+
+      var inp = c('hiwInput'), wrd = c('hiwWords'), voc = c('hiwVoice');
+      var rgc = c('hiwRgc'),   aco = c('hiwAcoustic');
+      var msr = c('hiwMeasurement'), psd = c('hiwPsd');
+      if (!inp || !wrd || !voc || !rgc || !aco || !msr || !psd) return;
+
+      var paths = [
+        bez(inp.x, inp.b, wrd.x, wrd.t),
+        bez(inp.x, inp.b, voc.x, voc.t),
+        line(wrd.x, wrd.b, rgc.x, rgc.t),
+        line(voc.x, voc.b, aco.x, aco.t),
+        bez(rgc.x, rgc.b, msr.x, msr.t),
+        bez(aco.x, aco.b, msr.x, msr.t),
+        line(msr.x, msr.b, psd.x, psd.t)
+      ];
+
+      paths.forEach(function(d) {
+        var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        p.setAttribute('d', d);
+        p.setAttribute('fill', 'none');
+        p.setAttribute('stroke', 'rgba(255,255,255,0.13)');
+        p.setAttribute('stroke-width', '1.5');
+        p.setAttribute('stroke-linecap', 'round');
+        var len = p.getTotalLength ? p.getTotalLength() : 200;
+        if (len < 1) len = 200;
+        p.setAttribute('stroke-dasharray',  len);
+        p.setAttribute('stroke-dashoffset', len);
+        svgEl.appendChild(p);
+        lines.push({ el: p, len: len });
+      });
+    }
+
+    function animateLines() {
+      lines.forEach(function(l, i) {
+        setTimeout(function() {
+          l.el.style.transition = 'stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)';
+          l.el.style.strokeDashoffset = '0';
+        }, i * 90);
+      });
+    }
+
+    // Initial draw (DOM is ready since script is at end of body)
+    drawLines();
+    activate('input');
+
+    var resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function() {
+        drawLines();
+        if (animated) animateLines();
+      }, 160);
+    });
+
+    // Intersection observer: sequence nodes then lines
+    var animated = false;
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      nodeIds.forEach(function(p) {
+        var el = document.getElementById(p[0]);
+        if (el) el.classList.add('is-vis');
+      });
+      animateLines();
+      animated = true;
+      return;
+    }
+
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting || animated) return;
+        animated = true;
+        nodeIds.forEach(function(pair, i) {
+          var el = document.getElementById(pair[0]);
+          if (el) setTimeout(function() { el.classList.add('is-vis'); }, i * 160);
+        });
+        setTimeout(animateLines, nodeIds.length * 160 - 400);
+      });
+    }, { threshold: 0.1 });
+    io.observe(diagram);
   })();
 
   // Nav blur on scroll
