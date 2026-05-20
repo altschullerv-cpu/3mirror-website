@@ -293,7 +293,7 @@
     height: 520px;
     margin-top: -260px;
     margin-left: 0;
-    border-radius: 0;
+    border-radius: 12px;
     background: transparent;
     box-shadow: 0 30px 70px rgba(0,0,0,0.8);
     transform-style: preserve-3d;
@@ -306,18 +306,25 @@
     inset: 0;
     overflow: hidden;
     border-radius: inherit;
-    border: 1px solid rgba(255,255,255,0.18);
-    background: linear-gradient(135deg, #20202a 0%, #0c0c12 48%, #1a1a22 100%);
-    box-shadow: 0 1px 0 rgba(255,255,255,0.10) inset;
+    border: 1px solid rgba(255,255,255,0.28);
+    background: linear-gradient(160deg,
+      #3a3a46 0%,
+      #1e1e28 20%,
+      #111118 50%,
+      #0d0d14 75%,
+      #181820 100%);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.22) inset,
+                inset 1px 0 0 rgba(255,255,255,0.12);
+    transform: translateZ(1px);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
   }
   .mirror .back {
     position: absolute;
     inset: 0;
-    background: #000;
-    border: 1px solid rgba(255,255,255,0.10);
-    transform: rotateY(180deg);
+    background: #08080c;
+    border: 1px solid rgba(255,255,255,0.06);
+    transform: translateZ(-1px) rotateY(180deg);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     pointer-events: none;
@@ -351,6 +358,8 @@
     flex-direction: column;
     justify-content: space-between;
     z-index: 2;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
   .mirror .idx {
     font-family: "JetBrains Mono", monospace;
@@ -971,7 +980,7 @@
     width: 28%;
     flex-shrink: 0;
     min-height: 360px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    transition: transform 1s ease, box-shadow 1s ease, background 1s ease;
     cursor: pointer;
     box-shadow: 0 14px 30px rgba(0,0,0,0.55),
                 inset -1px 0 0 rgba(255,255,255,0.09);
@@ -983,7 +992,7 @@
   .insight-card:nth-child(4) { z-index: 2; }
   .insight-card:nth-child(5) { z-index: 1; }
   .insight-card:hover:not(.is-active) {
-    transform: translateY(-74px);
+    transform: translateY(-78px);
     box-shadow: 0 28px 44px rgba(0,0,0,0.65),
                 inset -1px 0 0 rgba(255,255,255,0.09);
   }
@@ -991,9 +1000,12 @@
     transform: translateY(-32px) scale(1.06) !important;
     z-index: 100 !important;
     background: var(--bg-elev-2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     box-shadow: 0 40px 80px rgba(0,0,0,0.8),
                 0 0 0 1px rgba(255,255,255,0.1),
-                0 0 70px rgba(212,196,164,0.06);
+                0 0 70px rgba(212,196,164,0.06),
+                0 0 60px rgba(255,255,255,0.15),
+                0 0 120px rgba(255,255,255,0.07);
   }
 
   .iv-header {
@@ -1553,13 +1565,13 @@
 
 <section class="layer" id="threemirror">
   <div class="container">
-    <div class="layer-eyebrow reveal"><span class="num">01</span> The analysis engine</div>
+    <div class="layer-eyebrow reveal"><span class="num">01</span> The Incongruence Analysis Engine</div>
     <h2 class="section-title reveal">3Mirror</h2>
-    <p class="section-tagline reveal">Two channels. Never mixed. That's the point.</p>
-
-    <p class="description reveal">Every voice AI system today does the same thing: it listens to your words and your tone, blends them together, and gives you a single label — "happy," "angry," "stressed."</p>
-    <p class="description reveal">The problem? Blending destroys the most valuable signal. When someone says "I'm excited about this deal" but their voice tells a different story — that gap is the insight. Merge the channels and the gap disappears.</p>
-    <p class="description reveal"><strong>3Mirror doesn't merge.</strong> It runs two independent streams — what you say and how you say it — and measures the distance between them. Word by word. Millisecond by millisecond. The gap isn't noise. It's the product.</p>
+    <p class="description reveal">In 1961, Dr. Carl Rogers founder of humanistic psychology described <strong style="color:#ffffff; font-weight:600;">incongruence</strong> — a state where what a person experiences inside diverges from what they express outward. Rogers identified two types. Conscious — when a person knows they're holding something back. And unconscious — when the gap exists, but the person themselves doesn't see it. Rogers considered the second type one of the most important signals in human communication. For sixty-five years, it remained available only to a trained therapist — by ear, by intuition, with no way to measure it.</p>
+    <p class="description reveal">Modern voice AI answers a different question: what is this person expressing? For that question, combining words and voice into a single assessment is a natural architecture.</p>
+    <p class="description reveal">3Mirror asks a different question. Not what is being expressed — but where the expression diverges from what's underneath. Words are what the person decided to say. Voice is what the body does while saying it. The body doesn't fully obey the decision — doubt, uncertainty, excitement leak through. That leakage is the signal Rogers described. To preserve it, the channels must stay separate.</p>
+    <p class="description reveal">Two streams run in parallel. The system measures the distance between them — word by word, millisecond by millisecond. The third layer — who is speaking, in what role, in what context — turns the number into an interpretation.</p>
+    <p class="description reveal">Rogers' observation, made measurable.</p>
 
     <div class="mirrors-breakdown">
       <div class="mb-card reveal">
@@ -1616,15 +1628,11 @@
       </div>
     </div>
 
-    <div class="mirrors-callout reveal">
-      Three layers. Processed in parallel. Never merged.<br>
-      The distance between Mirror 1 and Mirror 2 is the <em>diagnostic signal</em>. Mirror 3 tells you what it means.
-    </div>
+
 
     <div class="formula-block reveal">
-      <div class="formula-line">Words + Sound + Context = <span class="accent">Divergence</span></div>
-      <div class="formula-line"><span class="accent">Divergence</span> + AI Analysis = <span class="accent">Conclusion</span></div>
-      <div class="formula-note">Remove any element — and the equation breaks.</div>
+      <div class="formula-line">Text − Sound = <span class="accent">Divergence</span></div>
+      <div class="formula-line"><span class="accent">Divergence</span> + Context = <span class="accent">Conclusion</span></div>
     </div>
 
     <div class="features-grid">
@@ -1654,13 +1662,13 @@
 
 <section class="layer" id="rgc">
   <div class="container">
-    <div class="layer-eyebrow reveal"><span class="num">02</span> The measurement foundation</div>
+    <div class="layer-eyebrow reveal"><span class="num">02</span> Calibration matrix tool</div>
     <h2 class="section-title reveal">Reverse Generative Calibration (RGC)</h2>
-    <p class="section-tagline reveal">A calibration matrix tool.</p>
-
-    <p class="description reveal">A TTS model today is built for one thing: precision. Its maximum capability is connecting the acoustic layer to the semantic layer — exactly as instructed, no more, no less. It has no internal state. Non-precision speech is a system bug.</p>
-    <p class="description reveal">Human free speech is the opposite. There are always two channels: what the person decided to say, and what their body does while saying it. The body doesn't fully obey — fear, doubt, excitement, uncertainty leak through. That leakage is the divergence.</p>
-    <p class="description reveal">To measure how far a voice diverges from its words, we built RGC. It feeds hundreds of phrases into multiple TTS models, extracts the acoustic reference for every emotional tag, and builds a measurement scale — from <strong>0.0</strong> (full alignment) to <strong>1.0</strong> (maximum divergence). The full calibration matrix supports up to 180,000 combinations of phrases, tags, voices, and divergence levels — each serving as a calibrated reference point on the PSD scale.</p>
+    <p class="description reveal">To measure divergence, we need a scale. A point on this scale where divergence is guaranteed to be absent is a <strong style="color:#ffffff; font-weight:600;">zero</strong>.</p>
+    <p class="description reveal">A TTS model is built for one thing: to deliver a message precisely. It connects sound to meaning — exactly as instructed, no more, no less. It has no internal state. Nothing to doubt, fear, or feel. Nothing to leak through. The divergence between words and voice in TTS without emotional tags is zero — not approximately, but architecturally.</p>
+    <p class="description reveal">That is the zero point of the scale.</p>
+    <p class="description reveal">A real person saying the same words will land somewhere above zero. How far above — that is the measurement.</p>
+    <p class="description reveal">RGC builds this scale. Hundreds of phrases pass through multiple TTS models. For each phrase, an acoustic reference is extracted — how a voice sounds when there is no divergence. Then the same phrases are generated with emotional tags that deliberately contradict the meaning — the opposite pole of the scale. Between zero and maximum, the gradations are calibrated. The full matrix supports up to <strong>180,000</strong> combinations of phrases, tags, voices, and divergence levels — each a calibrated coordinate on the PSD scale.</p>
 
     <div class="matrix-callout reveal">
       <strong>How to read this.</strong> The table has three sections. <strong>RGC Matrix</strong> — the green rows are the ruler. Synthetic voices that can't feel anything, so their words and tone always match (<span style="font-family:'JetBrains Mono',monospace">0.00</span>). This is the zero point of the measurement scale. <strong>3Mirror Analysis</strong> — a real person says the same phrases. The numbers show how far their voice departs from the words. The color shows severity: blue is low, amber is moderate, red is high. The Tag row shows the direction — which calibrated acoustic profile the voice is closest to. <strong>Conclusion &amp; Action</strong> — what the divergence means in plain language, and what to do about it. The system doesn't guess emotions. It measures the gap between words and voice, identifies the direction, and recommends a response.
@@ -1763,7 +1771,7 @@
     </div>
 
     <div class="matrix-note reveal">
-      This example uses a single zero-point reference — TTS without emotional tags. The full calibration matrix supports up to <strong>180,000</strong> combinations of phrases, tags, voices, and divergence levels — each serving as a calibrated reference point on the PSD scale.
+      This example uses a single zero-point reference — TTS without emotional tags. The full calibration matrix supports up to <strong>180,000</strong> combinations
     </div>
 
     <div class="insights">
@@ -2194,6 +2202,39 @@
     io.observe(wrap);
   })();
 
+  // Hide mirror labels on back face (backface-visibility unreliable in Chrome preserve-3d)
+  (function mirrorBackfaceLabels() {
+    var axis = document.querySelector('.mirrors-axis');
+    var mirrors = document.querySelectorAll('.mirror');
+    if (!axis || !mirrors.length) return;
+    var baseAngles = [0, 120, 240]; // m1, m2, m3
+    function tick() {
+      var mat = getComputedStyle(axis).transform;
+      var axisY = 0;
+      if (mat && mat !== 'none') {
+        var m = mat.match(/matrix3d\(([^)]+)\)/);
+        if (m) {
+          var v = m[1].split(',').map(parseFloat);
+          axisY = Math.round(Math.atan2(v[8], v[0]) * 180 / Math.PI);
+        } else {
+          var m2 = mat.match(/matrix\(([^)]+)\)/);
+          if (m2) {
+            var v2 = m2[1].split(',').map(parseFloat);
+            axisY = Math.round(Math.atan2(-v2[2], v2[0]) * 180 / Math.PI);
+          }
+        }
+      }
+      mirrors.forEach(function(mirror, i) {
+        var total = ((axisY + baseAngles[i]) % 360 + 360) % 360;
+        var onBack = total > 90 && total < 270;
+        var surface = mirror.querySelector('.surface');
+        if (surface) surface.style.visibility = onBack ? 'hidden' : '';
+      });
+      requestAnimationFrame(tick);
+    }
+    tick();
+  })();
+
   // Insight cards click-to-activate
   (function insightCardClicks() {
     var cards = document.querySelectorAll('.insight-card');
@@ -2204,6 +2245,9 @@
         var wasActive = card.classList.contains('is-active');
         cards.forEach(function (c) { c.classList.remove('is-active'); });
         if (!wasActive) card.classList.add('is-active');
+      });
+      card.addEventListener('mouseleave', function () {
+        card.classList.remove('is-active');
       });
     });
     document.addEventListener('click', function () {
