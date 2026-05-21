@@ -634,11 +634,14 @@
     line-height: 1.6;
   }
   .hiw-layout {
-    display: flex;
-    gap: 48px;
-    align-items: flex-start;
+    display: block;
   }
-  .hiw-diagram-wrap { flex: 0 0 460px; }
+  .hiw-diagram-wrap {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+  }
   .hiw-diagram {
     position: relative;
     display: flex;
@@ -654,13 +657,14 @@
   .hiw-stage { position: relative; z-index: 1; }
   .hiw-stage--center { display: flex; justify-content: center; }
   .hiw-stage--split { display: flex; gap: 14px; }
-  .hiw-gap { height: 48px; }
+  .hiw-gap { height: 36px; }
   .hiw-node {
+    position: relative;
     background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: 12px;
-    padding: 14px 18px;
-    cursor: pointer;
+    padding: 18px 22px;
+    cursor: default;
     opacity: 0;
     transform: translateY(12px);
     transition: opacity 0.5s ease, transform 0.5s ease,
@@ -673,45 +677,341 @@
     border-left-color: var(--accent);
     border-left-width: 2px;
   }
-  .hiw-node--c { width: 240px; }
+  .hiw-node--c { width: 300px; }
   .hiw-node--s { flex: 1; min-width: 0; }
   .hiw-node--out {
-    width: 268px;
+    width: 300px;
     border-color: rgba(212,196,164,0.22);
+  }
+  .hiw-node--ghost {
+    visibility: hidden;
+    pointer-events: none;
+    /* keeps its flex cell so split layout stays balanced */
+  }
+  .hiw-node--engine {
+    width: 100%;
+    border-color: rgba(212,196,164,0.32);
+    background: rgba(212,196,164,0.05);
+    padding: 18px 22px 16px;
+    min-height: 100px;
+  }
+  .hiw-engine-viz {
+    display: block;
+    width: 100%;
+    height: 130px;
+    margin: 14px 0 10px;
+    overflow: visible;
+  }
+  .hiw-psd-lbl {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 12px;
+    font-weight: 600;
+    fill: var(--c-mod-text);
+    opacity: 0;
+    animation: hiwPsdLbl 15s ease-in-out infinite;
+  }
+  .hiw-psd-tag {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    fill: var(--text-3);
+    letter-spacing: 0.04em;
+    opacity: 0;
+    animation: hiwPsdLbl 15s ease-in-out infinite;
+  }
+  @keyframes hiwPsdLbl {
+    0%, 44%  { opacity: 0; }
+    50%      { opacity: 1; }
+    90%      { opacity: 1; }
+    97%      { opacity: 0; }
+    100%     { opacity: 0; }
+  }
+  .hiw-wave {
+    fill: none;
+    stroke-width: 1.4;
+    stroke-dasharray: 780;
+  }
+  .hiw-wave--ref {
+    stroke: rgba(212,196,164,0.6);
+    animation: hiwWaveRef 15s ease-in-out infinite;
+  }
+  @keyframes hiwWaveRef {
+    0%, 6%  { stroke-dashoffset: 780; opacity: 0; }
+    8%      { opacity: 0.3; }
+    25%     { stroke-dashoffset: 0;   opacity: 1; }
+    90%     { stroke-dashoffset: 0;   opacity: 1; }
+    97%     { stroke-dashoffset: -780; opacity: 0; }
+    100%    { stroke-dashoffset: -780; opacity: 0; }
+  }
+  .hiw-wave--real {
+    stroke: rgba(133,183,235,0.75);
+    animation: hiwWaveReal 15s ease-in-out infinite;
+  }
+  @keyframes hiwWaveReal {
+    0%, 24% { stroke-dashoffset: 780; opacity: 0; }
+    26%     { opacity: 0.3; }
+    40%     { stroke-dashoffset: 0;   opacity: 1; }
+    90%     { stroke-dashoffset: 0;   opacity: 1; }
+    97%     { stroke-dashoffset: -780; opacity: 0; }
+    100%    { stroke-dashoffset: -780; opacity: 0; }
+  }
+  .hiw-diff {
+    fill: var(--c-mod-text);
+    opacity: 0;
+    animation: hiwDiff 15s ease-in-out infinite;
+  }
+  @keyframes hiwDiff {
+    0%, 24%    { opacity: 0; }
+    28%        { opacity: 0.8; }
+    90%        { opacity: 0.8; }
+    97%, 100%  { opacity: 0; }
+  }
+  .hiw-flow-comet {
+    opacity: 0;
+    animation: hiwFlow 3.6s linear infinite;
+    animation-play-state: paused;
+  }
+  .hiw-diagram.is-revealed .hiw-flow-comet { animation-play-state: running; }
+  .hiw-val {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    fill: var(--c-mod-text);
+    opacity: 0;
+    animation: hiwValRef 15s ease-in-out infinite;
+  }
+  @keyframes hiwValRef {
+    0%, 3%  { opacity: 0; }
+    7%      { opacity: 1; }
+    90%     { opacity: 1; }
+    97%     { opacity: 0; }
+    100%    { opacity: 0; }
+  }
+  .hiw-val-real {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    fill: #85B7EB;
+    opacity: 0;
+    animation: hiwValReal 15s ease-in-out infinite;
+  }
+  @keyframes hiwValReal {
+    0%, 28% { opacity: 0; }
+    36%     { opacity: 1; }
+    90%     { opacity: 1; }
+    97%     { opacity: 0; }
+    100%    { opacity: 0; }
+  }
+  .hiw-axis-lbl {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 7px;
+    fill: rgba(255,255,255,0.28);
+  }
+  .hiw-axis-line {
+    stroke: rgba(255,255,255,0.07);
+    stroke-width: 1;
+  }
+  @keyframes hiwVal {
+    0%, 4%   { opacity: 0; }
+    9%       { opacity: 1; }
+    46%      { opacity: 1; }
+    51%      { opacity: 0; }
+    100%     { opacity: 0; }
+  }
+  .hiw-node--rgc { padding: 18px 22px 18px; }
+  /* Real Voice block — blue accent matching chart Real Speaker #85B7EB */
+  #hiwRgcReal .rgc-calib-cell.is-matched {
+    background: rgba(133,183,235,0.14);
+    border-color: rgba(133,183,235,0.40);
+  }
+  #hiwRgcReal .rgc-calib-cell.is-matched .rgc-num {
+    color: #85B7EB;
+  }
+  #hiwRgcReal .rgc-zero-point {
+    border-color: rgba(133,183,235,0.22);
+    background: rgba(133,183,235,0.06);
+  }
+  #hiwRgcReal .rgc-zero-val {
+    color: #85B7EB;
+  }
+  .rgc-calib-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin: 14px 0 14px;
+  }
+  .rgc-calib-cell {
+    height: 26px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .rgc-num {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 10px;
+    color: var(--text-3);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    pointer-events: none;
+    user-select: none;
+  }
+  .rgc-calib-cell.is-matched {
+    background: rgba(212,196,164,0.16);
+    border-color: rgba(212,196,164,0.38);
+  }
+  .rgc-calib-cell.is-matched .rgc-num {
+    color: var(--c-mod-text);
+    font-weight: 700;
+  }
+  .rgc-zero-point {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding: 6px 10px;
+    border: 1px solid rgba(212,196,164,0.2);
+    border-radius: 4px;
+    background: rgba(212,196,164,0.05);
+  }
+  .rgc-zero-val {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--c-mod-text);
+    letter-spacing: -0.02em;
+    min-width: 3ch;
+  }
+  .rgc-zero-label {
+    font-family: "JetBrains Mono", monospace;
+    font-size: 9px;
+    color: var(--text-3);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .hiw-node--mirror {
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.018) 0%,
+      var(--bg-elev) 70%);
+  }
+  #hiwContext { align-self: flex-start; }
+  .hiw-node--mirror.is-active {
+    background: linear-gradient(180deg,
+      rgba(212,196,164,0.06) 0%,
+      var(--bg-elev-2) 70%);
+  }
+  @keyframes hiwFlow {
+    0%   { offset-distance: 0%;   opacity: 0;   }
+    6%   { opacity: 1; }
+    94%  { opacity: 1; }
+    100% { offset-distance: 100%; opacity: 0;   }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hiw-wave, .hiw-diff, .hiw-flow-comet, .hiw-val, .hiw-val-real { animation: none !important; }
+    .hiw-wave { stroke-dashoffset: 0; opacity: 0.8; }
+    .hiw-diff { opacity: 0.7; r: 2; }
+    .hiw-flow-comet { opacity: 0; }
+    .hiw-val  { opacity: 0.7; }
   }
   .hiw-node-tag {
     font-family: "JetBrains Mono", monospace;
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.16em;
     color: var(--text-4);
-    margin: 0 0 5px;
+    margin: 0 0 7px;
   }
   .hiw-node-title {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 600;
     color: var(--text);
-    margin: 0 0 4px;
-    letter-spacing: -0.01em;
+    margin: 0 0 6px;
+    letter-spacing: -0.02em;
   }
   .hiw-node-cap {
-    font-size: 11.5px;
+    font-size: 13px;
     color: var(--text-3);
     margin: 0;
-    line-height: 1.45;
+    line-height: 1.5;
   }
   .hiw-node--out .hiw-node-title {
     font-family: "JetBrains Mono", monospace;
     font-size: 13px;
     color: var(--c-mod-text);
   }
-  .hiw-panel-wrap {
-    flex: 1;
-    min-width: 0;
-    position: sticky;
-    top: 25vh;
-    align-self: flex-start;
-    transition: top 0.3s cubic-bezier(0.4,0,0.2,1);
+  #hiwPsd .hiw-node-title { color: var(--text); font-size: 15px; }
+  .hiw-panel-wrap { display: none; }
+
+  /* Nodes are clickable */
+  .hiw-node[data-node] { cursor: pointer; }
+  .hiw-node[data-node]:hover {
+    border-color: rgba(255,255,255,0.22);
+    box-shadow: 0 0 28px rgba(212,196,164,0.10);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  /* Pause engine animations on hover */
+  #hiwEngine:hover .hiw-wave,
+  #hiwEngine:hover .hiw-diff,
+  #hiwEngine:hover .hiw-val,
+  #hiwEngine:hover .hiw-val-real,
+  #hiwEngine:hover .hiw-psd-lbl,
+  #hiwEngine:hover .hiw-psd-tag { animation-play-state: paused; }
+
+  /* Floating popup — no backdrop/overlay */
+  .hiw-popup {
+    position: fixed;
+    z-index: 200;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -48%) scale(0.97);
+    opacity: 0;
+    pointer-events: none;
+    width: calc(100% - 48px);
+    max-width: 480px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    padding: 32px 32px 28px;
+    transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.16,1,0.3,1);
+    box-shadow:
+      0 0 0 1px rgba(212,196,164,0.08),
+      0 8px 48px rgba(0,0,0,0.72),
+      0 0 80px rgba(212,196,164,0.12),
+      0 0 160px rgba(212,196,164,0.05);
+  }
+  .hiw-popup.is-open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .hiw-popup-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-3);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .hiw-popup-close:hover { border-color: var(--border-strong); color: var(--text); }
+  @keyframes hiwModalIn {
+    from { opacity: 0; transform: translate(-50%, -46%) scale(0.96); }
+    to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
   }
   .hiw-panel {
     position: relative;
@@ -761,6 +1061,8 @@
     line-height: 1.7;
     margin: 0;
   }
+  .hiw-p-body p { margin: 0 0 12px; }
+  .hiw-p-body p:last-child { margin-bottom: 0; }
   @media (max-width: 900px) {
     .hiw-layout { flex-direction: column; gap: 32px; }
     .hiw-diagram-wrap { flex: none; width: 100%; }
@@ -1778,66 +2080,105 @@
 
             <div class="hiw-gap"></div>
 
-            <!-- Stage 2 -->
+            <!-- Stage 2 — Voice (left) and Text (right) split off from Human speech -->
             <div class="hiw-stage hiw-stage--split">
-              <div class="hiw-node hiw-node--s" id="hiwWords" data-node="words">
+              <div class="hiw-node hiw-node--s hiw-node--mirror" id="hiwVoice" data-node="voice">
                 <div class="hiw-node-tag">Mirror 01</div>
-                <div class="hiw-node-title">Words</div>
-                <div class="hiw-node-cap">transcribed, word-by-word</div>
-              </div>
-              <div class="hiw-node hiw-node--s" id="hiwVoice" data-node="voice">
-                <div class="hiw-node-tag">Mirror 02</div>
                 <div class="hiw-node-title">Voice</div>
-                <div class="hiw-node-cap">extracted on-device, audio never leaves</div>
               </div>
-            </div>
-
-            <div class="hiw-gap"></div>
-
-            <!-- Stage 3 -->
-            <div class="hiw-stage hiw-stage--split">
-              <div class="hiw-node hiw-node--s" id="hiwRgc" data-node="rgc">
-                <div class="hiw-node-tag">RGC</div>
-                <div class="hiw-node-title">Zero point</div>
-                <div class="hiw-node-cap">Same text → TTS (no tags) → reference vector</div>
-              </div>
-              <div class="hiw-node hiw-node--s" id="hiwAcoustic" data-node="acoustic">
-                <div class="hiw-node-tag">Acoustic</div>
-                <div class="hiw-node-title">Real vector</div>
-                <div class="hiw-node-cap">pitch, tremor, rate, pauses</div>
-              </div>
-            </div>
-
-            <div class="hiw-gap"></div>
-
-            <!-- Stage 4 -->
-            <div class="hiw-stage hiw-stage--center">
-              <div class="hiw-node hiw-node--c" id="hiwMeasurement" data-node="measurement">
-                <div class="hiw-node-tag">Measurement</div>
-                <div class="hiw-node-title">Text − Sound</div>
-                <div class="hiw-node-cap">= divergence, word by word</div>
-              </div>
-            </div>
-
-            <div class="hiw-gap"></div>
-
-            <!-- Stage 5 -->
-            <div class="hiw-stage hiw-stage--center">
-              <div class="hiw-node hiw-node--c hiw-node--out" id="hiwPsd" data-node="psd">
-                <div class="hiw-node-tag">Score</div>
-                <div class="hiw-node-title">PSD 0.73 · uncertain</div>
-                <div class="hiw-node-cap">scalar value + direction tag</div>
-              </div>
-            </div>
-
-            <div class="hiw-gap"></div>
-
-            <!-- Stage 6 -->
-            <div class="hiw-stage hiw-stage--center">
-              <div class="hiw-node hiw-node--c" id="hiwContext" data-node="context">
+              <div class="hiw-node hiw-node--s hiw-node--ghost" id="hiwCtxStage2"></div>
+              <div class="hiw-node hiw-node--s hiw-node--mirror" id="hiwWords" data-node="words">
                 <div class="hiw-node-tag">Mirror 03</div>
+                <div class="hiw-node-title">Text</div>
+              </div>
+            </div>
+
+            <div class="hiw-gap"></div>
+
+            <!-- Stage 3 — Voice → RGC Real (left), Context passes through (center ghost), Text → RGC Ref (right) -->
+            <div class="hiw-stage hiw-stage--split">
+              <div class="hiw-node hiw-node--s hiw-node--rgc" id="hiwRgcReal" data-node="rgcReal">
+                <div class="hiw-node-tag">Measurement</div>
+                <div class="hiw-node-title">RGC · Real Voice</div>
+                <div class="rgc-calib-grid">
+                  <div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div>
+                  <div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div>
+                  <div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div>
+                  <div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div>
+                </div>
+                <div class="rgc-zero-point">
+                  <span class="rgc-zero-val">—</span>
+                  <span class="rgc-zero-label">real voice</span>
+                </div>
+              </div>
+              <div class="hiw-node hiw-node--s hiw-node--mirror" id="hiwContext" data-node="context">
+                <div class="hiw-node-tag">Mirror 02</div>
                 <div class="hiw-node-title">Context</div>
-                <div class="hiw-node-cap">who, what role, what situation</div>
+              </div>
+              <div class="hiw-node hiw-node--s hiw-node--rgc" id="hiwRgcRef" data-node="rgcRef">
+                <div class="hiw-node-tag">Measurement</div>
+                <div class="hiw-node-title">RGC · TTS</div>
+                <div class="rgc-calib-grid">
+                  <div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div>
+                  <div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div>
+                  <div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div>
+                  <div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div><div class="rgc-calib-cell"></div>
+                </div>
+                <div class="rgc-zero-point">
+                  <span class="rgc-zero-val">—</span>
+                  <span class="rgc-zero-label">reference</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hiw-gap"></div>
+
+            <!-- Stage 4 (was Engine, was 5/6) -->
+            <div class="hiw-stage hiw-stage--center">
+              <div class="hiw-node hiw-node--engine" id="hiwEngine" data-node="engine">
+                <div class="hiw-node-tag">Engine</div>
+                <div class="hiw-node-title">3Mirror</div>
+                <svg class="hiw-engine-viz" viewBox="-28 0 744 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <!-- Y-axis labels -->
+                  <text class="hiw-axis-lbl" x="-3" y="11"  text-anchor="end">1.0</text>
+                  <text class="hiw-axis-lbl" x="-3" y="29"  text-anchor="end">0.5</text>
+                  <text class="hiw-axis-lbl" x="-3" y="47"  text-anchor="end">0.0</text>
+                  <text class="hiw-axis-lbl" x="-3" y="65"  text-anchor="end">-0.5</text>
+                  <text class="hiw-axis-lbl" x="-3" y="83"  text-anchor="end">-1.0</text>
+                  <!-- Grid lines -->
+                  <line class="hiw-axis-line" x1="0" y1="8"  x2="703" y2="8"/>
+                  <line class="hiw-axis-line" x1="0" y1="26" x2="703" y2="26"/>
+                  <line class="hiw-axis-line" x1="0" y1="44" x2="703" y2="44"/>
+                  <line class="hiw-axis-line" x1="0" y1="62" x2="703" y2="62"/>
+                  <line class="hiw-axis-line" x1="0" y1="80" x2="703" y2="80"/>
+                  <!-- Real voice values (white) — top row -->
+                  <text class="hiw-val-real" x="141" y="8"  text-anchor="middle" style="animation-delay:0.05s">0.09</text>
+                  <text class="hiw-val-real" x="294" y="8"  text-anchor="middle" style="animation-delay:0.25s">0.38</text>
+                  <text class="hiw-val-real" x="447" y="8"  text-anchor="middle" style="animation-delay:0.45s">0.71</text>
+                  <text class="hiw-val-real" x="600" y="8"  text-anchor="middle" style="animation-delay:0.65s">0.51</text>
+                  <!-- RGC reference values (gold) -->
+                  <text class="hiw-val" x="141"  y="20" text-anchor="middle" style="animation-delay:0.05s">0.04</text>
+                  <text class="hiw-val" x="294"  y="20" text-anchor="middle" style="animation-delay:0.25s">0.07</text>
+                  <text class="hiw-val" x="447"  y="20" text-anchor="middle" style="animation-delay:0.45s">0.11</text>
+                  <text class="hiw-val" x="600"  y="20" text-anchor="middle" style="animation-delay:0.65s">0.09</text>
+                  <path class="hiw-wave hiw-wave--real" d="M13 44 Q64 8 115 44 T217 44 T320 44 T422 44 T524 44 T627 44 T703 44"/>
+                  <path class="hiw-wave hiw-wave--ref"  d="M13 44 Q64 30 115 44 T217 44 T320 44 T422 44 T524 44 T627 44 T703 44"/>
+                  <circle class="hiw-diff" cx="141"  cy="44" r="2" style="animation-delay:0.05s"/>
+                  <circle class="hiw-diff" cx="294"  cy="44" r="2" style="animation-delay:0.25s"/>
+                  <circle class="hiw-diff" cx="447"  cy="44" r="2" style="animation-delay:0.45s"/>
+                  <circle class="hiw-diff" cx="600"  cy="44" r="2" style="animation-delay:0.65s"/>
+                  <!-- PSD values (real − ref) -->
+                  <text class="hiw-psd-lbl" x="141" y="96"  text-anchor="middle" style="animation-delay:0.05s">PSD: 0.05</text>
+                  <text class="hiw-psd-lbl" x="294" y="96"  text-anchor="middle" style="animation-delay:0.25s">PSD: 0.31</text>
+                  <text class="hiw-psd-lbl" x="447" y="96"  text-anchor="middle" style="animation-delay:0.45s">PSD: 0.60</text>
+                  <text class="hiw-psd-lbl" x="600" y="96"  text-anchor="middle" style="animation-delay:0.65s">PSD: 0.42</text>
+                  <!-- Tags -->
+                  <text class="hiw-psd-tag" x="141" y="108" text-anchor="middle" style="animation-delay:0.05s">stable</text>
+                  <text class="hiw-psd-tag" x="294" y="108" text-anchor="middle" style="animation-delay:0.25s">hesitant</text>
+                  <text class="hiw-psd-tag" x="447" y="108" text-anchor="middle" style="animation-delay:0.45s">tense</text>
+                  <text class="hiw-psd-tag" x="600" y="108" text-anchor="middle" style="animation-delay:0.65s">uncertain</text>
+                </svg>
+                <div class="hiw-node-cap">compares real voice vs reference, weighted by context</div>
               </div>
             </div>
 
@@ -1845,22 +2186,30 @@
 
             <!-- Stage 7 -->
             <div class="hiw-stage hiw-stage--center">
+              <div class="hiw-node hiw-node--c hiw-node--out" id="hiwPsd" data-node="psd">
+                <div class="hiw-node-tag">context based conclusion</div>
+                <div class="hiw-node-title"><span style="color:var(--c-mod-text)">PSD 0.42</span> · "uncertain"</div>
+              </div>
+            </div>
+
+            <div class="hiw-gap"></div>
+
+            <!-- Stage 8 -->
+            <div class="hiw-stage hiw-stage--center">
               <div class="hiw-node hiw-node--c" id="hiwConclusion" data-node="conclusion">
-                <div class="hiw-node-tag">Output</div>
-                <div class="hiw-node-title">Conclusion + action</div>
-                <div class="hiw-node-cap">plain-language interpretation</div>
+                <div class="hiw-node-tag">Action</div>
+                <div class="hiw-node-title">Recommended response</div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Info panel -->
-        <div class="hiw-panel-wrap">
-          <div class="hiw-panel" id="hiwPanel">
-            <div class="hiw-p-tag" id="hiwPTag"></div>
-            <div class="hiw-p-title" id="hiwPTitle"></div>
-            <p class="hiw-p-body" id="hiwPBody"></p>
-          </div>
+        <!-- Modal (hidden until an "i" button is clicked) -->
+        <div class="hiw-popup" id="hiwPopup" role="dialog" aria-modal="true" aria-hidden="true">
+          <button class="hiw-popup-close" id="hiwPopupClose" aria-label="Close">×</button>
+          <div class="hiw-p-tag" id="hiwPTag"></div>
+          <div class="hiw-p-title" id="hiwPTitle"></div>
+          <p class="hiw-p-body" id="hiwPBody"></p>
         </div>
       </div>
     </div>
@@ -2665,109 +3014,118 @@
   (function hiwDiagram() {
     var diagram = document.getElementById('hiwDiagram');
     var svgEl   = document.getElementById('hiwSvg');
-    var panel   = document.getElementById('hiwPanel');
     var pTag    = document.getElementById('hiwPTag');
     var pTitle  = document.getElementById('hiwPTitle');
     var pBody   = document.getElementById('hiwPBody');
-    if (!diagram || !svgEl || !panel) return;
+    if (!diagram || !svgEl) return;
 
     var DATA = {
       input: {
-        tag: 'Stage 01',
-        title: 'Human speech — the input',
-        body: 'A person speaks naturally. No prompts, no questions asked. The system receives raw audio and begins processing immediately — from the very first word.'
-      },
-      words: {
-        tag: 'Mirror 01',
-        title: 'Mirror 1 — Text stream',
-        body: 'The audio is transcribed word by word, with millisecond timestamps. This represents what the person decided to say — the conscious, edited message. This stream is processed independently and never mixes with the acoustic stream.'
+        tag: 'Input',
+        title: 'Human speech',
+        body: 'A person speaks naturally. No prompts, no special setup. The system receives raw audio and begins processing immediately — from the very first word, with no enrollment or prior data.'
       },
       voice: {
-        tag: 'Mirror 02',
-        title: 'Mirror 2 — Sound stream',
-        body: "The same audio is analyzed separately for voice characteristics: pitch, tremor, speech rate, pauses, dynamic range. This represents what the body does while speaking. The body doesn't fully obey the decision — doubt, tension, excitement leak through."
+        tag: 'Mirror 01',
+        title: 'Voice — with internal state',
+        body: "The real speaker's audio carries their internal state. Doubt, tension, excitement leak through the voice — pitch shifts, micro-tremor, pauses. The body doesn't fully obey the decision to speak, and that's the signal being measured. This channel is fed into RGC to extract its acoustic position on the PSD scale."
       },
-      rgc: {
-        tag: 'RGC',
-        title: 'RGC — building the zero point',
-        body: 'The transcript is fed into multiple TTS models with no emotional tags. TTS has no internal state — nothing to doubt, fear, or feel. Its output is acoustically precise and behaviorally flat. This becomes the zero point: what the voice would sound like if words and voice were perfectly aligned. The full RGC matrix contains 180,000 calibrated reference points.'
+      words: {
+        tag: 'Mirror 03',
+        title: 'Text — semantic content',
+        body: 'The transcript represents what the person decided to say — the conscious, edited message. This channel is sent to RGC to build a reference: how the same words would sound if the voice carried no internal state at all.'
       },
-      acoustic: {
-        tag: 'Acoustic',
-        title: 'Acoustic vector — the real voice',
-        body: "From the real audio, the system extracts pitch, tremor, speech rate, pauses, dynamic range. Processing happens on the speaker's own device — the raw audio never leaves. This vector represents what the body does while speaking."
+      rgcReal: {
+        tag: 'RGC · Real Voice',
+        title: 'RGC · measuring real voice',
+        body: "The real speaker's audio is run through the same calibration scale as the TTS reference. RGC extracts the acoustic position of the live voice on the PSD scale — the same measurement instrument, applied to a different source."
       },
-      measurement: {
-        tag: 'Measurement',
-        title: 'The measurement',
-        body: 'The two vectors meet here for the only time in the system. The distance between them is calculated word by word, with millisecond precision. This distance is the PSD score: how far the real voice diverges from the zero point.'
-      },
-      psd: {
-        tag: 'Score',
-        title: 'PSD 0.73 · direction: uncertain',
-        body: 'A number on a calibrated scale (0.0 to 1.0), plus a direction tag. The number says how far the voice diverged. The direction says which calibrated profile from the RGC matrix it was closest to. Together they form a coordinate — not an emotion label.'
+      rgcRef: {
+        tag: 'RGC · TTS Reference',
+        title: 'RGC · building zero point',
+        body: 'The transcript is fed into TTS with no emotional tags and measured on the RGC scale. No internal state means no leakage — the result is always at or near zero. This is the measurement anchor.'
       },
       context: {
-        tag: 'Mirror 03',
-        title: 'Mirror 3 — Context',
-        body: 'A PSD of 0.73 means different things for different people in different situations. A surgeon before an operation and a job candidate in an interview may show the same number — but the interpretation differs. The context layer knows who is speaking, in what role, and in what situation. It turns the raw measurement into a meaningful interpretation.'
+        tag: 'Mirror 02',
+        title: 'Context',
+        body: 'A PSD of 0.73 means different things for different people in different situations. A surgeon before an operation and a job candidate in an interview may show the same number — but the interpretation differs. Context knows who is speaking, in what role, and in what situation. It turns the raw measurement into a meaningful interpretation.'
+      },
+      engine: {
+        tag: 'Engine',
+        title: '3Mirror — the comparison point',
+        body: 'The only place where all three channels meet. The real voice (with internal state) and the reference (without internal state) are aligned word by word. The distance between them is calculated with millisecond precision. Context shapes how that distance is interpreted. The output is a coordinate on a calibrated scale — not a category.'
+      },
+      psd: {
+        tag: 'AI Output',
+        title: 'context based conclusion',
+        body: 'Measurement: Real voice measured at 0.51 on the RGC scale. TTS reference measured at 0.09. Divergence: 0.51 − 0.09 = 0.42. Direction: the closest calibrated profile in the RGC matrix is "uncertain".\n\nContext applied: this is a sales negotiation, the speaker is a senior executive presenting a deal to investors.\n\nConclusion: PSD 0.42 with direction "uncertain" in this context means the speaker has unresolved doubts about the deal they are presenting as confident. This is not general anxiety — it is specific to the content being discussed.'
       },
       conclusion: {
-        tag: 'Output',
-        title: 'Conclusion + action',
-        body: 'The final output is a plain-language conclusion and a specific recommended action. Not a score to interpret. Not a black-box label. A statement of what the divergence means in this context, and what to do about it.'
+        tag: 'Action',
+        title: 'Recommended response',
+        body: 'The final output is a plain-language conclusion and a specific recommended action. A statement of what the divergence means in this context, and what to do about it.\n\nConclusion: PSD 0.42 · "uncertain" + context — the speaker has unresolved doubts about the deal they are presenting as confident.\n\nAction: Do not challenge the deal directly. Address the doubt: "What would need to change for you to feel fully committed?"'
       }
     };
 
+    // Popup: floating card, no backdrop. Opens on node click, closes on × or click outside.
+    var popup = document.getElementById('hiwPopup');
     var activeEl = null;
-    var panelWrap = panel.parentElement;
-    function setPanelOffset() {
-      if (!panelWrap) return;
-      if (window.matchMedia('(max-width: 900px)').matches) {
-        panelWrap.style.top = '';
-        return;
-      }
-      var h = panel.offsetHeight;
-      panelWrap.style.top = 'calc(50vh - ' + (h / 2) + 'px)';
-    }
-    function activate(key) {
+    function openModal(key) {
       var d = DATA[key];
-      if (!d) return;
+      if (!d || !popup) return;
       if (activeEl) activeEl.classList.remove('is-active');
       activeEl = document.getElementById('hiw' + key.charAt(0).toUpperCase() + key.slice(1));
       if (activeEl) activeEl.classList.add('is-active');
       pTag.textContent   = d.tag;
       pTitle.textContent = d.title;
-      pBody.textContent  = d.body;
-      panel.classList.add('is-vis');
-      requestAnimationFrame(setPanelOffset);
+      pBody.innerHTML = d.body.split('\n\n').map(function(p){ return '<p>' + p + '</p>'; }).join('');
+      popup.classList.add('is-open');
+      popup.setAttribute('aria-hidden', 'false');
     }
-
-    // Map ids to data keys for event attachment
-    var nodeIds = [
-      ['hiwInput',       'input'],
-      ['hiwWords',       'words'],
-      ['hiwVoice',       'voice'],
-      ['hiwRgc',         'rgc'],
-      ['hiwAcoustic',    'acoustic'],
-      ['hiwMeasurement', 'measurement'],
-      ['hiwPsd',         'psd'],
-      ['hiwContext',     'context'],
-      ['hiwConclusion',  'conclusion']
-    ];
-
-    nodeIds.forEach(function(pair) {
-      var el = document.getElementById(pair[0]);
-      if (!el) return;
-      el.addEventListener('mouseenter', function() { activate(pair[1]); });
-      el.addEventListener('click',      function() { activate(pair[1]); });
+    function closeModal() {
+      if (!popup) return;
+      popup.classList.remove('is-open');
+      popup.setAttribute('aria-hidden', 'true');
+      if (activeEl) { activeEl.classList.remove('is-active'); activeEl = null; }
+    }
+    document.addEventListener('click', function(e) {
+      // Close button
+      if (e.target.closest && e.target.closest('#hiwPopupClose')) {
+        closeModal(); return;
+      }
+      // Click on a diagram node → open popup
+      var node = e.target.closest && e.target.closest('.hiw-node[data-node]');
+      if (node) {
+        e.stopPropagation();
+        var key = node.getAttribute('data-node');
+        if (key && DATA[key]) { openModal(key); return; }
+      }
+      // Click outside popup → close
+      if (popup && popup.classList.contains('is-open') &&
+          !(e.target.closest && e.target.closest('#hiwPopup'))) {
+        closeModal();
+      }
     });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && popup && popup.classList.contains('is-open')) closeModal();
+    });
+
+    // Map ids to data keys for reveal sequencing
+    var nodeIds = [
+      ['hiwInput',      'input'],
+      ['hiwVoice',      'voice'],
+      ['hiwContext',    'context'],
+      ['hiwWords',      'words'],
+      ['hiwRgcReal',    'rgcReal'],
+      ['hiwRgcRef',     'rgcRef'],
+      ['hiwEngine',     'engine'],
+      ['hiwPsd',        'psd'],
+      ['hiwConclusion', 'conclusion']
+    ];
 
     // SVG line drawing
     var lines = [];
-    var ARROW_GAP = 8;       // gap between line end and next node
-    var ARROW_LEN = 7;       // arrow length
-    var ARROW_HALF_W = 3.5;  // arrow half-width
+    var ARROW_GAP = 0;  // lines connect directly to next block, no arrowhead
 
     function drawLines() {
       var dr = diagram.getBoundingClientRect();
@@ -2778,6 +3136,17 @@
       svgEl.setAttribute('height', H);
       svgEl.innerHTML = '';
       lines = [];
+
+      // Comet gradient (linear, transparent → bright accent). Used as fill for
+      // ellipse comets that travel along each path via offset-path.
+      var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      defs.innerHTML =
+        '<linearGradient id="hiwCometGrad" x1="0%" y1="0%" x2="100%" y2="0%">' +
+        '<stop offset="0%" stop-color="rgba(212,196,164,0)"/>' +
+        '<stop offset="55%" stop-color="rgba(212,196,164,0.4)"/>' +
+        '<stop offset="100%" stop-color="rgba(212,196,164,1)"/>' +
+        '</linearGradient>';
+      svgEl.appendChild(defs);
 
       function c(id) {
         var el = document.getElementById(id);
@@ -2804,25 +3173,30 @@
         return 'M '+x1+' '+y1+' L '+x2+' '+(y2 - ARROW_GAP);
       }
 
-      var inp = c('hiwInput'), wrd = c('hiwWords'), voc = c('hiwVoice');
-      var rgc = c('hiwRgc'),   aco = c('hiwAcoustic');
-      var msr = c('hiwMeasurement'), psd = c('hiwPsd');
-      var ctx = c('hiwContext'), con = c('hiwConclusion');
-      if (!inp || !wrd || !voc || !rgc || !aco || !msr || !psd || !ctx || !con) return;
+      var inp = c('hiwInput'), voi = c('hiwVoice'), wrd = c('hiwWords');
+      var rgcReal = c('hiwRgcReal'), rgcRef = c('hiwRgcRef');
+      var ctx = c('hiwContext'), eng = c('hiwEngine');
+      var psd = c('hiwPsd'),   con = c('hiwConclusion');
+      if (!inp || !voi || !wrd || !rgcReal || !rgcRef || !ctx || !eng || !psd || !con) return;
 
       var paths = [
+        // Human speech splits into THREE channels: Voice (L), Context (C), Text (R)
+        bez(inp.x, inp.b, voi.x, voi.t),
+        line(inp.x, inp.b, ctx.x, ctx.t),
         bez(inp.x, inp.b, wrd.x, wrd.t),
-        bez(inp.x, inp.b, voc.x, voc.t),
-        line(wrd.x, wrd.b, rgc.x, rgc.t),
-        line(voc.x, voc.b, aco.x, aco.t),
-        bez(rgc.x, rgc.b, msr.x, msr.t),
-        bez(aco.x, aco.b, msr.x, msr.t),
-        line(msr.x, msr.b, psd.x, psd.t),
-        line(psd.x, psd.b, ctx.x, ctx.t),
-        line(ctx.x, ctx.b, con.x, con.t)
+        // Voice → RGC Real (left), Text → RGC Ref (right)
+        line(voi.x, voi.b, rgcReal.x, rgcReal.t),
+        line(wrd.x, wrd.b, rgcRef.x, rgcRef.t),
+        // Three channels enter Engine: RGC-Real left, Context center, RGC-Ref right
+        line(rgcReal.x, rgcReal.b, rgcReal.x, eng.t),
+        line(ctx.x, ctx.b, ctx.x, eng.t),
+        line(rgcRef.x, rgcRef.b, rgcRef.x, eng.t),
+        // Engine → PSD → Action (single output stream, centered)
+        line(eng.x, eng.b, psd.x, psd.t),
+        line(psd.x, psd.b, con.x, con.t)
       ];
 
-      paths.forEach(function(d) {
+      paths.forEach(function(d, idx) {
         var p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         p.setAttribute('d', d);
         p.setAttribute('fill', 'none');
@@ -2835,23 +3209,24 @@
         p.setAttribute('stroke-dashoffset', len);
         svgEl.appendChild(p);
 
-        // Downward arrow polygon. Path endpoint is ARROW_GAP above the next node;
-        // arrow tip sits at the node's top edge.
-        var endX = parseFloat(p.getAttribute('d').match(/([0-9.]+)\s+([0-9.]+)\s*$/)[1]);
-        var endY = parseFloat(p.getAttribute('d').match(/([0-9.]+)\s+([0-9.]+)\s*$/)[2]);
-        var tipY = endY + ARROW_GAP;
-        var baseY = tipY - ARROW_LEN;
-        var poly = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-        poly.setAttribute('points',
-          (endX - ARROW_HALF_W) + ',' + baseY + ' ' +
-          (endX + ARROW_HALF_W) + ',' + baseY + ' ' +
-          endX + ',' + tipY);
-        poly.setAttribute('fill', 'rgba(255,255,255,0.32)');
-        poly.style.opacity = '0';
-        poly.style.transition = 'opacity 0.35s ease';
-        svgEl.appendChild(poly);
+        // Comet — an elongated ellipse with a gradient fill (transparent tail to
+        // bright head) traveling along the path. offset-rotate:auto orients the
+        // head toward the direction of motion. Paused until .is-revealed.
+        var comet = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
+        comet.setAttribute('rx', '6');
+        comet.setAttribute('ry', '1.6');
+        comet.setAttribute('cx', '0');
+        comet.setAttribute('cy', '0');
+        comet.setAttribute('fill', 'url(#hiwCometGrad)');
+        comet.classList.add('hiw-flow-comet');
+        comet.style.offsetPath        = "path('" + d + "')";
+        comet.style.webkitOffsetPath  = "path('" + d + "')";
+        comet.style.offsetRotate      = 'auto';
+        comet.style.webkitOffsetRotate = 'auto';
+        comet.style.animationDelay = (idx * 220) + 'ms';
+        svgEl.appendChild(comet);
 
-        lines.push({ el: p, len: len, arrow: poly });
+        lines.push({ el: p, len: len, comet: comet });
       });
     }
 
@@ -2860,24 +3235,81 @@
         setTimeout(function() {
           l.el.style.transition = 'stroke-dashoffset 0.8s cubic-bezier(0.4,0,0.2,1)';
           l.el.style.strokeDashoffset = '0';
-          setTimeout(function() { if (l.arrow) l.arrow.style.opacity = '1'; }, 700);
         }, i * 90);
       });
     }
 
     // Initial draw (DOM is ready since script is at end of body)
     drawLines();
-    activate('input');
 
     var resizeTimer;
     window.addEventListener('resize', function() {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(function() {
         drawLines();
-        setPanelOffset();
         if (animated) animateLines();
       }, 160);
     });
+
+    // RGC calibration grid: running numbers in each cell, one cell "matches" periodically.
+    // container: the .hiw-node--rgc element to scope to.
+    // isRef: true = TTS Reference (cells stay near zero, match fixates ~0.00);
+    //        false = Real Voice (cells run full range, match shows actual measurement).
+    function animateRgcGrid(container, isRef) {
+      var cells = container.querySelectorAll('.rgc-calib-cell');
+      if (!cells.length) return;
+
+      function randVal() {
+        return isRef ? (0.10 + Math.random() * 0.52).toFixed(2) : Math.random().toFixed(2);
+      }
+
+      // Clear any stale spans, then inject fresh ones
+      Array.prototype.forEach.call(cells, function(cell) {
+        var old = cell.querySelector('.rgc-num');
+        if (old) cell.removeChild(old);
+        var sp = document.createElement('span');
+        sp.className = 'rgc-num';
+        sp.textContent = randVal();
+        cell.appendChild(sp);
+      });
+
+      var matchedIdx = -1;
+
+      setInterval(function() {
+        var spans = container.querySelectorAll('.rgc-calib-cell .rgc-num');
+        Array.prototype.forEach.call(spans, function(sp, i) {
+          if (i !== matchedIdx) sp.textContent = randVal();
+        });
+      }, 500);
+
+      var zeroVal = container.querySelector('.rgc-zero-val');
+
+      function pickMatch() {
+        var allCells = container.querySelectorAll('.rgc-calib-cell');
+        if (matchedIdx >= 0 && allCells[matchedIdx]) allCells[matchedIdx].classList.remove('is-matched');
+        matchedIdx = Math.floor(Math.random() * allCells.length);
+        if (allCells[matchedIdx]) {
+          allCells[matchedIdx].classList.add('is-matched');
+          var sp = allCells[matchedIdx].querySelector('.rgc-num');
+          // For TTS ref, force matched cell to a near-zero value
+          if (isRef && sp) sp.textContent = (0.12 + Math.random() * 0.50).toFixed(2);
+          if (sp && zeroVal) zeroVal.textContent = sp.textContent;
+        }
+        setTimeout(function() {
+          var allCells2 = container.querySelectorAll('.rgc-calib-cell');
+          if (allCells2[matchedIdx]) allCells2[matchedIdx].classList.remove('is-matched');
+          matchedIdx = -1;
+          setTimeout(pickMatch, 400);
+        }, 200);
+      }
+      setTimeout(pickMatch, 500);
+    }
+
+    // Start both RGC grids immediately
+    var rgcRealEl = document.getElementById('hiwRgcReal');
+    var rgcRefEl  = document.getElementById('hiwRgcRef');
+    if (rgcRealEl) animateRgcGrid(rgcRealEl, false);
+    if (rgcRefEl)  animateRgcGrid(rgcRefEl,  true);
 
     // Intersection observer: sequence nodes then lines
     var animated = false;
@@ -2887,6 +3319,7 @@
         if (el) el.classList.add('is-vis');
       });
       animateLines();
+      diagram.classList.add('is-revealed');
       animated = true;
       return;
     }
@@ -2900,6 +3333,8 @@
           if (el) setTimeout(function() { el.classList.add('is-vis'); }, i * 160);
         });
         setTimeout(animateLines, nodeIds.length * 160 - 400);
+        // Start the traveling flow dots once the lines start drawing in
+        setTimeout(function() { diagram.classList.add('is-revealed'); }, nodeIds.length * 160);
       });
     }, { threshold: 0.1 });
     io.observe(diagram);
