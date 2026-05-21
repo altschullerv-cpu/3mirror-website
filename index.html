@@ -3460,8 +3460,10 @@
       });
     }
 
-    // Initial draw (DOM is ready since script is at end of body)
-    drawLines();
+    // Initial draw — wait for fonts so layout is stable before measuring positions
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(function() {
+      requestAnimationFrame(function() { drawLines(); });
+    });
 
     var resizeTimer;
     window.addEventListener('resize', function() {
@@ -3549,13 +3551,16 @@
       entries.forEach(function(entry) {
         if (!entry.isIntersecting || animated) return;
         animated = true;
-        nodeIds.forEach(function(pair, i) {
-          var el = document.getElementById(pair[0]);
-          if (el) setTimeout(function() { el.classList.add('is-vis'); }, i * 160);
+        // Redraw lines now that the diagram is visible and layout is stable
+        requestAnimationFrame(function() {
+          drawLines();
+          nodeIds.forEach(function(pair, i) {
+            var el = document.getElementById(pair[0]);
+            if (el) setTimeout(function() { el.classList.add('is-vis'); }, i * 160);
+          });
+          setTimeout(animateLines, nodeIds.length * 160 - 400);
+          setTimeout(function() { diagram.classList.add('is-revealed'); }, nodeIds.length * 160);
         });
-        setTimeout(animateLines, nodeIds.length * 160 - 400);
-        // Start the traveling flow dots once the lines start drawing in
-        setTimeout(function() { diagram.classList.add('is-revealed'); }, nodeIds.length * 160);
       });
     }, { threshold: 0.1 });
     io.observe(diagram);
