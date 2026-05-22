@@ -3706,7 +3706,17 @@
       timer = setTimeout(step, s[3]);
     }
     window.startPsdAnimation = function() { stopped = false; idx = 0; step(); };
-    psdNode.addEventListener('mouseenter', setFinal);
+    psdNode.addEventListener('mouseenter', function() {
+      stopped = true;
+      if (timer) { clearTimeout(timer); timer = null; }
+      valSpan.style.color = C_RED; valSpan.textContent = 'PSD 0.78';
+      lblSpan.style.color = C_RED; lblSpan.textContent = 'uncertain';
+    });
+    psdNode.addEventListener('mouseleave', function() {
+      stopped = false;
+      idx = 0;
+      step();
+    });
   })();
 
   // Conclusion node: emerge-from-darkness — fires when node scrolls into view
