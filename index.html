@@ -3624,6 +3624,10 @@
         setTimeout(function() {
           if (window.startPsdAnimation) window.startPsdAnimation();
         }, 7 * 160 + 600);
+        // 5. Conclusion node: scramble-decode generation animation
+        setTimeout(function() {
+          if (window.startConclusionAnimation) window.startConclusionAnimation();
+        }, 8 * 160 + 600);
       });
     }, { threshold: 0.1 });
     io.observe(diagram);
@@ -3686,6 +3690,60 @@
     }
     window.startPsdAnimation = function() { stopped = false; idx = 0; step(); };
     psdNode.addEventListener('mouseenter', setFinal);
+  })();
+
+  // Conclusion node: scramble-decode generation animation (loops)
+  (function() {
+    var node = document.getElementById('hiwConclusion');
+    if (!node) return;
+    var titleEl = node.querySelector('.hiw-node-title');
+    if (!titleEl) return;
+
+    var FINAL  = 'Recommended response';
+    var CHARS  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var FRAME  = 45;   // ms per tick
+    var SCRAMBLE_TICKS = 13;  // pure-scramble phase length
+    var TICKS_PER_CHAR = 2;   // how many ticks before each char locks in
+    var HOLD_MS = 3000;       // pause on final text before looping
+    var timer = null, stopped = false;
+
+    function rand() { return CHARS[Math.floor(Math.random() * CHARS.length)]; }
+
+    function runAnim() {
+      if (stopped) return;
+      var len   = FINAL.length;
+      var tick  = 0;
+      var total = SCRAMBLE_TICKS + len * TICKS_PER_CHAR;
+
+      function frame() {
+        if (stopped) return;
+        if (tick >= total) {
+          titleEl.textContent = FINAL;
+          timer = setTimeout(runAnim, HOLD_MS);
+          return;
+        }
+        var locked = tick < SCRAMBLE_TICKS
+          ? 0
+          : Math.floor((tick - SCRAMBLE_TICKS) / TICKS_PER_CHAR);
+        var out = '';
+        for (var i = 0; i < len; i++) {
+          if (i < locked)            out += FINAL[i];
+          else if (FINAL[i] === ' ') out += ' ';
+          else                       out += rand();
+        }
+        titleEl.textContent = out;
+        tick++;
+        timer = setTimeout(frame, FRAME);
+      }
+      frame();
+    }
+
+    window.startConclusionAnimation = function() { stopped = false; runAnim(); };
+    node.addEventListener('mouseenter', function() {
+      stopped = true;
+      if (timer) { clearTimeout(timer); timer = null; }
+      titleEl.textContent = FINAL;
+    });
   })();
 
   // "Request NDA access" button → scroll to form + pre-select NDA option
