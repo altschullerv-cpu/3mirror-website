@@ -955,6 +955,19 @@
     color: var(--c-mod-text);
   }
   #hiwPsd .hiw-node-title { color: var(--text); font-size: 15px; }
+
+  /* Conclusion: title hidden until emerge animation fires */
+  #hiwConclusion .hiw-node-title { opacity: 0; }
+  #hiwConclusion .hiw-node-title.hiw-emerge {
+    animation: hiwEmerge 3s cubic-bezier(0.1, 0, 0.4, 1) forwards;
+  }
+  @keyframes hiwEmerge {
+    0%   { opacity: 0; }
+    25%  { opacity: 0.02; }
+    55%  { opacity: 0.15; }
+    80%  { opacity: 0.65; }
+    100% { opacity: 1; }
+  }
   .hiw-panel-wrap { display: none; }
 
   /* Nodes are clickable */
@@ -3692,58 +3705,15 @@
     psdNode.addEventListener('mouseenter', setFinal);
   })();
 
-  // Conclusion node: scramble-decode generation animation (loops)
+  // Conclusion node: emerge-from-darkness reveal
   (function() {
     var node = document.getElementById('hiwConclusion');
     if (!node) return;
     var titleEl = node.querySelector('.hiw-node-title');
     if (!titleEl) return;
-
-    var FINAL  = 'Recommended response';
-    var CHARS  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var FRAME  = 45;   // ms per tick
-    var SCRAMBLE_TICKS = 13;  // pure-scramble phase length
-    var TICKS_PER_CHAR = 2;   // how many ticks before each char locks in
-    var HOLD_MS = 3000;       // pause on final text before looping
-    var timer = null, stopped = false;
-
-    function rand() { return CHARS[Math.floor(Math.random() * CHARS.length)]; }
-
-    function runAnim() {
-      if (stopped) return;
-      var len   = FINAL.length;
-      var tick  = 0;
-      var total = SCRAMBLE_TICKS + len * TICKS_PER_CHAR;
-
-      function frame() {
-        if (stopped) return;
-        if (tick >= total) {
-          titleEl.textContent = FINAL;
-          timer = setTimeout(runAnim, HOLD_MS);
-          return;
-        }
-        var locked = tick < SCRAMBLE_TICKS
-          ? 0
-          : Math.floor((tick - SCRAMBLE_TICKS) / TICKS_PER_CHAR);
-        var out = '';
-        for (var i = 0; i < len; i++) {
-          if (i < locked)            out += FINAL[i];
-          else if (FINAL[i] === ' ') out += ' ';
-          else                       out += rand();
-        }
-        titleEl.textContent = out;
-        tick++;
-        timer = setTimeout(frame, FRAME);
-      }
-      frame();
-    }
-
-    window.startConclusionAnimation = function() { stopped = false; runAnim(); };
-    node.addEventListener('mouseenter', function() {
-      stopped = true;
-      if (timer) { clearTimeout(timer); timer = null; }
-      titleEl.textContent = FINAL;
-    });
+    window.startConclusionAnimation = function() {
+      titleEl.classList.add('hiw-emerge');
+    };
   })();
 
   // "Request NDA access" button → scroll to form + pre-select NDA option
