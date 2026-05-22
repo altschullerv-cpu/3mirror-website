@@ -985,13 +985,20 @@
                 0 0 60px rgba(255,255,255,0.06);
     transform: translateY(-2px);
   }
-  /* Pause engine animations on hover */
-  #hiwEngine:hover .hiw-wave,
-  #hiwEngine:hover .hiw-diff,
+  /* Reveal all engine elements on hover */
   #hiwEngine:hover .hiw-val,
   #hiwEngine:hover .hiw-val-real,
+  #hiwEngine:hover .hiw-diff,
   #hiwEngine:hover .hiw-psd-lbl,
-  #hiwEngine:hover .hiw-psd-tag { animation-play-state: paused; }
+  #hiwEngine:hover .hiw-psd-tag {
+    animation: none;
+    opacity: 1;
+  }
+  #hiwEngine:hover .hiw-wave {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
 
   /* Floating popup — no backdrop/overlay */
   .hiw-popup {
