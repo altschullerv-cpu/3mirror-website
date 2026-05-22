@@ -3620,9 +3620,56 @@
         }, afterNodes);
         // 3. Reveal flow dots shortly after lines start drawing
         setTimeout(function() { diagram.classList.add('is-revealed'); }, afterNodes + 200);
+        // 4. PSD counter animation (green → blue → red, settles on 0.78)
+        setTimeout(function() {
+          if (window.startPsdAnimation) window.startPsdAnimation();
+        }, 7 * 160 + 600);
       });
     }, { threshold: 0.1 });
     io.observe(diagram);
+  })();
+
+  // PSD node: animated counter green→blue→red, settles on 0.78
+  (function() {
+    var psdNode = document.getElementById('hiwPsd');
+    if (!psdNode) return;
+    var titleEl = psdNode.querySelector('.hiw-node-title');
+    if (!titleEl) return;
+    var spans = titleEl.querySelectorAll('span');
+    var valSpan = spans[0], lblSpan = spans[1];
+    if (!valSpan || !lblSpan) return;
+
+    var C_GREEN = '#6dcabe', C_BLUE = '#7ab4f5', C_RED = '#e88888';
+    // [value, label, color, delay_ms]
+    var seq = [
+      [0.08, 'nominal',   C_GREEN,  80],
+      [0.14, 'stable',    C_GREEN,  80],
+      [0.22, 'clear',     C_GREEN,  80],
+      [0.19, 'nominal',   C_GREEN,  80],
+      [0.31, 'stable',    C_GREEN,  90],
+      [0.44, 'moderate',  C_BLUE,  110],
+      [0.52, 'elevated',  C_BLUE,  110],
+      [0.59, 'mixed',     C_BLUE,  120],
+      [0.64, 'shifting',  C_BLUE,  140],
+      [0.70, 'uncertain', C_RED,   180],
+      [0.74, 'uncertain', C_RED,   230]
+    ];
+    var timer = null, idx = 0;
+
+    function setFinal() {
+      if (timer) { clearTimeout(timer); timer = null; }
+      valSpan.style.color = C_RED; valSpan.textContent = 'PSD 0.78';
+      lblSpan.style.color = C_RED; lblSpan.textContent = 'uncertain';
+    }
+    function step() {
+      if (idx >= seq.length) { setFinal(); return; }
+      var s = seq[idx++];
+      valSpan.style.color = s[2]; valSpan.textContent = 'PSD ' + s[0].toFixed(2);
+      lblSpan.style.color = s[2]; lblSpan.textContent = s[1];
+      timer = setTimeout(step, s[3]);
+    }
+    window.startPsdAnimation = function() { idx = 0; step(); };
+    psdNode.addEventListener('mouseenter', setFinal);
   })();
 
   // "Request NDA access" button → scroll to form + pre-select NDA option
