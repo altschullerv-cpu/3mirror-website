@@ -1026,6 +1026,53 @@
   }
   .hiw-popup-close:hover { border-color: var(--border-strong); color: var(--text); }
 
+  /* Thank-you modal */
+  .ty-backdrop {
+    position: fixed; inset: 0; z-index: 399;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(4px);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .ty-backdrop.is-open { opacity: 1; pointer-events: auto; }
+  .ty-modal {
+    position: fixed; z-index: 400; top: 50%; left: 50%;
+    transform: translate(-50%, -48%) scale(0.97);
+    opacity: 0; pointer-events: none;
+    width: calc(100% - 48px); max-width: 440px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border-strong);
+    border-radius: 18px;
+    padding: 48px 40px 40px;
+    text-align: center;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.70), 0 0 80px rgba(212,196,164,0.08);
+  }
+  .ty-modal.is-open {
+    opacity: 1; pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  .ty-modal-title {
+    font-size: 24px; font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .ty-modal-sub {
+    font-size: 15px; color: var(--text-3);
+    line-height: 1.6;
+  }
+  .ty-modal-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 32px; height: 32px;
+    border: 1px solid var(--border); border-radius: 50%;
+    background: none; cursor: pointer;
+    color: var(--text-3); font-size: 18px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .ty-modal-close:hover { border-color: var(--border-strong); color: var(--text); }
+
   /* RGC full matrix popup */
   .rgc-backdrop {
     position: fixed; inset: 0; z-index: 299;
@@ -2786,12 +2833,18 @@
           <button type="submit" class="btn" id="cfSubmitBtn">Send request</button>
         </div>
       </form>
-      <div class="cf-success" id="cfSuccess">Thank you. We'll be in touch.</div>
     </div>
   </div>
 </section>
 
 <footer>3Mirror · Patents Pending · 2026</footer>
+
+<div class="ty-backdrop" id="tyBackdrop"></div>
+<div class="ty-modal" id="tyModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <button class="ty-modal-close" id="tyModalClose" aria-label="Close">×</button>
+  <div class="ty-modal-title">Thank you.</div>
+  <div class="ty-modal-sub">We'll be in touch.</div>
+</div>
 
 <div class="rgc-backdrop" id="rgcBackdrop"></div>
 <!-- RGC full calibration matrix popup -->
@@ -3591,7 +3644,30 @@
   (function contactForm() {
     var form    = document.getElementById('contactForm');
     var btn     = document.getElementById('cfSubmitBtn');
-    var success = document.getElementById('cfSuccess');
+    var backdrop = document.getElementById('tyBackdrop');
+    var modal    = document.getElementById('tyModal');
+    var closeBtn = document.getElementById('tyModalClose');
+
+    function openTy() {
+      if (!modal) return;
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      if (backdrop) backdrop.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeTy() {
+      if (!modal) return;
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      if (backdrop) backdrop.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+    if (closeBtn) closeBtn.addEventListener('click', closeTy);
+    if (backdrop) backdrop.addEventListener('click', closeTy);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeTy();
+    });
+
     if (!form) return;
     form.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -3600,14 +3676,13 @@
       var company = form.querySelector('#cf-company').value.trim();
       var country = form.querySelector('#cf-country').value;
       var phone   = form.querySelector('#cf-phone').value.trim();
-      if (!name || !email || !company || !country || !phone) {
-        if (!name)    { form.querySelector('#cf-name').focus(); return; }
-        if (!email)   { form.querySelector('#cf-email').focus(); return; }
-        if (!company) { form.querySelector('#cf-company').focus(); return; }
-        if (!country) { form.querySelector('#cf-country').focus(); return; }
-        if (!phone)   { form.querySelector('#cf-phone').focus(); return; }
-        if (!form.querySelector('#cf-message').value.trim()) { form.querySelector('#cf-message').focus(); return; }
-      }
+      var message = form.querySelector('#cf-message').value.trim();
+      if (!name)    { form.querySelector('#cf-name').focus(); return; }
+      if (!email)   { form.querySelector('#cf-email').focus(); return; }
+      if (!company) { form.querySelector('#cf-company').focus(); return; }
+      if (!country) { form.querySelector('#cf-country').focus(); return; }
+      if (!phone)   { form.querySelector('#cf-phone').focus(); return; }
+      if (!message) { form.querySelector('#cf-message').focus(); return; }
       btn.disabled = true;
       btn.textContent = 'Sending…';
       var data = new FormData(form);
@@ -3617,12 +3692,11 @@
         headers: { 'Accept': 'application/json' }
       }).then(function(res) {
         if (res.ok) {
-          form.style.display = 'none';
-          success.style.display = 'block';
-        } else {
-          btn.disabled = false;
-          btn.textContent = 'Send request';
+          form.reset();
+          openTy();
         }
+        btn.disabled = false;
+        btn.textContent = 'Send request';
       }).catch(function() {
         btn.disabled = false;
         btn.textContent = 'Send request';
