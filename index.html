@@ -3638,10 +3638,6 @@
         setTimeout(function() {
           if (window.startPsdAnimation) window.startPsdAnimation();
         }, 7 * 160 + 600);
-        // 5. Conclusion node: scramble-decode generation animation
-        setTimeout(function() {
-          if (window.startConclusionAnimation) window.startConclusionAnimation();
-        }, 8 * 160 + 600);
       });
     }, { threshold: 0.1 });
     io.observe(diagram);
@@ -3706,15 +3702,23 @@
     psdNode.addEventListener('mouseenter', setFinal);
   })();
 
-  // Conclusion node: emerge-from-darkness reveal
+  // Conclusion node: emerge-from-darkness — fires when node scrolls into view
   (function() {
     var node = document.getElementById('hiwConclusion');
     if (!node) return;
     var titleEl = node.querySelector('.hiw-node-title');
     if (!titleEl) return;
-    window.startConclusionAnimation = function() {
-      titleEl.classList.add('hiw-emerge');
-    };
+    var started = false;
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting || started) return;
+        started = true;
+        io.disconnect();
+        // Wait for node's own entrance animation to finish, then emerge
+        setTimeout(function() { titleEl.classList.add('hiw-emerge'); }, 600);
+      });
+    }, { threshold: 0.6 });
+    io.observe(node);
   })();
 
   // "Request NDA access" button → scroll to form + pre-select NDA option
