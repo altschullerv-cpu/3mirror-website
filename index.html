@@ -3639,22 +3639,34 @@
     var valSpan = spans[0], lblSpan = spans[1];
     if (!valSpan || !lblSpan) return;
 
-    var C_GREEN = '#6dcabe', C_BLUE = '#7ab4f5', C_RED = '#e88888';
+    // Exact colors from design tokens
+    var C_GREEN  = '#6dcabe'; // --c-zero-text · stable   · 0.05
+    var C_BLUE   = '#92b3e6'; // --c-low-text  · hesitant · 0.31
+    var C_ORANGE = '#e0b878'; // --c-mod-text  · tense    · 0.60
+    var C_RED    = '#e88888'; // --c-high-text · uncertain· 0.78
+
     // [value, label, color, delay_ms]
-    // Last frame of each color group holds for the pause duration
+    // Last frame of each phase holds for the pause duration, then next phase begins
     var seq = [
-      [0.08, 'nominal',   C_GREEN,   80],
-      [0.14, 'stable',    C_GREEN,   80],
-      [0.22, 'clear',     C_GREEN,   80],
-      [0.19, 'nominal',   C_GREEN,   80],
-      [0.31, 'stable',    C_GREEN, 2000],  // ← 2s pause on last green
-      [0.44, 'moderate',  C_BLUE,   110],
-      [0.52, 'elevated',  C_BLUE,   110],
-      [0.59, 'mixed',     C_BLUE,   120],
-      [0.64, 'shifting',  C_BLUE,  2000],  // ← 2s pause on last blue
-      [0.70, 'uncertain', C_RED,    180],
-      [0.74, 'uncertain', C_RED,    230],
-      [0.78, 'uncertain', C_RED,   4000]   // ← 4s pause on final red, then loop
+      // — Green phase → settles on 0.05 · stable —
+      [0.02, 'nominal',  C_GREEN,   70],
+      [0.04, 'stable',   C_GREEN,   70],
+      [0.03, 'clear',    C_GREEN,   70],
+      [0.05, 'stable',   C_GREEN, 2000],  // 2s pause
+      // — Blue phase → settles on 0.31 · hesitant —
+      [0.11, 'moderate', C_BLUE,    90],
+      [0.21, 'hesitant', C_BLUE,    90],
+      [0.27, 'moderate', C_BLUE,   100],
+      [0.31, 'hesitant', C_BLUE,  2000],  // 2s pause
+      // — Orange phase → settles on 0.60 · tense —
+      [0.38, 'elevated', C_ORANGE, 110],
+      [0.49, 'tense',    C_ORANGE, 110],
+      [0.55, 'elevated', C_ORANGE, 130],
+      [0.60, 'tense',    C_ORANGE,2000],  // 2s pause
+      // — Red phase → settles on 0.78 · uncertain —
+      [0.65, 'uncertain',C_RED,    170],
+      [0.72, 'uncertain',C_RED,    220],
+      [0.78, 'uncertain',C_RED,   4000]   // 4s pause → loop
     ];
     var timer = null, idx = 0, stopped = false;
 
