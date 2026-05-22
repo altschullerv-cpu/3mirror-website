@@ -3629,7 +3629,7 @@
     io.observe(diagram);
   })();
 
-  // PSD node: animated counter green→blue→red, settles on 0.78
+  // PSD node: animated counter green→blue→red, loops. Hover snaps to 0.78.
   (function() {
     var psdNode = document.getElementById('hiwPsd');
     if (!psdNode) return;
@@ -3641,34 +3641,38 @@
 
     var C_GREEN = '#6dcabe', C_BLUE = '#7ab4f5', C_RED = '#e88888';
     // [value, label, color, delay_ms]
+    // Last frame of each color group holds for the pause duration
     var seq = [
-      [0.08, 'nominal',   C_GREEN,  80],
-      [0.14, 'stable',    C_GREEN,  80],
-      [0.22, 'clear',     C_GREEN,  80],
-      [0.19, 'nominal',   C_GREEN,  80],
-      [0.31, 'stable',    C_GREEN,  90],
-      [0.44, 'moderate',  C_BLUE,  110],
-      [0.52, 'elevated',  C_BLUE,  110],
-      [0.59, 'mixed',     C_BLUE,  120],
-      [0.64, 'shifting',  C_BLUE,  140],
-      [0.70, 'uncertain', C_RED,   180],
-      [0.74, 'uncertain', C_RED,   230]
+      [0.08, 'nominal',   C_GREEN,   80],
+      [0.14, 'stable',    C_GREEN,   80],
+      [0.22, 'clear',     C_GREEN,   80],
+      [0.19, 'nominal',   C_GREEN,   80],
+      [0.31, 'stable',    C_GREEN, 2000],  // ← 2s pause on last green
+      [0.44, 'moderate',  C_BLUE,   110],
+      [0.52, 'elevated',  C_BLUE,   110],
+      [0.59, 'mixed',     C_BLUE,   120],
+      [0.64, 'shifting',  C_BLUE,  2000],  // ← 2s pause on last blue
+      [0.70, 'uncertain', C_RED,    180],
+      [0.74, 'uncertain', C_RED,    230],
+      [0.78, 'uncertain', C_RED,   4000]   // ← 4s pause on final red, then loop
     ];
-    var timer = null, idx = 0;
+    var timer = null, idx = 0, stopped = false;
 
     function setFinal() {
+      stopped = true;
       if (timer) { clearTimeout(timer); timer = null; }
       valSpan.style.color = C_RED; valSpan.textContent = 'PSD 0.78';
       lblSpan.style.color = C_RED; lblSpan.textContent = 'uncertain';
     }
     function step() {
-      if (idx >= seq.length) { setFinal(); return; }
+      if (stopped) return;
+      if (idx >= seq.length) idx = 0; // loop back to start
       var s = seq[idx++];
       valSpan.style.color = s[2]; valSpan.textContent = 'PSD ' + s[0].toFixed(2);
       lblSpan.style.color = s[2]; lblSpan.textContent = s[1];
       timer = setTimeout(step, s[3]);
     }
-    window.startPsdAnimation = function() { idx = 0; step(); };
+    window.startPsdAnimation = function() { stopped = false; idx = 0; step(); };
     psdNode.addEventListener('mouseenter', setFinal);
   })();
 
