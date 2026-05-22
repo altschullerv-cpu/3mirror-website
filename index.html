@@ -3460,10 +3460,7 @@
       });
     }
 
-    // Initial draw — wait for fonts so layout is stable before measuring positions
-    (document.fonts ? document.fonts.ready : Promise.resolve()).then(function() {
-      requestAnimationFrame(function() { drawLines(); });
-    });
+    // Lines are drawn after nodes become visible (their transform resets to none first)
 
     var resizeTimer;
     window.addEventListener('resize', function() {
@@ -3541,7 +3538,10 @@
         var el = document.getElementById(p[0]);
         if (el) el.classList.add('is-vis');
       });
-      animateLines();
+      requestAnimationFrame(function() {
+        drawLines();
+        requestAnimationFrame(animateLines);
+      });
       diagram.classList.add('is-revealed');
       animated = true;
       return;
@@ -3551,16 +3551,21 @@
       entries.forEach(function(entry) {
         if (!entry.isIntersecting || animated) return;
         animated = true;
-        // Redraw lines now that the diagram is visible and layout is stable
-        requestAnimationFrame(function() {
-          drawLines();
-          nodeIds.forEach(function(pair, i) {
-            var el = document.getElementById(pair[0]);
-            if (el) setTimeout(function() { el.classList.add('is-vis'); }, i * 160);
-          });
-          setTimeout(animateLines, nodeIds.length * 160 - 400);
-          setTimeout(function() { diagram.classList.add('is-revealed'); }, nodeIds.length * 160);
+        // 1. Stagger nodes visible
+        nodeIds.forEach(function(pair, i) {
+          var el = document.getElementById(pair[0]);
+          if (el) setTimeout(function() { el.classList.add('is-vis'); }, i * 160);
         });
+        // 2. After last node + full transform transition (0.5s) → draw lines in correct positions
+        var afterNodes = (nodeIds.length - 1) * 160 + 550;
+        setTimeout(function() {
+          requestAnimationFrame(function() {
+            drawLines();
+            requestAnimationFrame(animateLines);
+          });
+        }, afterNodes);
+        // 3. Reveal flow dots shortly after lines start drawing
+        setTimeout(function() { diagram.classList.add('is-revealed'); }, afterNodes + 200);
       });
     }, { threshold: 0.1 });
     io.observe(diagram);
