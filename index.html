@@ -959,14 +959,17 @@
   /* Conclusion: title hidden until emerge animation fires */
   #hiwConclusion .hiw-node-title { opacity: 0; }
   #hiwConclusion .hiw-node-title.hiw-emerge {
-    animation: hiwEmerge 3s cubic-bezier(0.1, 0, 0.4, 1) forwards;
+    animation: hiwEmerge 8s linear infinite;
+    /* 4s emerge + 4s hold = 8s cycle */
   }
   @keyframes hiwEmerge {
-    0%   { opacity: 0; }
-    25%  { opacity: 0.02; }
-    55%  { opacity: 0.15; }
-    80%  { opacity: 0.65; }
-    100% { opacity: 1; }
+    0%    { opacity: 0; }    /* start invisible       */
+    6%    { opacity: 0.01; } /* very slow at first    */
+    22%   { opacity: 0.08; }
+    35%   { opacity: 0.30; }
+    45%   { opacity: 0.75; }
+    50%   { opacity: 1; }    /* fully visible at 4s   */
+    100%  { opacity: 1; }    /* hold 4s, then loop    */
   }
   .hiw-panel-wrap { display: none; }
 
