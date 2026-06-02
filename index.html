@@ -343,9 +343,9 @@
   .mirror .sweep {
     position: absolute;
     inset: -20% -40%;
-    background: linear-gradient(110deg, transparent 34%, rgba(255,255,255,0.55) 49%, transparent 64%);
-    transform: translateX(-100%);
-    animation: sweep 9s ease-in-out infinite;
+    background: linear-gradient(110deg, transparent 38%, rgba(255,255,255,0.28) 49%, transparent 60%);
+    transform: translateX(-130%);
+    animation: sweep 30s ease-in-out infinite;
     pointer-events: none;
   }
   .mirror .gloss {
@@ -381,8 +381,9 @@
   }
 
   @keyframes sweep {
-    0%, 100% { transform: translateX(-110%); }
-    50%      { transform: translateX(110%); }
+    0%   { transform: translateX(-130%); }
+    14%  { transform: translateX(130%); }
+    100% { transform: translateX(130%); }
   }
   /* Each mirror enters large at the far-right edge (front, low) and steps
      toward the centre as it recedes — drifting up and shrinking, forming a
@@ -400,9 +401,9 @@
   .mirror.m1 { animation-delay: 0s;      }
   .mirror.m2 { animation-delay: -23.33s; }
   .mirror.m3 { animation-delay: -46.67s; }
-  .mirror.m1 .sweep { animation-delay: 0s; }
-  .mirror.m2 .sweep { animation-delay: 2.5s; }
-  .mirror.m3 .sweep { animation-delay: 5s; }
+  .mirror.m1 .sweep { animation-delay: 0s;  }
+  .mirror.m2 .sweep { animation-delay: 10s; }
+  .mirror.m3 .sweep { animation-delay: 20s; }
 
   /* Floating divergence numbers (kept outside the axis so they don't rotate) */
   .float-num {
