@@ -287,7 +287,7 @@
     position: absolute;
     inset: 0;
     transform-style: preserve-3d;
-    transform: rotateX(-6deg) rotateY(-14deg);
+    transform: rotateX(-9deg) rotateY(-22deg);
   }
   .mirror {
     position: absolute;
@@ -384,14 +384,15 @@
     0%, 100% { transform: translateX(-110%); }
     50%      { transform: translateX(110%); }
   }
-  /* Each mirror emerges large on the right, then recedes into the distance
-     sweeping toward the left as it shrinks, then a short rest before looping. */
+  /* Each mirror enters large at the far-right edge (front, low) and steps
+     toward the centre as it recedes — drifting up and shrinking, forming a
+     perspective staircase into the distance. Short rest before looping. */
   @keyframes mirror-fly {
-    0%   { transform: translateX(-50%) translateX(140px)  translateZ(200px)  translateY(50px);   opacity: 0; }
-    12%  { opacity: 1; }
-    60%  { opacity: 1; }
-    76%  { opacity: 0; }
-    100% { transform: translateX(-50%) translateX(-320px) translateZ(-1980px) translateY(-130px); opacity: 0; }
+    0%   { transform: translateX(-50%) translateX(360px)  translateZ(250px)   translateY(120px);  opacity: 0; }
+    13%  { opacity: 1; }
+    70%  { opacity: 1; }
+    88%  { opacity: 0; }
+    100% { transform: translateX(-50%) translateX(-150px) translateZ(-2050px) translateY(-210px); opacity: 0; }
   }
 
   /* Three mirrors fly the same path, staggered by 1/3 of the cycle so one
@@ -2100,11 +2101,11 @@
   @media (prefers-reduced-motion: reduce) {
     .reveal { opacity: 1; transform: none; transition: none; }
     .mirror { animation: none; }
-    .mirror.m1 { transform: translateX(-50%) translateX(140px)  translateZ(160px);                   opacity: 1;   }
-    .mirror.m2 { transform: translateX(-50%) translateX(-70px)  translateZ(-560px)  translateY(-80px);  opacity: 0.55;}
-    .mirror.m3 { transform: translateX(-50%) translateX(-260px) translateZ(-1200px) translateY(-160px); opacity: 0.3; }
+    .mirror.m1 { transform: translateX(-50%) translateX(320px)  translateZ(220px)   translateY(110px);  opacity: 1;   }
+    .mirror.m2 { transform: translateX(-50%) translateX(90px)   translateZ(-720px)  translateY(-50px);  opacity: 0.6; }
+    .mirror.m3 { transform: translateX(-50%) translateX(-150px) translateZ(-1650px) translateY(-180px); opacity: 0.3; }
     .mirror .sweep { animation: none; opacity: 0; }
-    .mirrors-axis { transform: rotateX(-6deg) rotateY(-14deg); }
+    .mirrors-axis { transform: rotateX(-9deg) rotateY(-22deg); }
     .float-num { opacity: 0.5; animation: none; }
     .hero-eyebrow .pulse::after { animation: none; }
     .cell.pulsing { animation: none; }
