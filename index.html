@@ -188,7 +188,7 @@
     100% { transform: scale(2.2); opacity: 0; }
   }
   .hero h1 {
-    font-size: 66px;
+    font-size: clamp(26px, 6vw, 66px);
     font-weight: 500;
     line-height: 1.04;
     letter-spacing: -0.04em;
@@ -205,6 +205,7 @@
   }
   .hero h1 .line {
     display: block;
+    white-space: nowrap;
   }
   .hero h1 .line:nth-child(3) {
     color: var(--text-3);
@@ -2063,7 +2064,7 @@
   @media (max-width: 880px) {
     .container { padding: 0 22px; }
     section.hero { padding: 70px 0 70px; }
-    .hero h1 { font-size: 38px; letter-spacing: -0.03em; }
+    .hero h1 { letter-spacing: -0.03em; }
     .hero .sub { font-size: 16px; margin-bottom: 32px; }
     section.layer { padding: 88px 0; }
     h2.section-title { font-size: 34px; }
