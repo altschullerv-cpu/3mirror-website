@@ -303,7 +303,7 @@
     transform-style: preserve-3d;
     transform-origin: 50% 50%;
     opacity: 0;
-    animation: mirror-fly 48s linear infinite;
+    animation: mirror-fly 70s linear infinite;
   }
   .mirror .surface {
     position: absolute;
@@ -397,9 +397,9 @@
 
   /* Three mirrors fly the same path, staggered by 1/3 of the cycle so one
      follows another into the distance (negative delays = already in flight) */
-  .mirror.m1 { animation-delay: 0s;   }
-  .mirror.m2 { animation-delay: -16s; }
-  .mirror.m3 { animation-delay: -32s; }
+  .mirror.m1 { animation-delay: 0s;      }
+  .mirror.m2 { animation-delay: -23.33s; }
+  .mirror.m3 { animation-delay: -46.67s; }
   .mirror.m1 .sweep { animation-delay: 0s; }
   .mirror.m2 .sweep { animation-delay: 2.5s; }
   .mirror.m3 .sweep { animation-delay: 5s; }
